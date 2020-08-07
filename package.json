@@ -1,20 +1,53 @@
 {
   "name": "effector-form",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "description": "Effector form state factory",
+  "main": "./dist/effector-form.cjs.js",
+  "jsnext:main": "./dist/effector-form.es.js",
+  "module": "./dist/effector-form.es.js",
+  "umd:main": "./dist/effector-form.umd.js",
+  "browser": "./dist/effector-form.es.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rollup -c rollup.config.js",
+    "lint": "eslint \"./**/*.{js,ts,tsx}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aanation/effector-form"
   },
   "keywords": [
     "effector",
     "effectorjs",
-    "forns",
-    "factory"
+    "form"
   ],
-  "author": "aanarion",
+  "author": "42px",
   "license": "ISC",
-  "dependencies": {
-    "effector": "^21.2.1"
-  }
+  "bugs": {
+    "url": "https://github.com/aanation/effector-form/issues"
+  },
+  "homepage": "https://github.com/aanation/effector-form#readme",
+  "peerDependencies": {
+    "effector": "^21.2.1",
+    "effector-react": "^21.0.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@typescript-eslint/eslint-plugin": "^2.33.0",
+    "@typescript-eslint/parser": "^2.33.0",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "cross-env": "^7.0.2",
+    "eslint": "^7.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "rollup": "^2.10.2",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-terser": "^5.3.0",
+    "rollup-plugin-typescript2": "^0.27.1",
+    "typescript": "^3.9.2"
+  },
+  "files": [
+    "dist"
+  ],
+  "typings": "./dist",
+  "dependencies": {}
 }

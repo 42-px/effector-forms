@@ -1,0 +1,95 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": [
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2019,
+    "sourceType": "module"
+  },
+  "rules": {
+    "import/first": "off",
+    "semi": [
+      "error",
+      "never"
+    ],
+    "import/no-duplicates": "off",
+    "no-trailing-spaces": "off",
+    "no-unused-vars": "warn",
+    "no-console": 0,
+    "func-names": 0,
+    "complexity": "off",
+    "no-multiple-empty-lines": [
+      "error",
+      {
+        "max": 2
+      }
+    ],
+    "standard/no-callback-literal": "off",
+    "quote-props": [
+      "error",
+      "consistent"
+    ],
+    "no-plusplus": 0,
+    "quotes": [
+      "error",
+      "double"
+    ],
+    "space-before-function-paren": 0,
+    "eol-last": "warn",
+    "spaced-comment": 0,
+    "key-spacing": 0,
+    "comma-dangle": [
+      "warn",
+      "only-multiline"
+    ],
+    "curly": "off",
+    "valid-jsdoc": [
+      "warn",
+      {
+        "requireReturn": false,
+        "requireParamDescription": false,
+        "requireParamType": false,
+        "requireReturnType": false
+      }
+    ],
+    "max-len": [
+      "error",
+      {
+        "code": 80,
+        "comments": 140
+      }
+    ],
+    "indent": [
+      "warn",
+      4,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "prefer-template": 2,
+    "no-useless-constructor": "off",
+    "@typescript-eslint/no-useless-constructor": "error",
+    "@typescript-eslint/camelcase": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "object-curly-spacing": 0,
+    "no-case-declarations": "off",
+    "@typescript-eslint/ban-types": "warn",
+    "@typescript-eslint/member-delimiter-style": [
+      "error",
+      {
+        "multiline": {
+          "delimiter": "none"
+        },
+        "singleline": {
+          "delimiter": "semi"
+        }
+      }
+    ],
+    "@typescript-eslint/no-explicit-any": "off"
+  }
+}
