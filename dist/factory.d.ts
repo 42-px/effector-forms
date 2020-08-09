@@ -1,25 +1,17 @@
-import { Effect, Store, Domain } from "effector";
-declare type UnknownObject<T = unknown> = {
-    [key: string]: T;
+import { Event, Store } from "effector";
+import { FieldConfig, Field, AnyFieldsConfigs, FormConfig } from "./types";
+declare type FormValues<Fields extends AnyFieldsConfigs> = {
+    [K in keyof Fields]: Fields[K] extends FieldConfig<infer U> ? U : never;
 };
-export declare type Validator<Value> = (v: Value) => boolean;
-export declare type Rule<Value> = {
-    name: string;
-    validator: Validator<Value>;
+declare type Form<Fields extends AnyFieldsConfigs> = {
+    fields: {
+        [K in keyof Fields]: Fields[K] extends FieldConfig<infer U> ? Field<U> : never;
+    };
+    $values: Store<FormValues<Fields>>;
+    $eachValid: Store<boolean>;
+    submit: Event<void>;
+    setForm: Event<Partial<FormValues<Fields>>>;
+    formValidated: Event<FormValues<Fields>>;
 };
-declare type InitFunc<Value> = () => Value;
-export declare type FieldConfig<Value> = {
-    init: Value | InitFunc<Value>;
-    rules?: Rule<Value>[];
-    validateOn?: ValidationEvent;
-};
-declare type ValidationEvent = "submit" | "blur" | "change";
-declare type FormConfig<Fields extends UnknownObject, Done, Fail, Error> = {
-    fields: Fields;
-    submitFx: Effect<Done, Fail, Error>;
-    domain?: Domain;
-    validateOn?: ValidationEvent;
-};
-export declare function createFieldsStores<Fields extends UnknownObject>(fields: Fields, domain?: Domain): { [K in keyof Fields]: Fields[K] extends FieldConfig<infer U> ? Store<U> : Fields[K]; };
-export declare function createForm<Fields extends UnknownObject, Done, Fail, Error>(config: FormConfig<Fields, Done, Fail, Error>): void;
+export declare function createForm<Fields extends AnyFieldsConfigs>(config: FormConfig<Fields>): Form<Fields>;
 export {};

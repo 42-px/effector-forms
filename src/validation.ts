@@ -1,4 +1,12 @@
-import { ValidationError, Rule } from "./types"
+import { Event, Store, combine, sample } from "effector"
+import {
+    ValidationError,
+    Rule,
+    AnyFormValues,
+    Field,
+    AnyFields,
+    ValidationEvent,
+} from "./types"
 
 export function createCombineValidator<Value = any, Form = any>(
     rules: Rule<Value, Form>[]
@@ -28,4 +36,19 @@ export function createCombineValidator<Value = any, Form = any>(
 
         return errors
     }
+}
+
+
+export function eachValid(fields: AnyFields) {
+    const firstErrors: Store<ValidationError | null>[] = []
+  
+    for (const fieldName in fields) {
+        if (!fields.hasOwnProperty(fieldName)) continue
+        const { $firstError } = fields[fieldName]
+        firstErrors.push($firstError)
+    }
+  
+    const $firstErrors = combine(firstErrors)
+  
+    return $firstErrors.map((errors) => errors.every(error => error === null))
 }

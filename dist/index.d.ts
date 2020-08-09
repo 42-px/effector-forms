@@ -1,1 +1,2 @@
-export { createForm, createFieldsStores } from "./factory";
+export { createForm } from "./factory";
+export { FormConfig } from "./types";
