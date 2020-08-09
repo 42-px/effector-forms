@@ -1,11 +1,8 @@
-import { Event, Store, combine, sample } from "effector"
+import { Store, combine } from "effector"
 import {
     ValidationError,
     Rule,
-    AnyFormValues,
-    Field,
     AnyFields,
-    ValidationEvent,
 } from "./types"
 
 export function createCombineValidator<Value = any, Form = any>(
