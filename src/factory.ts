@@ -4,11 +4,7 @@ import {
     combine,
     sample,
     guard,
-    forward,
-    createEffect,
-    createDomain,
     createEvent,
-    createStore,
 } from "effector"
 import {
     FieldConfig,
@@ -135,44 +131,3 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         formValidated,
     } as unknown as Form<Fields>
 }
-
-
-type User = {
-  username: string
-  password: string
-}
-
-const required = () => ({
-    name: "required",
-    validator: (val: string) => Boolean(val)
-})
-
-const createUserFx = createEffect<User, void, Error>()
-const $serverError = createStore<Error | null>(null)
-
-$serverError.on(createUserFx.failData, (_, error) => error)
-
-const form = createForm({
-    domain: createDomain("my-form"),
-    validateOn: ["submit"],
-    filter: combine(
-        $serverError,
-        createUserFx.pending,
-        (serverError, pending) => !serverError && !pending,
-    ),
-    fields: {
-        username: {
-            init: "",
-            rules: [required()],
-        },
-        password: {
-            init: "",
-            rules: [required()]
-        }
-    },
-})
-
-forward({
-    from: form.formValidated,
-    to: createUserFx,
-})
