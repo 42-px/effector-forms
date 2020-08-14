@@ -35,13 +35,13 @@ function createFormValuesStore(
 }
 
 
-type FormValues<Fields extends AnyFieldsConfigs> = {
+export type FormValues<Fields extends AnyFieldsConfigs> = {
   [K in keyof Fields]: Fields[K] extends FieldConfig<infer U>
     ? U
     : never
 }
 
-type Form<Fields extends AnyFieldsConfigs> = {
+export type Form<Fields extends AnyFieldsConfigs> = {
   fields: {
     [K in keyof Fields]: Fields[K] extends FieldConfig<infer U>
       ? Field<U>

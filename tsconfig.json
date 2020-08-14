@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+    "jsx": "react",
     "sourceMap": true,
     "baseUrl": "src",
     "strict": true,
