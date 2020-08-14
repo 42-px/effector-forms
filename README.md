@@ -32,9 +32,6 @@ Model:
 import { restore, forward, createEffect } from "effector"
 import { createForm } from 'effector-form'
 
-export const loginFx = createEffect()
-export const $serverError = restore(loginFx.failData, null)
-
 export const loginForm = createForm({
     fields: {
         email: {
@@ -59,32 +56,28 @@ export const loginForm = createForm({
     validateOn: ["submit"],
 })
 
+export const loginFx = createEffect()
+
 forward({
     from: loginForm.formValidated,
     to: loginFx,
 })
-
-$serverError.reset(loginForm.$values.updates)
 ```
 
 View
 ```tsx
-import { useStore } from 'effector-react'
 import { useForm } from 'effector-form'
-import { loginForm, $serverError } from '../model'
+import { loginForm, loginFx } from '../model'
 
 export const LoginForm = () => {
-  const serverError = useStore($serverError)
-  const { fields, submit } = useForm(loginForm)
+  const { fields, submit, eachValid } = useForm(loginForm)
 
   return (
     <form onSubmit={() => submit()}>
-        <div>
-          {serverError.text}
-        </div>
         <input
             type="text"
             value={fields.email.value}
+            disabled={loginFx.pending}
             onChange={(e) => fields.email.onChange(e.target.value)}
         />
         <div>
@@ -95,6 +88,7 @@ export const LoginForm = () => {
         <input
             type="password"
             value={fields.password.value}
+            disabled={loginFx.pending}
             onChange={(e) => fields.password.onChange(e.target.value)}
         />
         <div>
@@ -102,7 +96,12 @@ export const LoginForm = () => {
                 "required": "password required"
             })}
         </div>
-        <button type="submit">Login</button>
+        <button
+          disabled={!eachValid || loginFx.pending}
+          type="submit"
+        >
+          Login
+        </button>
     </form>
   )
 }
@@ -110,7 +109,9 @@ export const LoginForm = () => {
 ```
 
 ## form values
+## validate events
 ## Domain
+## external error (filter)
 ## Rules with error text
 ## Override error text
 ## Usage with rules lib

@@ -186,7 +186,7 @@ test("set form", () => {
     })
 })
 
-test("with submit effect", (done) => {
+test("filter", (done) => {
   type Credentials = {
     email: string
     password: string
