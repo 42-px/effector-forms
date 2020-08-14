@@ -1,6 +1,6 @@
 # Effector form
 
-# Motivation
+## Motivation
 
 If you working with forms in an Effector-application, there is often a lot of boilerplate code, such as:
 
@@ -25,7 +25,7 @@ $password.on(passwordChanged, (_, password) => password)
 If you also need validation, it really hurts. This library was created to improve the "form experience" in an effector application by generating form state from declarative configuration. **Good typescript support!**.
 
 
-# Simple login form
+## Simple login form
 
 Model:
 ```ts
