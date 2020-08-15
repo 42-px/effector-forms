@@ -12,6 +12,12 @@ declare type ConnectedField<Value> = {
     onChange: Event<Value>;
     onBlur: Event<void>;
     errorText: (map?: ErrorTextMap) => string;
+    addError: Event<{
+        rule: string;
+        errorText?: string;
+    }>;
+    validate: Event<void>;
+    resetErrors: Event<void>;
 };
 declare type ConnectedFields<Fields extends AnyFieldsConfigs> = {
     [K in keyof Fields]: Fields[K] extends FieldConfig<infer U> ? ConnectedField<U> : never;

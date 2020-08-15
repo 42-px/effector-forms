@@ -32,6 +32,9 @@ export type Field<Value> = {
   $firstError: Store<ValidationError<Value> | null>
   onChange: Event<Value>
   onBlur: Event<void>
+  addError: Event<{ rule: string; errorText?: string }>
+  validate: Event<void>
+  resetErrors: Event<void>
 }
 
 export type FieldConfig<Value> = {

@@ -154,4 +154,126 @@ test("bind validation: validate on blur", () => {
     expect(field.$firstError.getState()).toBeNull()
 })
 
+test("add error manually", () => {
+    const fieldConfig: FieldConfig<any> = {
+        init: "",
+        validateOn: ["change"],
+    }
+
+    const field = createField("email", fieldConfig)
+    const $form = createStore<any>({ email: "" })
+    const setForm = createEvent<any>()
+    const submit = createEvent<void>()
+
+    bindChangeEvent(field, setForm)
+    bindValidation({
+        $form,
+        submitEvent: submit,
+        field,
+        rules: [],
+        fieldValidationEvents: ["change"],
+        formValidationEvents: ["submit"],
+    })
+
+
+    field.onChange("123")
+
+    field.addError({
+        rule: "custom-rule",
+        errorText: "error-text"
+    })
+
+    expect(field.$firstError.getState()).toEqual({
+        rule: "custom-rule",
+        errorText: "error-text",
+        value: "123",
+    })
+
+    field.onChange("123")
+
+    expect(field.$firstError.getState()).toBeNull()
+})
+
+
+test("validate manually", () => {
+    const rules: Rule<string, any>[] = [
+        email(),
+    ]
+
+    const fieldConfig: FieldConfig<any> = {
+        init: "",
+        rules,
+        validateOn: ["submit"],
+    }
+
+    const field = createField("email", fieldConfig)
+    const $form = createStore<any>({ email: "" })
+    const setForm = createEvent<any>()
+    const submit = createEvent<void>()
+
+    bindChangeEvent(field, setForm)
+    bindValidation({
+        $form,
+        submitEvent: submit,
+        field,
+        rules,
+        fieldValidationEvents: ["submit"],
+        formValidationEvents: ["submit"],
+    })
+
+    field.onChange("123")
+
+    expect(field.$value.getState()).toBe("123")
+    expect(field.$firstError.getState()).toBeNull()
+
+    field.validate()
+    expect(field.$firstError.getState()).toEqual({
+        rule: "email",
+        value: "123",
+    })
+
+    field.onChange("1234")
+
+    expect(field.$firstError.getState()).toBeNull()
+
+})
+
+test("reset errors", () => {
+    const rules: Rule<string, any>[] = [
+        email(),
+    ]
+
+    const fieldConfig: FieldConfig<any> = {
+        init: "",
+        rules,
+        validateOn: ["submit"],
+    }
+
+    const field = createField("email", fieldConfig)
+    const $form = createStore<any>({ email: "" })
+    const setForm = createEvent<any>()
+    const submit = createEvent<void>()
+
+    bindChangeEvent(field, setForm)
+    bindValidation({
+        $form,
+        submitEvent: submit,
+        field,
+        rules,
+        fieldValidationEvents: ["submit"],
+        formValidationEvents: ["submit"],
+    })
+
+    field.onChange("123")
+    submit()
+
+    expect(field.$firstError.getState()).toEqual({
+        rule: "email",
+        value: "123",
+    })
+
+    field.resetErrors()
+
+    expect(field.$firstError.getState()).toBeNull()
+})
 

@@ -38,6 +38,11 @@ export function createField(
 
     const onChange = domain ? domain.event() : createEvent()
     const onBlur = domain ? domain.event() : createEvent()
+    const addError = domain
+        ? domain.event<{ rule: string; errorText?: string }>()
+        : createEvent<{ rule: string; errorText?: string }>()
+    const validate = domain ? domain.event() : createEvent()
+    const resetErrors = domain ? domain.event() : createEvent()
 
     return {
         name: fieldName,
@@ -46,6 +51,9 @@ export function createField(
         $firstError,
         onChange,
         onBlur,
+        addError,
+        validate,
+        resetErrors,
     }
 }
 
@@ -66,7 +74,15 @@ export function bindValidation({
     formValidationEvents,
     fieldValidationEvents
 }: BindValidationParams): void {
-    const { $value, $errors, onBlur, onChange } = field
+    const {
+        $value,
+        $errors,
+        onBlur,
+        onChange,
+        addError,
+        validate,
+        resetErrors
+    } = field
     const validator = createCombineValidator(rules)
     const eventsNames = [...formValidationEvents, ...fieldValidationEvents]
     const validationEvents: Event<{
@@ -104,11 +120,31 @@ export function bindValidation({
         }))
     }
 
+    validationEvents.push(sample({
+        source: combine({
+            fieldValue: $value,
+            form: $form,
+        }),
+        clock: validate,
+    }))
+
+    const addErrorWithValue = sample({
+        source: $value,
+        clock: addError,
+        fn: (value, { rule, errorText }): ValidationError => ({
+            rule,
+            value,
+            errorText,
+        }),  
+    })
+
     $errors
         .on(
             validationEvents,
             (_, { form, fieldValue }) => validator(fieldValue, form)
         )
+        .on(addErrorWithValue, (errors, newError) => [newError, ...errors])
+        .reset(resetErrors)
 
     if (!eventsNames.includes("change")) {
         $errors.reset(onChange)
