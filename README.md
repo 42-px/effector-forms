@@ -16,6 +16,7 @@
   * [Reset errors](#reset-errors)
   * [Register form (full example)](#register-form--full-example-)
   * [Typescipt users tips](#typescipt-users-tips)
+  * [Coming soon](#coming-soon)
 
 ## Motivation
 
