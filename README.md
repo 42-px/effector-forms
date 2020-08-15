@@ -1,7 +1,8 @@
-# Effector form
+# Effector forms
 
   * [Motivation](#motivation)
   * [Usage](#usage)
+  * [useField](#usefield)
   * [Form state](#form-state)
   * [Submit Filter](#submit-filter)
   * [Set form](#set-form)
@@ -52,7 +53,7 @@ The library comes with hooks for react/react-native, however you can use it with
 Model:
 ```ts
 import { restore, forward, createEffect } from "effector"
-import { createForm } from 'effector-form'
+import { createForm } from 'effector-forms'
 
 export const loginForm = createForm({
     fields: {
@@ -91,14 +92,19 @@ The **createForm** factory creates stores and events of the form and binds them 
 After we have created the form, we can connect it to the view using the **useForm** hook:
 
 ```tsx
-import { useForm } from 'effector-form'
+import { useForm } from 'effector-forms'
 import { loginForm, loginFx } from '../model'
 
 export const LoginForm = () => {
   const { fields, submit, eachValid } = useForm(loginForm)
 
+  const onSubmit = (e) => {
+    e.preventDefault()
+    submit()
+  }
+
   return (
-    <form onSubmit={() => submit()}>
+    <form onSubmit={onSubmit)}>
         <input
             type="text"
             value={fields.email.value}
@@ -129,6 +135,66 @@ export const LoginForm = () => {
         </button>
     </form>
   )
+}
+```
+
+
+## useField
+
+```tsx
+import { createForm, useField } from 'effector-forms'
+
+export const form = createForm({
+  fields: {
+    email: {
+      init: "",
+      rules: emailRules,
+    },
+    password: {
+      init: "",
+      rules: passwordRules,
+    },
+  },
+})
+
+const Email = () => {
+  const { value, onChange } = useField(form.fields.email)
+
+  return (
+    <input
+      type="text"
+      placeholder="email"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
+  )
+}
+
+const Password = () => {
+  const { value, onChange } = useField(form.fields.password)
+  
+  return (
+    <input
+      type="password"
+      placeholder="password"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
+  )
+}
+
+const Form = () => {
+  const onSubmit = (e) => {
+    e.preventDefault()
+    form.submit()
+  }
+
+
+  <form onSubmit={onSubmit}>
+    <Email />
+    <Password />
+    <button type="submit">Login</button>
+  </form>
 }
 ```
 
@@ -255,8 +321,13 @@ const form = createForm({
 const RegisterForm = () => {
   const { submit, fields } = useForm(form)
 
+  const onSubmit = (e) => {
+    e.preventDefault()
+    submit()
+  }
+
   return (
-    <form onSubmit={submit}>
+    <form onSubmit={onSubmit}>
       <input
         type="text"
         placeholder="email"
@@ -509,7 +580,7 @@ You can also combine both approaches by overriding errors of only certain rules 
 You can implement your own validation rules or wrap an external rules library, for example [validator.js](https://www.npmjs.com/package/validator)
 
 ```ts
-import { Rule } from 'effector-form'
+import { Rule } from 'effector-forms'
 import isEmail from 'validator/lib/isEmail'
 
 function createRule<Value>(
@@ -616,7 +687,7 @@ form.fields.username.resetErrors()
 
 Rules:
 ```ts
-import { Rule } from 'effector-form'
+import { Rule } from 'effector-forms'
 
 export const rules = {
     required: (): Rule<string> => ({
@@ -638,7 +709,7 @@ export const rules = {
 Model:
 ```ts
 import { restore, createEffect } from 'effector'
-import { createForm } from 'effector-form'
+import { createForm } from 'effector-forms'
 import { rules } from '@/validation-rules'
 
 
@@ -688,15 +759,20 @@ forward({
 View:
 ```tsx
 import { useStore } from 'effector'
-import { useForm } from 'effector-form'
+import { useForm } from 'effector-forms'
 import { registerForm, registerFx } from '../model'
 
 const RegisterForm = () => {
   const pending = useStore(registerFx.pending)
   const { submit, fields, eachValid } = useForm(form)
 
+  const onSubmit = (e) => {
+    e.preventDefault()
+    submit()
+  }
+
   return (
-    <form onSubmit={() => submit()}>
+    <form onSubmit={onSubmit}>
       <input
         type="text"
         placeholder="email"
@@ -726,7 +802,6 @@ const RegisterForm = () => {
   )
 }
 ```
-
 
 ## Typescipt users tips
 

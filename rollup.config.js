@@ -4,7 +4,13 @@ import typescript from "rollup-plugin-typescript2"
 import pkg from "./package.json"
 
 export default {
-    external: ["effector", "effector-react"],
+    external: [
+        "effector",
+        "effector-react",
+        "react",
+        "object-assign",
+        "react-dom"
+    ],
     input: "src/index.ts",
     output: [
         {
@@ -24,7 +30,7 @@ export default {
             name: "EffectorForm",
         },
         {
-            file: "./dist/effector-form.iife.js",
+            file: "./dist/effector-forms.iife.js",
             format: "iife",
             name: "EffectorForm",
             sourcemap: true,
