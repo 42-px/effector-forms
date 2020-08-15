@@ -1,6 +1,6 @@
 {
   "name": "effector-forms",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Effector form state factory",
   "main": "./dist/effector-forms.cjs.js",
   "jsnext:main": "./dist/effector-forms.es.js",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aanation/effector-form"
+    "url": "git+https://github.com/aanation/effector-forms"
   },
   "keywords": [
     "effector",
@@ -25,9 +25,9 @@
   "author": "42px",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/aanation/effector-form/issues"
+    "url": "https://github.com/aanation/effector-forms/issues"
   },
-  "homepage": "https://github.com/aanation/effector-form#readme",
+  "homepage": "https://github.com/aanation/effector-forms#readme",
   "peerDependencies": {
     "effector": "^21.2.1",
     "effector-react": "^21.0.4",
