@@ -787,3 +787,8 @@ const form = createForm({
 
 const $usernameVal = form.fields.username.$value // Store<string>
 ```
+
+# Coming soon
+
+* dynamic fields
+* async (effect) validators
