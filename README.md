@@ -488,7 +488,7 @@ const rules = [
     required: (): Rule<string> => ({
         name: "required",
         validator: (value) => ({
-            isValid: Boolean(),
+            isValid: Boolean(value),
             errorText: "Required field",
         }),
     }),
