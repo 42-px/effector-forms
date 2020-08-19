@@ -1,6 +1,7 @@
 import { restore, forward, createEffect } from "effector"
+import * as yup from 'yup'
 import { createForm } from "./factory"
-import { Rule } from "./types"
+import { Rule, ValidationError } from "./types"
 
 const rules = {
     required: (): Rule<string> => ({
@@ -249,4 +250,73 @@ test("filter", (done) => {
       form.submit()
       expect(validated.mock.calls.length).toBe(2)
   })
+})
+
+test("use YUP", () => {
+    function createRule<V, T = any>({
+        schema,
+        name,
+    }: { schema: yup.Schema<T>, name: string }): Rule<V> {
+        return {
+            name,
+            validator: (v: V) => {
+                try {
+                    schema.validateSync(v)
+                    return {
+                        isValid: true,
+                        value: v,
+                    }
+                } catch (err) {
+                    return {
+                        isValid: false,
+                        value: v,
+                        errorText: err.message,
+                    }
+                }
+            },
+        }
+    }
+
+    type ObjFeild = { a: string, b: string }
+
+    const form = createForm({
+        fields: {
+            simpleField: {
+                init: "",
+                rules: [
+                    createRule<string>({
+                        name: 'email',
+                        schema: yup.string().email().min(3),
+                    })
+                ],
+            },
+            objField: {
+                init: { a: "", b: "" },
+                rules: [
+                    createRule<ObjFeild>({
+                        name: "obj",
+                        schema: yup.object().shape({
+                            a: yup.string().email().required(),
+                            b: yup.string().required(),
+                        })
+                    })
+                ],
+            },
+        },
+    })
+
+    form.fields.simpleField.onChange("invalid")
+    form.fields.objField.onChange({ a: "email@example.com", b: "fd" })
+
+    form.submit()
+
+    expect(form.fields.simpleField.$firstError.getState()).toBeTruthy()
+    expect(form.fields.objField.$firstError.getState()).toBeNull()
+
+    form.fields.objField.onChange({ a: "invalid", b: "valid" })
+    form.fields.simpleField.onChange("test@example.com")
+    form.submit()
+
+    expect(form.fields.simpleField.$firstError.getState()).toBeNull()
+    expect(form.fields.objField.$firstError.getState()).toBeTruthy()
 })

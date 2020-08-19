@@ -1,23 +1,24 @@
 # Effector forms
 
-  * [Motivation](#motivation)
-  * [Usage](#usage)
-  * [useField](#usefield)
-  * [Form state](#form-state)
-  * [Submit Filter](#submit-filter)
-  * [Set form](#set-form)
-  * [Validation triggers](#validation-triggers)
-  * [Interdependent validations](#interdependent-validations)
-  * [Usage with domain](#usage-with-domain)
-  * [Rules](#rules)
-  * [Show errors](#show-errors)
-  * [Use external validators lib](#use-external-validators-lib)
-  * [Add custom error manually](#add-custom-error-manually)
-  * [Validate manually](#validate-manually)
-  * [Reset errors](#reset-errors)
-  * [Register form (full example)](#register-form--full-example-)
-  * [Typescipt users tips](#typescipt-users-tips)
-  * [Coming soon](#coming-soon)
+- [Motivation](#motivation)
+- [Usage](#usage)
+- [useField](#usefield)
+- [Form state](#form-state)
+- [Submit Filter](#submit-filter)
+- [Set form](#set-form)
+- [Validation triggers](#validation-triggers)
+- [Interdependent validations](#interdependent-validations)
+- [Usage with domain](#usage-with-domain)
+- [Rules](#rules)
+- [Show errors](#show-errors)
+- [Use external validators lib](#use-external-validators-lib)
+  * [Usage with Yup](#usage-with-yup)
+- [Add custom error manually](#add-custom-error-manually)
+- [Validate manually](#validate-manually)
+- [Reset errors](#reset-errors)
+- [Register form (full example)](#register-form--full-example-)
+- [Typescipt users tips](#typescipt-users-tips)
+- [Coming soon](#coming-soon)
 
 ## Motivation
 
@@ -93,10 +94,12 @@ After we have created the form, we can connect it to the view using the **useFor
 
 ```tsx
 import { useForm } from 'effector-forms'
+import { useStore } from 'effector-react'
 import { loginForm, loginFx } from '../model'
 
 export const LoginForm = () => {
   const { fields, submit, eachValid } = useForm(loginForm)
+  const pending = useStore(loginFx.pending)
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -108,7 +111,7 @@ export const LoginForm = () => {
         <input
             type="text"
             value={fields.email.value}
-            disabled={loginFx.pending}
+            disabled={pending}
             onChange={(e) => fields.email.onChange(e.target.value)}
         />
         <div>
@@ -119,7 +122,7 @@ export const LoginForm = () => {
         <input
             type="password"
             value={fields.password.value}
-            disabled={loginFx.pending}
+            disabled={pending}
             onChange={(e) => fields.password.onChange(e.target.value)}
         />
         <div>
@@ -128,7 +131,7 @@ export const LoginForm = () => {
             })}
         </div>
         <button
-          disabled={!eachValid || loginFx.pending}
+          disabled={!eachValid || pending}
           type="submit"
         >
           Login
@@ -596,6 +599,68 @@ export const rules = [
 ]
 ```
 
+### Usage with Yup
+yup validation wrapper:
+```ts
+import * as yup from 'yup'
+
+export function createRule<V, T = any>({
+    schema,
+    name,
+}: { schema: yup.Schema<T>, name: string }): Rule<V> {
+    return {
+        name,
+        validator: (v: V) => {
+            try {
+                schema.validateSync(v)
+                return {
+                    isValid: true,
+                    value: v,
+                }
+            } catch (err) {
+                return {
+                    isValid: false,
+                    value: v,
+                    errorText: err.message,
+                }
+            }
+        },
+    }
+}
+```
+
+use it with your form:
+```ts
+import * as yup from 'yup'
+import { createForm } from 'effector-forms'
+import { createRule } from '@/lib/create-yup-rule'
+
+
+const form = createForm({
+    fields: {
+        email: {
+            init: "",
+            rules: [
+                createRule<string>({
+                    name: 'email',
+                    schema: yup.string().email().required(),
+                })
+            ],
+        },
+        password: {
+            init: "",
+            rules: [
+                createRule<string>({
+                    name: "password",
+                    schema: yup.string().required().min(3),
+                })
+            ],
+        },
+    },
+})
+
+```
+
 ## Add custom error manually
 
 Sometimes you need to add an error manually. To do this, you can use the addError event on the field:
@@ -864,7 +929,7 @@ const form = createForm({
 const $usernameVal = form.fields.username.$value // Store<string>
 ```
 
-# Coming soon
+## Coming soon
 
 * dynamic fields
 * async (effect) validators
