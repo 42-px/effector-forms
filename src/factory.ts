@@ -49,8 +49,10 @@ export type Form<Fields extends AnyFieldsConfigs> = {
   }
   $values: Store<FormValues<Fields>>
   $eachValid: Store<boolean>
+  $isValid: Store<boolean>
   submit: Event<void>
   reset: Event<void>
+  set: Event<Partial<FormValues<Fields>>>
   setForm: Event<Partial<FormValues<Fields>>>
   formValidated: Event<FormValues<Fields>>
 }
@@ -131,9 +133,11 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         fields,
         $values: $form,
         $eachValid,
+        $isValid: $eachValid,
         submit: submitForm,
         reset: resetForm,
         setForm,
+        set: setForm,
         formValidated,
     } as unknown as Form<Fields>
 }

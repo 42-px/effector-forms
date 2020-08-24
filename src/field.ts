@@ -50,10 +50,12 @@ export function createField(
         $value,
         $errors,
         $firstError,
+        $isValid: $firstError.map((firstError) => firstError === null),
         onChange,
         onBlur,
         addError,
         validate,
+        set: onChange,
         reset,
         resetErrors,
     }
