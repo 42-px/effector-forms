@@ -38,8 +38,9 @@ test("bind change event", () => {
     })
 
     const setForm = createEvent<Partial<{ email: string }>>()
+    const resetForm = createEvent<void>()
 
-    bindChangeEvent(field, setForm)
+    bindChangeEvent(field, setForm, resetForm)
     
     field.onChange("123")
     expect(field.$value.getState()).toEqual("123")
@@ -75,8 +76,9 @@ test("bind validation: validate on change", () => {
     const $form = createStore<any>({ email: "" })
     const setForm = createEvent<any>()
     const submit = createEvent<void>()
+    const resetForm = createEvent<void>()
 
-    bindChangeEvent(field, setForm)
+    bindChangeEvent(field, setForm, resetForm)
     bindValidation({
         $form,
         submitEvent: submit,
@@ -120,8 +122,9 @@ test("bind validation: validate on blur", () => {
     const $form = createStore<any>({ email: "" })
     const setForm = createEvent<any>()
     const submit = createEvent<void>()
+    const resetForm = createEvent<void>()
 
-    bindChangeEvent(field, setForm)
+    bindChangeEvent(field, setForm, resetForm)
     bindValidation({
         $form,
         submitEvent: submit,
@@ -164,8 +167,9 @@ test("add error manually", () => {
     const $form = createStore<any>({ email: "" })
     const setForm = createEvent<any>()
     const submit = createEvent<void>()
+    const reset = createEvent<void>()
 
-    bindChangeEvent(field, setForm)
+    bindChangeEvent(field, setForm, reset)
     bindValidation({
         $form,
         submitEvent: submit,
@@ -210,8 +214,9 @@ test("validate manually", () => {
     const $form = createStore<any>({ email: "" })
     const setForm = createEvent<any>()
     const submit = createEvent<void>()
+    const reset = createEvent<void>()
 
-    bindChangeEvent(field, setForm)
+    bindChangeEvent(field, setForm, reset)
     bindValidation({
         $form,
         submitEvent: submit,
@@ -253,8 +258,9 @@ test("reset errors", () => {
     const $form = createStore<any>({ email: "" })
     const setForm = createEvent<any>()
     const submit = createEvent<void>()
+    const reset = createEvent<void>()
 
-    bindChangeEvent(field, setForm)
+    bindChangeEvent(field, setForm, reset)
     bindValidation({
         $form,
         submitEvent: submit,

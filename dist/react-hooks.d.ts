@@ -9,6 +9,7 @@ declare type ConnectedField<Value> = {
     value: Value;
     errors: ValidationError<Value>[];
     firstError: ValidationError<Value> | null;
+    hasError: () => boolean;
     onChange: Event<Value>;
     onBlur: Event<void>;
     errorText: (map?: ErrorTextMap) => string;
@@ -17,6 +18,9 @@ declare type ConnectedField<Value> = {
         errorText?: string;
     }>;
     validate: Event<void>;
+    isValid: boolean;
+    reset: Event<void>;
+    set: Event<Value>;
     resetErrors: Event<void>;
 };
 declare type ConnectedFields<Fields extends AnyFieldsConfigs> = {
@@ -28,11 +32,14 @@ declare type Result<Fields extends AnyFieldsConfigs> = {
     values: FormValues<Fields>;
     hasError: (fieldName?: keyof Fields) => boolean;
     eachValid: boolean;
+    isValid: boolean;
     errors: (fieldName: keyof Fields) => (Fields[typeof fieldName] extends FieldConfig<infer U> ? ValidationError<U>[] : never);
     error: (fieldName: keyof Fields) => (Fields[typeof fieldName] extends FieldConfig<infer U> ? ValidationError<U> : never) | null;
     errorText: (fieldName: keyof Fields, map?: ErrorTextMap) => string;
     submit: Event<void>;
+    reset: Event<void>;
     setForm: Event<Partial<FormValues<Fields>>>;
+    set: Event<Partial<FormValues<Fields>>>;
     formValidated: Event<FormValues<Fields>>;
 };
 export declare function useForm<Fields extends AnyFieldsConfigs>(form: Form<Fields>): Result<Fields>;

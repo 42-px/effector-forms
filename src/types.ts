@@ -30,10 +30,13 @@ export type Field<Value> = {
   $value: Store<Value>
   $errors: Store<ValidationError<Value>[]>
   $firstError: Store<ValidationError<Value> | null>
+  $isValid: Store<boolean>
   onChange: Event<Value>
   onBlur: Event<void>
   addError: Event<{ rule: string; errorText?: string }>
   validate: Event<void>
+  reset: Event<void>
+  set: Event<Value>
   resetErrors: Event<void>
 }
 

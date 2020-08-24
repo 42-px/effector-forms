@@ -1,5 +1,5 @@
 import { restore, forward, createEffect } from "effector"
-import * as yup from 'yup'
+import * as yup from "yup"
 import { createForm } from "./factory"
 import { Rule, ValidationError } from "./types"
 
@@ -252,11 +252,47 @@ test("filter", (done) => {
   })
 })
 
+test("reset form", () => {
+    const form = createForm({
+        fields: {
+            email: {
+                init: "",
+                rules: [
+                    rules.required(),
+                ],
+            },
+            password: {
+                init: "",
+                rules: [
+                    rules.required()
+                ],
+            }
+        },
+    })
+
+    form.fields.email.onChange("123")
+    form.fields.password.onChange("123")
+
+    expect(form.fields.email.$value.getState()).toBe("123")
+    expect(form.fields.password.$value.getState()).toBe("123")
+
+    form.fields.password.reset()
+    expect(form.fields.password.$value.getState()).toBe("")
+    expect(form.fields.email.$value.getState()).toBe("123")
+
+    form.fields.password.onChange("123")
+    form.reset()
+
+    expect(form.fields.email.$value.getState()).toBe("")
+    expect(form.fields.password.$value.getState()).toBe("")
+
+})
+
 test("use YUP", () => {
     function createRule<V, T = any>({
         schema,
         name,
-    }: { schema: yup.Schema<T>, name: string }): Rule<V> {
+    }: { schema: yup.Schema<T>; name: string }): Rule<V> {
         return {
             name,
             validator: (v: V) => {
@@ -277,7 +313,7 @@ test("use YUP", () => {
         }
     }
 
-    type ObjFeild = { a: string, b: string }
+    type ObjFeild = { a: string; b: string }
 
     const form = createForm({
         fields: {
@@ -285,7 +321,7 @@ test("use YUP", () => {
                 init: "",
                 rules: [
                     createRule<string>({
-                        name: 'email',
+                        name: "email",
                         schema: yup.string().email().min(3),
                     })
                 ],

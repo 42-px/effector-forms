@@ -17,11 +17,15 @@ type ConnectedField<Value> = {
   value: Value
   errors: ValidationError<Value>[]
   firstError: ValidationError<Value> | null
+  hasError: () => boolean
   onChange: Event<Value>
   onBlur: Event<void>
   errorText: (map?: ErrorTextMap) => string
   addError: Event<{ rule: string; errorText?: string }>
   validate: Event<void>
+  isValid: boolean
+  reset: Event<void>
+  set: Event<Value>
   resetErrors: Event<void>
 }
 
@@ -39,17 +43,24 @@ export function useField<Value>(field: Field<Value>): ConnectedField<Value> {
     const value = useStore(field.$value)
     const errors = useStore(field.$errors)
     const firstError = useStore(field.$firstError)
+    const isValid = useStore(field.$isValid)
 
     return {
         name: field.name,
         value,
         errors,
         firstError,
+        isValid,
         onChange: field.onChange,
         onBlur: field.onBlur,
         addError: field.addError,
         validate: field.validate,
+        reset: field.reset,
+        set: field.onChange,
         resetErrors: field.resetErrors,
+        hasError: () => {
+            return firstError !== null
+        },
         errorText: (map) => {
             if (!firstError) {
                 return ""
@@ -71,6 +82,7 @@ type Result<Fields extends AnyFieldsConfigs> = {
   values: FormValues<Fields>
   hasError: (fieldName?: keyof Fields) => boolean
   eachValid: boolean
+  isValid: boolean
   errors: (fieldName: keyof Fields) => (
     // eslint-disable-next-line max-len
     Fields[typeof fieldName] extends FieldConfig<infer U> ? ValidationError<U>[] : never
@@ -81,7 +93,9 @@ type Result<Fields extends AnyFieldsConfigs> = {
   ) | null
   errorText: (fieldName: keyof Fields, map?: ErrorTextMap) => string
   submit: Event<void>
+  reset: Event<void>
   setForm: Event<Partial<FormValues<Fields>>>
+  set: Event<Partial<FormValues<Fields>>>
   formValidated: Event<FormValues<Fields>>
 }
 
@@ -147,11 +161,14 @@ export function useForm<Fields extends AnyFieldsConfigs>(
         values,
         hasError,
         eachValid,
+        isValid: eachValid,
         errors,
         error,
+        reset: form.reset,
         errorText,
         submit: form.submit,
         setForm: form.setForm,
+        set: form.setForm, // set form alias
         formValidated: form.formValidated,
     } as Result<Fields>
 }

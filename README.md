@@ -1,24 +1,24 @@
 # Effector forms
 
-- [Motivation](#motivation)
-- [Usage](#usage)
-- [useField](#usefield)
-- [Form state](#form-state)
-- [Submit Filter](#submit-filter)
-- [Set form](#set-form)
-- [Validation triggers](#validation-triggers)
-- [Interdependent validations](#interdependent-validations)
-- [Usage with domain](#usage-with-domain)
-- [Rules](#rules)
-- [Show errors](#show-errors)
-- [Use external validators lib](#use-external-validators-lib)
-  * [Usage with Yup](#usage-with-yup)
-- [Add custom error manually](#add-custom-error-manually)
-- [Validate manually](#validate-manually)
-- [Reset errors](#reset-errors)
-- [Register form (full example)](#register-form--full-example-)
-- [Typescipt users tips](#typescipt-users-tips)
-- [Coming soon](#coming-soon)
+  * [Motivation](#motivation)
+  * [Usage](#usage)
+  * [useField](#usefield)
+  * [Form state](#form-state)
+  * [Submit Filter](#submit-filter)
+  * [Set form](#set-form)
+  * [Validation triggers](#validation-triggers)
+  * [Interdependent validations](#interdependent-validations)
+  * [Usage with domain](#usage-with-domain)
+  * [Rules](#rules)
+  * [Show errors](#show-errors)
+  * [Use external validators lib](#use-external-validators-lib)
+  * [Add custom error manually](#add-custom-error-manually)
+  * [Validate manually](#validate-manually)
+  * [Reset form](#reset-form)
+  * [Reset errors](#reset-errors)
+  * [Register form (full example)](#register-form--full-example-)
+  * [Typescipt users tips](#typescipt-users-tips)
+  * [Coming soon](#coming-soon)
 
 ## Motivation
 
@@ -728,6 +728,18 @@ forward({
   from: somethingHappened,
   to: form.fields.validate,
 })
+```
+
+## Reset form
+You can reset some field value or all fields:
+```ts
+const form = createForm(formConfig)
+
+// reset specific field
+form.fields.email.reset()
+
+// reset form
+form.reset()
 ```
 
 ## Reset errors
