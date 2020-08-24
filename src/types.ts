@@ -34,6 +34,7 @@ export type Field<Value> = {
   onBlur: Event<void>
   addError: Event<{ rule: string; errorText?: string }>
   validate: Event<void>
+  reset: Event<void>
   resetErrors: Event<void>
 }
 

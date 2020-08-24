@@ -250,3 +250,38 @@ test("filter", (done) => {
       expect(validated.mock.calls.length).toBe(2)
   })
 })
+
+test("reset form", () => {
+    const form = createForm({
+        fields: {
+            email: {
+                init: "",
+                rules: [
+                    rules.required(),
+                ],
+            },
+            password: {
+                init: "",
+                rules: [
+                    rules.required()
+                ],
+            }
+        },
+    })
+
+    form.fields.email.onChange("123")
+    form.fields.password.onChange("123")
+
+    expect(form.fields.email.$value.getState()).toBe("123")
+    expect(form.fields.password.$value.getState()).toBe("123")
+
+    form.fields.password.reset()
+    expect(form.fields.password.$value.getState()).toBe("")
+    expect(form.fields.email.$value.getState()).toBe("123")
+
+    form.fields.password.onChange("123")
+    form.reset()
+
+    expect(form.fields.email.$value.getState()).toBe("")
+    expect(form.fields.password.$value.getState()).toBe("")
+})

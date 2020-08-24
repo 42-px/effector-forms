@@ -22,6 +22,7 @@ type ConnectedField<Value> = {
   errorText: (map?: ErrorTextMap) => string
   addError: Event<{ rule: string; errorText?: string }>
   validate: Event<void>
+  reset: Event<void>
   resetErrors: Event<void>
 }
 
@@ -49,6 +50,7 @@ export function useField<Value>(field: Field<Value>): ConnectedField<Value> {
         onBlur: field.onBlur,
         addError: field.addError,
         validate: field.validate,
+        reset: field.reset,
         resetErrors: field.resetErrors,
         errorText: (map) => {
             if (!firstError) {
@@ -81,6 +83,7 @@ type Result<Fields extends AnyFieldsConfigs> = {
   ) | null
   errorText: (fieldName: keyof Fields, map?: ErrorTextMap) => string
   submit: Event<void>
+  reset: Event<void>
   setForm: Event<Partial<FormValues<Fields>>>
   formValidated: Event<FormValues<Fields>>
 }
@@ -149,6 +152,7 @@ export function useForm<Fields extends AnyFieldsConfigs>(
         eachValid,
         errors,
         error,
+        reset: form.reset,
         errorText,
         submit: form.submit,
         setForm: form.setForm,

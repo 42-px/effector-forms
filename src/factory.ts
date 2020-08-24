@@ -50,6 +50,7 @@ export type Form<Fields extends AnyFieldsConfigs> = {
   $values: Store<FormValues<Fields>>
   $eachValid: Store<boolean>
   submit: Event<void>
+  reset: Event<void>
   setForm: Event<Partial<FormValues<Fields>>>
   formValidated: Event<FormValues<Fields>>
 }
@@ -91,6 +92,10 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         ? domain.event<Partial<AnyFormValues>>()
         : createEvent<Partial<AnyFormValues>>()
 
+    const resetForm = domain
+        ? domain.event<void>()
+        : createEvent<void>()
+
     const submitWithFormData = sample($form, submitForm)
 
     // bind units
@@ -100,7 +105,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         const fieldConfig = fieldsConfigs[fieldName]
         const field = fields[fieldName]
 
-        bindChangeEvent(field, setForm)
+        bindChangeEvent(field, setForm, resetForm)
 
         if (!fieldConfig.rules) continue
 
@@ -127,6 +132,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         $values: $form,
         $eachValid,
         submit: submitForm,
+        reset: resetForm,
         setForm,
         formValidated,
     } as unknown as Form<Fields>

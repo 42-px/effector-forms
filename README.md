@@ -14,6 +14,7 @@
   * [Use external validators lib](#use-external-validators-lib)
   * [Add custom error manually](#add-custom-error-manually)
   * [Validate manually](#validate-manually)
+  * [Reset form](#reset-form)
   * [Reset errors](#reset-errors)
   * [Register form (full example)](#register-form--full-example-)
   * [Typescipt users tips](#typescipt-users-tips)
@@ -663,6 +664,18 @@ forward({
   from: somethingHappened,
   to: form.fields.validate,
 })
+```
+
+## Reset form
+You can reset some field value or all fields:
+```ts
+const form = createForm(formConfig)
+
+// reset specific field
+form.fields.email.reset()
+
+// reset form
+form.reset()
 ```
 
 ## Reset errors
