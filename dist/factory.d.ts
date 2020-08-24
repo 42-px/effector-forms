@@ -9,7 +9,10 @@ export declare type Form<Fields extends AnyFieldsConfigs> = {
     };
     $values: Store<FormValues<Fields>>;
     $eachValid: Store<boolean>;
+    $isValid: Store<boolean>;
     submit: Event<void>;
+    reset: Event<void>;
+    set: Event<Partial<FormValues<Fields>>>;
     setForm: Event<Partial<FormValues<Fields>>>;
     formValidated: Event<FormValues<Fields>>;
 };
