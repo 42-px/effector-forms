@@ -1,4 +1,4 @@
-import { createEvent, createStore } from "effector"
+import { createEvent, createStore, restore } from "effector"
 import { ValidationError, FieldConfig, Rule, ValidationEvent } from "./types"
 import { createField, bindValidation, bindChangeEvent } from "./field"
 
@@ -155,6 +155,73 @@ test("bind validation: validate on blur", () => {
     expect(field.$firstError.getState()).toBeNull()
     submit()
     expect(field.$firstError.getState()).toBeNull()
+})
+
+test("filter input by store", () => {
+    const setFilter = createEvent<boolean>()
+    const $filter = restore(setFilter, false)
+
+
+    const fieldConfig: FieldConfig<any> = {
+        init: "",
+        filter: $filter,
+
+    }
+
+    const field = createField("email", fieldConfig)
+    const $form = createStore<any>({ email: "" })
+    const setForm = createEvent<any>()
+    const submit = createEvent<void>()
+    const resetForm = createEvent<void>()
+
+    bindChangeEvent(field, setForm, resetForm)
+    bindValidation({
+        $form,
+        submitEvent: submit,
+        field,
+        rules: [],
+        fieldValidationEvents: [],
+        formValidationEvents: ["submit"],
+    })
+
+    field.onChange("123")
+    expect(field.$value.getState()).toBe("")
+    setFilter(true)
+    field.onChange("123")
+    expect(field.$value.getState()).toBe("123")
+})
+
+
+test("filter input by func", () => {
+    const fieldConfig: FieldConfig<any> = {
+        init: "",
+        filter: (v: string) => /^\d+$/.test(v),
+    }
+
+    const field = createField("numeric", fieldConfig)
+    const $form = createStore<any>({ email: "" })
+    const setForm = createEvent<any>()
+    const submit = createEvent<void>()
+    const resetForm = createEvent<void>()
+
+    bindChangeEvent(field, setForm, resetForm)
+    bindValidation({
+        $form,
+        submitEvent: submit,
+        field,
+        rules: [],
+        fieldValidationEvents: [],
+        formValidationEvents: ["submit"],
+    })
+
+    field.onChange("f")
+    expect(field.$value.getState()).toBe("")
+    field.onChange("1")
+    expect(field.$value.getState()).toBe("1")
+    field.onChange("12")
+    expect(field.$value.getState()).toBe("12")
+    field.onChange("12f")
+    expect(field.$value.getState()).toBe("12")
 })
 
 test("add error manually", () => {

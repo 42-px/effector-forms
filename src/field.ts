@@ -6,6 +6,7 @@ import {
     createEvent,
     combine, 
     sample,
+    guard,
 } from "effector"
 import {
     ValidationError,
@@ -38,6 +39,7 @@ export function createField(
 
     const onChange = domain ? domain.event() : createEvent()
     const onBlur = domain ? domain.event() : createEvent()
+    const changed = domain ? domain.event() : createEvent()
     const addError = domain
         ? domain.event<{ rule: string; errorText?: string }>()
         : createEvent<{ rule: string; errorText?: string }>()
@@ -46,6 +48,7 @@ export function createField(
     const reset = domain ? domain.event() : createEvent()
 
     return {
+        changed,
         name: fieldName,
         $value,
         $errors,
@@ -58,6 +61,7 @@ export function createField(
         set: onChange,
         reset,
         resetErrors,
+        filter: fieldConfig.filter,
     }
 }
 
@@ -82,7 +86,7 @@ export function bindValidation({
         $value,
         $errors,
         onBlur,
-        onChange,
+        changed,
         addError,
         validate,
         resetErrors
@@ -120,7 +124,7 @@ export function bindValidation({
                 fieldValue: $value,
                 form: $form,
             }),
-            clock: onChange,
+            clock: changed,
         }))
     }
 
@@ -151,18 +155,25 @@ export function bindValidation({
         .reset(resetErrors)
 
     if (!eventsNames.includes("change")) {
-        $errors.reset(onChange)
+        $errors.reset(changed)
     }
 }
 
 export function bindChangeEvent(
-    { $value, onChange, name, reset }: Field<any>,
+    { $value, onChange, changed, name, reset, filter }: Field<any>,
     setForm: Event<Partial<AnyFormValues>>,
     resetForm: Event<void>,
 ): void {
 
+
+    guard({
+        source: onChange,
+        filter: filter || (() => true),
+        target: changed,
+    })
+
     $value
-        .on(onChange, (_, value) => value)
+        .on(changed, (_, value) => value)
         .on(
             setForm,
             (curr, updateSet) => updateSet.hasOwnProperty(name) 

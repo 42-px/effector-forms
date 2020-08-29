@@ -32,17 +32,22 @@ export type Field<Value> = {
   $firstError: Store<ValidationError<Value> | null>
   $isValid: Store<boolean>
   onChange: Event<Value>
+  changed: Event<Value>
   onBlur: Event<void>
   addError: Event<{ rule: string; errorText?: string }>
   validate: Event<void>
   reset: Event<void>
   set: Event<Value>
   resetErrors: Event<void>
+  filter?: Store<boolean> | FilterFunc<Value>
 }
+
+type FilterFunc<Value> = (value: Value) => boolean
 
 export type FieldConfig<Value> = {
   init: Value | InitFieldValue<Value>
   rules?: Rule<Value>[]
+  filter?: Store<boolean> | FilterFunc<Value>
   validateOn?: ValidationEvent[]
 }
 
