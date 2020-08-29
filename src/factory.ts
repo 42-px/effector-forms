@@ -50,6 +50,8 @@ export type Form<Fields extends AnyFieldsConfigs> = {
   $values: Store<FormValues<Fields>>
   $eachValid: Store<boolean>
   $isValid: Store<boolean>
+  $isDirty: Store<boolean>
+  $touched: Store<boolean>
   submit: Event<void>
   reset: Event<void>
   set: Event<Partial<FormValues<Fields>>>
@@ -70,13 +72,20 @@ export function createForm<Fields extends AnyFieldsConfigs>(
 
     const fields: AnyFields = {}
 
+    const dirtyFlagsArr: Store<boolean>[] = []
+    const touchedFlagsArr: Store<boolean>[] = []
+ 
     // create units
     for (const fieldName in fieldsConfigs) {
         if (!fieldsConfigs.hasOwnProperty(fieldName)) continue
 
         const fieldConfig = fieldsConfigs[fieldName]
 
-        fields[fieldName] = createField(fieldName, fieldConfig, domain)
+        const field = createField(fieldName, fieldConfig, domain)
+
+        fields[fieldName] = field
+        dirtyFlagsArr.push(field.$isDirty)
+        touchedFlagsArr.push(field.$touched)
     }
 
     const $form = createFormValuesStore(fields)
@@ -84,6 +93,12 @@ export function createForm<Fields extends AnyFieldsConfigs>(
     const $isFormValid = $filter
         ? combine($eachValid, $filter, (valid, filter) => valid && filter)
         : $eachValid
+    const $isDirty = combine(dirtyFlagsArr).map(
+        (dirtyFlags) => dirtyFlags.some(Boolean)
+    )
+    const $touched = combine(touchedFlagsArr).map(
+        (touchedFlags) => touchedFlags.some(Boolean)
+    )
   
     const submitForm = domain ? domain.event<void>() : createEvent<void>()
     const formValidated = domain 
@@ -134,6 +149,8 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         $values: $form,
         $eachValid,
         $isValid: $eachValid,
+        $isDirty: $isDirty,
+        $touched: $touched,
         submit: submitForm,
         reset: resetForm,
         setForm,

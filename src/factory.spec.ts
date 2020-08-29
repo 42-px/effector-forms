@@ -356,3 +356,75 @@ test("use YUP", () => {
     expect(form.fields.simpleField.$firstError.getState()).toBeNull()
     expect(form.fields.objField.$firstError.getState()).toBeTruthy()
 })
+
+test("isDirty & touched", () => {
+    const form = createForm({
+        fields: {
+            email: {
+                init: "",
+                rules: [
+                    rules.email(),
+                ],
+            },
+            password: {
+                init: "",
+                rules: [
+                    rules.required()
+                ],
+            },
+        },
+        validateOn: ["submit"],
+    })
+
+    expect(form.fields.email.$isDirty.getState()).toBe(false)
+    expect(form.fields.password.$isDirty.getState()).toBe(false)
+    expect(form.$isDirty.getState()).toBe(false)
+    expect(form.fields.email.$touched.getState()).toBe(false)
+    expect(form.fields.password.$touched.getState()).toBe(false)
+    expect(form.$touched.getState()).toBe(false)
+
+    form.fields.email.onChange("123")
+
+    expect(form.fields.email.$isDirty.getState()).toBe(true)
+    expect(form.fields.password.$isDirty.getState()).toBe(false)
+    expect(form.$isDirty.getState()).toBe(true)
+    expect(form.fields.email.$touched.getState()).toBe(true)
+    expect(form.fields.password.$touched.getState()).toBe(false)
+    expect(form.$touched.getState()).toBe(true)
+
+    form.fields.password.onChange("123")
+
+    expect(form.fields.email.$isDirty.getState()).toBe(true)
+    expect(form.fields.password.$isDirty.getState()).toBe(true)
+    expect(form.$isDirty.getState()).toBe(true)
+    expect(form.fields.email.$touched.getState()).toBe(true)
+    expect(form.fields.password.$touched.getState()).toBe(true)
+    expect(form.$touched.getState()).toBe(true)
+
+    form.fields.email.onChange("")
+
+    expect(form.fields.email.$isDirty.getState()).toBe(false)
+    expect(form.fields.password.$isDirty.getState()).toBe(true)
+    expect(form.$isDirty.getState()).toBe(true)
+    expect(form.fields.email.$touched.getState()).toBe(true)
+    expect(form.fields.password.$touched.getState()).toBe(true)
+    expect(form.$touched.getState()).toBe(true)
+
+    form.fields.password.onChange("")
+
+    expect(form.fields.email.$isDirty.getState()).toBe(false)
+    expect(form.fields.password.$isDirty.getState()).toBe(false)
+    expect(form.$isDirty.getState()).toBe(false)
+    expect(form.fields.email.$touched.getState()).toBe(true)
+    expect(form.fields.password.$touched.getState()).toBe(true)
+    expect(form.$touched.getState()).toBe(true)
+
+    form.reset()
+
+    expect(form.fields.email.$isDirty.getState()).toBe(false)
+    expect(form.fields.password.$isDirty.getState()).toBe(false)
+    expect(form.$isDirty.getState()).toBe(false)
+    expect(form.fields.email.$touched.getState()).toBe(false)
+    expect(form.fields.password.$touched.getState()).toBe(false)
+    expect(form.$touched.getState()).toBe(false)
+})

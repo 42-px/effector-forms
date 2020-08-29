@@ -199,7 +199,7 @@ test("filter input by func", () => {
     }
 
     const field = createField("numeric", fieldConfig)
-    const $form = createStore<any>({ email: "" })
+    const $form = createStore<any>({ numeric: "" })
     const setForm = createEvent<any>()
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
@@ -348,5 +348,42 @@ test("reset errors", () => {
     field.resetErrors()
 
     expect(field.$firstError.getState()).toBeNull()
+})
+
+test("isDirty & touched", () => {
+    const fieldConfig: FieldConfig<any> = {
+        init: "",
+    }
+
+    const field = createField("field", fieldConfig)
+    const $form = createStore<any>({ field: "" })
+    const setForm = createEvent<any>()
+    const submit = createEvent<void>()
+    const resetForm = createEvent<void>()
+
+    bindChangeEvent(field, setForm, resetForm)
+    bindValidation({
+        $form,
+        submitEvent: submit,
+        field,
+        rules: [],
+        fieldValidationEvents: [],
+        formValidationEvents: ["submit"],
+    })
+
+    expect(field.$isDirty.getState()).toBe(false)
+    expect(field.$touched.getState()).toBe(false)
+
+    field.onChange("123")
+    expect(field.$isDirty.getState()).toBe(true)
+    expect(field.$touched.getState()).toBe(true)
+
+    field.onChange("")
+    expect(field.$isDirty.getState()).toBe(false)
+    expect(field.$touched.getState()).toBe(true)
+
+    field.reset()
+    expect(field.$isDirty.getState()).toBe(false)
+    expect(field.$touched.getState()).toBe(false)
 })
 

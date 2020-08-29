@@ -24,6 +24,8 @@ type ConnectedField<Value> = {
   addError: Event<{ rule: string; errorText?: string }>
   validate: Event<void>
   isValid: boolean
+  isDirty: boolean
+  touched: boolean
   reset: Event<void>
   set: Event<Value>
   resetErrors: Event<void>
@@ -44,6 +46,8 @@ export function useField<Value>(field: Field<Value>): ConnectedField<Value> {
     const errors = useStore(field.$errors)
     const firstError = useStore(field.$firstError)
     const isValid = useStore(field.$isValid)
+    const isDirty = useStore(field.$isDirty)
+    const touched = useStore(field.$touched)
 
     return {
         name: field.name,
@@ -51,6 +55,8 @@ export function useField<Value>(field: Field<Value>): ConnectedField<Value> {
         errors,
         firstError,
         isValid,
+        isDirty,
+        touched,
         onChange: field.onChange,
         onBlur: field.onBlur,
         addError: field.addError,
@@ -83,6 +89,8 @@ type Result<Fields extends AnyFieldsConfigs> = {
   hasError: (fieldName?: keyof Fields) => boolean
   eachValid: boolean
   isValid: boolean
+  isDirty: boolean
+  touched: boolean
   errors: (fieldName: keyof Fields) => (
     // eslint-disable-next-line max-len
     Fields[typeof fieldName] extends FieldConfig<infer U> ? ValidationError<U>[] : never
@@ -113,6 +121,8 @@ export function useForm<Fields extends AnyFieldsConfigs>(
 
     const values = useStore(form.$values)
     const eachValid = useStore(form.$eachValid)
+    const isDirty = useStore(form.$isDirty)
+    const touched = useStore(form.$touched)
 
 
     const hasError = (fieldName?: string): boolean => {
@@ -162,6 +172,8 @@ export function useForm<Fields extends AnyFieldsConfigs>(
         hasError,
         eachValid,
         isValid: eachValid,
+        isDirty,
+        touched,
         errors,
         error,
         reset: form.reset,

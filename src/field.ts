@@ -37,6 +37,10 @@ export function createField(
         (errors) => errors[0] ? errors[0] : null
     )
 
+    const $isDirty = $value.map((value) => value !== initValue)
+
+    const $touched = domain ? domain.store(false) : createStore(false)
+
     const onChange = domain ? domain.event() : createEvent()
     const onBlur = domain ? domain.event() : createEvent()
     const changed = domain ? domain.event() : createEvent()
@@ -54,6 +58,8 @@ export function createField(
         $errors,
         $firstError,
         $isValid: $firstError.map((firstError) => firstError === null),
+        $isDirty,
+        $touched,
         onChange,
         onBlur,
         addError,
@@ -160,11 +166,14 @@ export function bindValidation({
 }
 
 export function bindChangeEvent(
-    { $value, onChange, changed, name, reset, filter }: Field<any>,
+    { $value, $touched, onChange, changed, name, reset, filter }: Field<any>,
     setForm: Event<Partial<AnyFormValues>>,
     resetForm: Event<void>,
 ): void {
 
+    $touched
+        .on(changed, () => true)
+        .reset(reset, resetForm)
 
     guard({
         source: onChange,
