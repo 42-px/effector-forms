@@ -19,6 +19,8 @@ declare type ConnectedField<Value> = {
     }>;
     validate: Event<void>;
     isValid: boolean;
+    isDirty: boolean;
+    touched: boolean;
     reset: Event<void>;
     set: Event<Value>;
     resetErrors: Event<void>;
@@ -33,6 +35,8 @@ declare type Result<Fields extends AnyFieldsConfigs> = {
     hasError: (fieldName?: keyof Fields) => boolean;
     eachValid: boolean;
     isValid: boolean;
+    isDirty: boolean;
+    touched: boolean;
     errors: (fieldName: keyof Fields) => (Fields[typeof fieldName] extends FieldConfig<infer U> ? ValidationError<U>[] : never);
     error: (fieldName: keyof Fields) => (Fields[typeof fieldName] extends FieldConfig<infer U> ? ValidationError<U> : never) | null;
     errorText: (fieldName: keyof Fields, map?: ErrorTextMap) => string;

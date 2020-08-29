@@ -21,7 +21,10 @@ export declare type Field<Value> = {
     $errors: Store<ValidationError<Value>[]>;
     $firstError: Store<ValidationError<Value> | null>;
     $isValid: Store<boolean>;
+    $isDirty: Store<boolean>;
+    $touched: Store<boolean>;
     onChange: Event<Value>;
+    changed: Event<Value>;
     onBlur: Event<void>;
     addError: Event<{
         rule: string;
@@ -31,10 +34,13 @@ export declare type Field<Value> = {
     reset: Event<void>;
     set: Event<Value>;
     resetErrors: Event<void>;
+    filter?: Store<boolean> | FilterFunc<Value>;
 };
+declare type FilterFunc<Value> = (value: Value) => boolean;
 export declare type FieldConfig<Value> = {
     init: Value | InitFieldValue<Value>;
     rules?: Rule<Value>[];
+    filter?: Store<boolean> | FilterFunc<Value>;
     validateOn?: ValidationEvent[];
 };
 export declare type AnyFields = {
