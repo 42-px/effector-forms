@@ -39,8 +39,9 @@ test("bind change event", () => {
 
     const setForm = createEvent<Partial<{ email: string }>>()
     const resetForm = createEvent<void>()
+    const resetTouched = createEvent<void>()
 
-    bindChangeEvent(field, setForm, resetForm)
+    bindChangeEvent(field, setForm, resetForm, resetTouched)
     
     field.onChange("123")
     expect(field.$value.getState()).toEqual("123")
@@ -77,8 +78,9 @@ test("bind validation: validate on change", () => {
     const setForm = createEvent<any>()
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
+    const resetTouched = createEvent<void>()
 
-    bindChangeEvent(field, setForm, resetForm)
+    bindChangeEvent(field, setForm, resetForm, resetTouched)
     bindValidation({
         $form,
         submitEvent: submit,
@@ -123,8 +125,9 @@ test("bind validation: validate on blur", () => {
     const setForm = createEvent<any>()
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
+    const resetTouched = createEvent<void>()
 
-    bindChangeEvent(field, setForm, resetForm)
+    bindChangeEvent(field, setForm, resetForm, resetTouched)
     bindValidation({
         $form,
         submitEvent: submit,
@@ -173,8 +176,9 @@ test("filter input by store", () => {
     const setForm = createEvent<any>()
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
+    const resetTouched = createEvent<void>()
 
-    bindChangeEvent(field, setForm, resetForm)
+    bindChangeEvent(field, setForm, resetForm, resetTouched)
     bindValidation({
         $form,
         submitEvent: submit,
@@ -203,8 +207,9 @@ test("filter input by func", () => {
     const setForm = createEvent<any>()
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
+    const resetTouched = createEvent<void>()
 
-    bindChangeEvent(field, setForm, resetForm)
+    bindChangeEvent(field, setForm, resetForm, resetTouched)
     bindValidation({
         $form,
         submitEvent: submit,
@@ -236,7 +241,9 @@ test("add error manually", () => {
     const submit = createEvent<void>()
     const reset = createEvent<void>()
 
-    bindChangeEvent(field, setForm, reset)
+    const resetTouched = createEvent<void>()
+
+    bindChangeEvent(field, setForm, reset, resetTouched)
     bindValidation({
         $form,
         submitEvent: submit,
@@ -282,8 +289,9 @@ test("validate manually", () => {
     const setForm = createEvent<any>()
     const submit = createEvent<void>()
     const reset = createEvent<void>()
+    const resetTouched = createEvent<void>()
 
-    bindChangeEvent(field, setForm, reset)
+    bindChangeEvent(field, setForm, reset, resetTouched)
     bindValidation({
         $form,
         submitEvent: submit,
@@ -326,8 +334,9 @@ test("reset errors", () => {
     const setForm = createEvent<any>()
     const submit = createEvent<void>()
     const reset = createEvent<void>()
+    const resetTouched = createEvent<void>()
 
-    bindChangeEvent(field, setForm, reset)
+    bindChangeEvent(field, setForm, reset, resetTouched)
     bindValidation({
         $form,
         submitEvent: submit,
@@ -360,8 +369,9 @@ test("isDirty & touched", () => {
     const setForm = createEvent<any>()
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
+    const resetTouched = createEvent<void>()
 
-    bindChangeEvent(field, setForm, resetForm)
+    bindChangeEvent(field, setForm, resetForm, resetTouched)
     bindValidation({
         $form,
         submitEvent: submit,
@@ -384,6 +394,14 @@ test("isDirty & touched", () => {
 
     field.reset()
     expect(field.$isDirty.getState()).toBe(false)
+    expect(field.$touched.getState()).toBe(false)
+
+    field.onChange("123")
+    expect(field.$isDirty.getState()).toBe(true)
+    expect(field.$touched.getState()).toBe(true)
+
+    resetTouched()
+    expect(field.$isDirty.getState()).toBe(true)
     expect(field.$touched.getState()).toBe(false)
 })
 

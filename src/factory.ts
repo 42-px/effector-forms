@@ -56,6 +56,7 @@ export type Form<Fields extends AnyFieldsConfigs> = {
   reset: Event<void>
   set: Event<Partial<FormValues<Fields>>>
   setForm: Event<Partial<FormValues<Fields>>>
+  resetTouched: Event<void>
   formValidated: Event<FormValues<Fields>>
 }
 
@@ -113,6 +114,10 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         ? domain.event<void>()
         : createEvent<void>()
 
+    const resetTouched = domain
+        ? domain.event<void>()
+        : createEvent<void>()
+
     const submitWithFormData = sample($form, submitForm)
 
     // bind units
@@ -122,7 +127,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         const fieldConfig = fieldsConfigs[fieldName]
         const field = fields[fieldName]
 
-        bindChangeEvent(field, setForm, resetForm)
+        bindChangeEvent(field, setForm, resetForm, resetTouched)
 
         if (!fieldConfig.rules) continue
 
@@ -152,6 +157,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         $isDirty: $isDirty,
         $touched: $touched,
         submit: submitForm,
+        resetTouched,
         reset: resetForm,
         setForm,
         set: setForm,

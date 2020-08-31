@@ -169,11 +169,12 @@ export function bindChangeEvent(
     { $value, $touched, onChange, changed, name, reset, filter }: Field<any>,
     setForm: Event<Partial<AnyFormValues>>,
     resetForm: Event<void>,
+    resetTouched: Event<void>,
 ): void {
 
     $touched
         .on(changed, () => true)
-        .reset(reset, resetForm)
+        .reset(reset, resetForm, resetTouched)
 
     guard({
         source: onChange,
