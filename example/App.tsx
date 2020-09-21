@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { createForm, Rule, useForm } from '../dist'
+import { createForm, Rule, useForm } from '../src/index'
 
 const rules = {
   required: (): Rule<string> => ({
