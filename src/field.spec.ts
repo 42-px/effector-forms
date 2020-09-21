@@ -84,6 +84,7 @@ test("bind validation: validate on change", () => {
     bindValidation({
         $form,
         submitEvent: submit,
+        resetFormEvent: resetForm,
         field,
         rules,
         fieldValidationEvents: validateOn,
@@ -131,6 +132,7 @@ test("bind validation: validate on blur", () => {
     bindValidation({
         $form,
         submitEvent: submit,
+        resetFormEvent: resetForm,
         field,
         rules,
         fieldValidationEvents: validateOn,
@@ -182,6 +184,7 @@ test("filter input by store", () => {
     bindValidation({
         $form,
         submitEvent: submit,
+        resetFormEvent: resetForm,
         field,
         rules: [],
         fieldValidationEvents: [],
@@ -213,6 +216,7 @@ test("filter input by func", () => {
     bindValidation({
         $form,
         submitEvent: submit,
+        resetFormEvent: resetForm,
         field,
         rules: [],
         fieldValidationEvents: [],
@@ -247,6 +251,7 @@ test("add error manually", () => {
     bindValidation({
         $form,
         submitEvent: submit,
+        resetFormEvent: reset,
         field,
         rules: [],
         fieldValidationEvents: ["change"],
@@ -295,6 +300,7 @@ test("validate manually", () => {
     bindValidation({
         $form,
         submitEvent: submit,
+        resetFormEvent: reset,
         field,
         rules,
         fieldValidationEvents: ["submit"],
@@ -340,6 +346,7 @@ test("reset errors", () => {
     bindValidation({
         $form,
         submitEvent: submit,
+        resetFormEvent: reset,
         field,
         rules,
         fieldValidationEvents: ["submit"],
@@ -375,6 +382,7 @@ test("isDirty & touched", () => {
     bindValidation({
         $form,
         submitEvent: submit,
+        resetFormEvent: resetForm,
         field,
         rules: [],
         fieldValidationEvents: [],

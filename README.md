@@ -473,6 +473,43 @@ const form = createForm({
 })
 ```
 
+## isDirty & isTouched
+
+Each field has two boolean stores: $isTouched and $isDirty.
+
+*$isTouched* true if this field has ever changed (the onChange event has been called at least once). false otherwise.
+
+*isDirty* true if the current value is different from the initial (===). false otherwise.
+
+Both fields are reset on form.reset event.
+
+```ts
+const form = createForm({
+  fields: {
+    email: {
+      init: "email@example.com",
+      rules: [
+        rules.required(),
+      ],
+    },
+  }
+})
+
+form.fields.email.onChange("")
+console.log(form.fields.email.$isTouched.getState()) // true
+console.log(form.fields.email.$isDirty.getState()) // true
+
+form.fields.email.onChange("email@example.com")
+console.log(form.fields.email.$isTouched.getState()) // true
+console.log(form.fields.email.$isDirty.getState()) // false
+
+form.reset()
+console.log(form.fields.email.$isTouched.getState()) // false
+console.log(form.fields.email.$isDirty.getState()) // false
+```
+
+[Sandbox](https://codesandbox.io/s/sad-wildflower-0hjc9?file=/src/App.js)
+
 ## Show errors
 
 You can use two different approaches to output error text

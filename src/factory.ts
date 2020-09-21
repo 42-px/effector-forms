@@ -135,6 +135,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
             $form,
             rules: fieldConfig.rules,
             submitEvent: submitForm,
+            resetFormEvent: resetForm,
             field,
             formValidationEvents: validateOn ? validateOn : ["submit"],
             fieldValidationEvents: fieldConfig.validateOn

@@ -59,6 +59,7 @@ export function createField(
         $firstError,
         $isValid: $firstError.map((firstError) => firstError === null),
         $isDirty,
+        $isTouched: $touched,
         $touched,
         onChange,
         onBlur,
@@ -74,6 +75,7 @@ export function createField(
 type BindValidationParams = {
   $form: Store<AnyFormValues>
   submitEvent: Event<void>
+  resetFormEvent: Event<void>
   field: Field<any>
   rules: Rule<any, any>[]
   formValidationEvents: ValidationEvent[]
@@ -83,10 +85,11 @@ type BindValidationParams = {
 export function bindValidation({
     $form,
     submitEvent,
+    resetFormEvent,
     field,
     rules,
     formValidationEvents,
-    fieldValidationEvents
+    fieldValidationEvents,
 }: BindValidationParams): void {
     const {
         $value,
@@ -95,7 +98,8 @@ export function bindValidation({
         changed,
         addError,
         validate,
-        resetErrors
+        resetErrors,
+        reset,
     } = field
     const validator = createCombineValidator(rules)
     const eventsNames = [...formValidationEvents, ...fieldValidationEvents]
@@ -158,7 +162,7 @@ export function bindValidation({
             (_, { form, fieldValue }) => validator(fieldValue, form)
         )
         .on(addErrorWithValue, (errors, newError) => [newError, ...errors])
-        .reset(resetErrors)
+        .reset(resetErrors, resetFormEvent, reset)
 
     if (!eventsNames.includes("change")) {
         $errors.reset(changed)

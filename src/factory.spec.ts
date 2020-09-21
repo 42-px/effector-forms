@@ -281,10 +281,21 @@ test("reset form", () => {
     expect(form.fields.email.$value.getState()).toBe("123")
 
     form.fields.password.onChange("123")
+    form.fields.email.onChange("")
+    form.submit()
+
+    expect(form.fields.email.$firstError.getState()).toEqual({
+        rule: "required",
+        value: "",
+    })
+    expect(form.fields.password.$firstError.getState()).toBeNull()
     form.reset()
 
     expect(form.fields.email.$value.getState()).toBe("")
     expect(form.fields.password.$value.getState()).toBe("")
+    expect(form.fields.email.$firstError.getState()).toBeNull()
+    expect(form.fields.password.$firstError.getState()).toBeNull()
+    expect(form.$eachValid.getState()).toBe(true)
 
 })
 

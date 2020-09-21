@@ -32,6 +32,7 @@ export type Field<Value> = {
   $firstError: Store<ValidationError<Value> | null>
   $isValid: Store<boolean>
   $isDirty: Store<boolean>
+  $isTouched: Store<boolean>
   $touched: Store<boolean>
   onChange: Event<Value>
   changed: Event<Value>
