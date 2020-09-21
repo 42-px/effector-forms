@@ -4,7 +4,6 @@ import {
     combine,
     sample,
     guard,
-    createEvent,
 } from "effector"
 import {
     FieldConfig,
@@ -21,7 +20,7 @@ import {
     bindValidation,
     bindChangeEvent,
 } from "./field"
-import { createFormUnit } from './create-form-unit'
+import { createFormUnit } from "./create-form-unit"
 
 function createFormValuesStore(
     fields: AnyFields
@@ -109,9 +108,9 @@ export function createForm<Fields extends AnyFieldsConfigs>(
     })
 
 
-    const setForm = createFormUnit.event({
+    const setForm = createFormUnit.event<Partial<AnyFormValues>>({
         domain,
-        existing: units?.setForm,
+        existing: units?.setForm as Event<Partial<AnyFormValues>>,
     })
     
     const resetForm = createFormUnit.event({

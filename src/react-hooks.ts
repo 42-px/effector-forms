@@ -26,7 +26,7 @@ type ConnectedField<Value> = {
   validate: Event<void>
   isValid: boolean
   isDirty: boolean
-  isTouched: boolean,
+  isTouched: boolean
   touched: boolean
   reset: Event<void>
   set: Event<Value>

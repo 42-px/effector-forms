@@ -11,7 +11,7 @@
     "build": "rollup -c rollup.config.js",
     "test": "jest",
     "example": "cross-env NODE_ENV=development webpack-dev-server --config ./webpack.example.config.js",
-    "lint": "eslint \"./**/*.{js,ts,tsx}\"",
+    "lint": "eslint \"./**/*.{js,ts,tsx}\" --fix",
     "peers": "npm-install-peers"
   },
   "repository": {
@@ -57,6 +57,7 @@
     "cross-env": "^7.0.2",
     "eslint": "^7.0.0",
     "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.20.6",
     "fork-ts-checker-webpack-plugin": "^5.2.0",
     "html-webpack-plugin": "^4.5.0",
     "jest": "^26.2.2",

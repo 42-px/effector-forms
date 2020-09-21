@@ -15,7 +15,7 @@ import {
     Rule,
 } from "./types"
 import { createCombineValidator } from "./validation"
-import { createFormUnit } from './create-form-unit'
+import { createFormUnit } from "./create-form-unit"
 
 export function createField(
     fieldName: string,
@@ -63,7 +63,10 @@ export function createField(
         domain,
         existing: fieldConfig.units?.changed,
     })
-    const addError = createFormUnit.event<{ rule: string; errorText?: string }>({
+    const addError = createFormUnit.event<{
+        rule: string
+        errorText?: string 
+    }>({
         domain,
         existing: fieldConfig.units?.addError,
     })

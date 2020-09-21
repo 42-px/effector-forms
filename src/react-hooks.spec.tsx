@@ -1,5 +1,5 @@
 import * as React from "react"
-import { render, fireEvent, screen } from "@testing-library/react"
+import { render } from "@testing-library/react"
 import { createForm } from "./factory"
 import { useForm } from "./react-hooks"
 import { Rule } from "./types"

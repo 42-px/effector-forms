@@ -1,7 +1,7 @@
 import { restore, forward, createEffect, createEvent } from "effector"
 import * as yup from "yup"
 import { createForm } from "./factory"
-import { Rule, ValidationError } from "./types"
+import { Rule } from "./types"
 
 const rules = {
     required: (): Rule<string> => ({

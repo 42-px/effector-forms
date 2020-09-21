@@ -1,4 +1,4 @@
-import { createStore, createEvent, Domain, Store, Event } from 'effector'
+import { createStore, createEvent, Domain, Store, Event } from "effector"
 
 type CreateStoreParams<Value> = {
   init: Value
@@ -7,10 +7,10 @@ type CreateStoreParams<Value> = {
 }
 
 function store<Value>({ init, domain, existing }: CreateStoreParams<Value>) {
-  if (existing) {
-    return existing
-  }
-  return domain ? domain.store(init) : createStore(init)
+    if (existing) {
+        return existing
+    }
+    return domain ? domain.store(init) : createStore(init)
 }
 
 type CreateEventParams<Value> = {
@@ -19,13 +19,13 @@ type CreateEventParams<Value> = {
 }
 
 function event<Value>({ domain, existing }: CreateEventParams<Value>) {
-  if (existing) {
-    return existing
-  }
-  return domain ? domain.event<Value>() : createEvent<Value>()
+    if (existing) {
+        return existing
+    }
+    return domain ? domain.event<Value>() : createEvent<Value>()
 }
 
 export const createFormUnit = {
-  store,
-  event,
+    store,
+    event,
 }

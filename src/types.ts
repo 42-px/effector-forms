@@ -54,17 +54,17 @@ export type FieldConfig<Value> = {
   filter?: Store<boolean> | FilterFunc<Value>
   validateOn?: ValidationEvent[]
   units?: {
-    $value?: Store<Value>,
-    $errors?: Store<ValidationError<Value>[]>,
-    $isTouched?: Store<boolean>,
-    onChange?: Event<Value>,
-    changed?: Event<Value>,
-    onBlur?: Event<void>,
-    addError?: Event<{ rule: string; errorText?: string }>,
-    validate?: Event<void>,
-    reset?: Event<void>,
-    resetErrors?: Event<void>,
-  },
+    $value?: Store<Value>
+    $errors?: Store<ValidationError<Value>[]>
+    $isTouched?: Store<boolean>
+    onChange?: Event<Value>
+    changed?: Event<Value>
+    onBlur?: Event<void>
+    addError?: Event<{ rule: string; errorText?: string }>
+    validate?: Event<void>
+    reset?: Event<void>
+    resetErrors?: Event<void>
+  }
 }
 
 export type AnyFields ={

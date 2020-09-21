@@ -1,4 +1,4 @@
-import { Domain, Store, Event } from 'effector';
+import { Domain, Store, Event } from "effector";
 declare type CreateStoreParams<Value> = {
     init: Value;
     domain?: Domain;
