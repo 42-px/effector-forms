@@ -22,6 +22,7 @@ export type ValidationError<Value = any> = {
 
 export type Rule<Value, Form = any> = {
   name: string
+  errorText?: string
   validator: Validator<Value, Form>
 }
 
@@ -52,6 +53,18 @@ export type FieldConfig<Value> = {
   rules?: Rule<Value>[]
   filter?: Store<boolean> | FilterFunc<Value>
   validateOn?: ValidationEvent[]
+  units?: {
+    $value?: Store<Value>,
+    $errors?: Store<ValidationError<Value>[]>,
+    $isTouched?: Store<boolean>,
+    onChange?: Event<Value>,
+    changed?: Event<Value>,
+    onBlur?: Event<void>,
+    addError?: Event<{ rule: string; errorText?: string }>,
+    validate?: Event<void>,
+    reset?: Event<void>,
+    resetErrors?: Event<void>,
+  },
 }
 
 export type AnyFields ={
@@ -66,9 +79,22 @@ export type AnyFormValues = {
   [key: string]: any
 }
 
+export type FormValues<Fields extends AnyFieldsConfigs> = {
+  [K in keyof Fields]: Fields[K] extends FieldConfig<infer U>
+    ? U
+    : never
+}
+
 export type FormConfig<Fields extends AnyFieldsConfigs> = {
   fields: Fields
   domain?: Domain
   filter?: Store<boolean>
   validateOn?: ValidationEvent[]
+  units?: {
+    submit?: Event<void>
+    reset?: Event<void>
+    resetTouched?: Event<void>
+    formValidated?: Event<FormValues<Fields>>
+    setForm?: Event<Partial<FormValues<Fields>>>
+  }
 }

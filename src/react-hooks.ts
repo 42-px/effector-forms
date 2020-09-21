@@ -1,8 +1,9 @@
 import { useStore } from "effector-react"
 import { Event } from "effector"
-import { Form, FormValues } from "./factory"
+import { Form } from "./factory"
 import {
     Field,
+    FormValues,
     ValidationError,
     FieldConfig,
     AnyFieldsConfigs
@@ -25,6 +26,7 @@ type ConnectedField<Value> = {
   validate: Event<void>
   isValid: boolean
   isDirty: boolean
+  isTouched: boolean,
   touched: boolean
   reset: Event<void>
   set: Event<Value>
@@ -57,6 +59,7 @@ export function useField<Value>(field: Field<Value>): ConnectedField<Value> {
         isValid,
         isDirty,
         touched,
+        isTouched: touched,
         onChange: field.onChange,
         onBlur: field.onBlur,
         addError: field.addError,
@@ -90,6 +93,7 @@ type Result<Fields extends AnyFieldsConfigs> = {
   eachValid: boolean
   isValid: boolean
   isDirty: boolean
+  isTouched: boolean
   touched: boolean
   errors: (fieldName: keyof Fields) => (
     // eslint-disable-next-line max-len
@@ -173,6 +177,7 @@ export function useForm<Fields extends AnyFieldsConfigs>(
         eachValid,
         isValid: eachValid,
         isDirty,
+        isTouched: touched,
         touched,
         errors,
         error,

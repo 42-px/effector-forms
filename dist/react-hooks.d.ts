@@ -1,6 +1,6 @@
 import { Event } from "effector";
-import { Form, FormValues } from "./factory";
-import { Field, ValidationError, FieldConfig, AnyFieldsConfigs } from "./types";
+import { Form } from "./factory";
+import { Field, FormValues, ValidationError, FieldConfig, AnyFieldsConfigs } from "./types";
 declare type ErrorTextMap = {
     [key: string]: string;
 };
@@ -20,6 +20,7 @@ declare type ConnectedField<Value> = {
     validate: Event<void>;
     isValid: boolean;
     isDirty: boolean;
+    isTouched: boolean;
     touched: boolean;
     reset: Event<void>;
     set: Event<Value>;
@@ -36,6 +37,7 @@ declare type Result<Fields extends AnyFieldsConfigs> = {
     eachValid: boolean;
     isValid: boolean;
     isDirty: boolean;
+    isTouched: boolean;
     touched: boolean;
     errors: (fieldName: keyof Fields) => (Fields[typeof fieldName] extends FieldConfig<infer U> ? ValidationError<U>[] : never);
     error: (fieldName: keyof Fields) => (Fields[typeof fieldName] extends FieldConfig<infer U> ? ValidationError<U> : never) | null;

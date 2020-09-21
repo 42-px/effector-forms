@@ -1,8 +1,5 @@
 import { Event, Store } from "effector";
-import { FieldConfig, Field, AnyFieldsConfigs, FormConfig } from "./types";
-export declare type FormValues<Fields extends AnyFieldsConfigs> = {
-    [K in keyof Fields]: Fields[K] extends FieldConfig<infer U> ? U : never;
-};
+import { FieldConfig, Field, AnyFieldsConfigs, FormConfig, FormValues } from "./types";
 export declare type Form<Fields extends AnyFieldsConfigs> = {
     fields: {
         [K in keyof Fields]: Fields[K] extends FieldConfig<infer U> ? Field<U> : never;

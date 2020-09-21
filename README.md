@@ -521,7 +521,7 @@ You can use two different approaches to output error text
 In the first approach returns an object instead of a boolean from the validator function:
 
 ```ts
-const rules = [
+const rules = {
     required: (): Rule<string> => ({
         name: "required",
         validator: (value) => ({
@@ -529,7 +529,7 @@ const rules = [
             errorText: "Required field",
         }),
     }),
-]
+}
 
 
 const form = createForm({
@@ -571,12 +571,12 @@ const Form = () => {
 Alternatively, you can define the error text by passing the second argument to the errorText helper:
 
 ```tsx
-const rules = [
+const rules = {
     required: (): Rule<string> => ({
         name: "required",
         validator: (value) => Boolean(value),
     }),
-]
+}
 
 
 const form = createForm({
@@ -631,9 +631,9 @@ function createRule<Value>(
   validator
 })
 
-export const rules = [
+export const rules = {
   email: = () => createRule("email", isEmail)
-]
+}
 ```
 
 ### Usage with Yup
@@ -977,6 +977,48 @@ const form = createForm({
 
 const $usernameVal = form.fields.username.$value // Store<string>
 ```
+
+## Advanced
+
+### Use external units
+
+By default, **createForm** factory creates all form units (stores & events). Sometimes there is a need to pass externally created form units. In this case, **createForm** just binds them and creates combine units:
+
+```ts
+import { createForm, ValidationError } from 'effector-forms'
+
+const form = createForm({
+  fields: {
+    email: {
+        init: "",
+        rules: [],
+        units: {
+          // all units are optional
+          $value: createStore(""),
+          $errors: createStore<ValidationError<string>[]>([]),
+          $isTouched: createStore<boolean>(false),
+          onChange: createEvent<string>(),
+          changed: createEvent<string>(),
+          onBlur: createEvent<void>(),
+          addError: createEvent<{ rule: string; errorText?: string }>(),
+          validate: createEvent<void>(),
+          reset: createEvent<void>(),
+          resetErrors: createEvent<void>(),
+        },
+    },
+  },
+  units: {
+    // all units are optional
+    submit: createEvent(),
+    reset: createEvent(),
+    resetTouched: createEvent(),
+    formValidated: createEvent<{ email: string }>(),
+    setForm: createEvent<{ email?: string }>(),
+  },
+  validateOn: ["submit"],
+})
+```
+
 
 ## Coming soon
 

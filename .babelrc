@@ -3,11 +3,21 @@
     [
       "@babel/preset-env",
       {
-        "modules": false
+        "modules": false,
+        "targets": {
+          "node": "10",
+          "browsers": [
+            "last 2 Chrome versions",
+            "last 2 Firefox versions",
+            "last 2 Safari versions",
+            "last 1 Edge versions"
+          ]
+        }
       }
     ]
   ],
   "plugins": [
+    "@babel/plugin-proposal-optional-chaining",
     [
       "module-resolver",
       {
@@ -25,6 +35,15 @@
       ],
       "plugins": [
         "@babel/plugin-transform-modules-commonjs"
+      ]
+    },
+    "development": {
+      "presets": [
+        "@babel/preset-typescript",
+        "@babel/preset-react"
+      ],
+      "plugins": [
+        "react-hot-loader/babel"
       ]
     }
   }

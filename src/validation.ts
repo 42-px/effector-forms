@@ -18,6 +18,7 @@ export function createCombineValidator<Value = any, Form = any>(
             if (typeof result === "boolean" && !result) {
                 errors.push({
                     rule: rule.name,
+                    errorText: rule.errorText,
                     value,
                 })
             }

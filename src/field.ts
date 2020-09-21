@@ -2,8 +2,6 @@ import {
     Domain,
     Event,
     Store,
-    createStore,
-    createEvent,
     combine, 
     sample,
     guard,
@@ -17,6 +15,7 @@ import {
     Rule,
 } from "./types"
 import { createCombineValidator } from "./validation"
+import { createFormUnit } from './create-form-unit'
 
 export function createField(
     fieldName: string,
@@ -27,11 +26,18 @@ export function createField(
         ? fieldConfig.init()
         : fieldConfig.init
 
-    const $value = domain ? domain.store(initValue) : createStore(initValue)
+    const $value = createFormUnit.store({
+        domain,
+        existing: fieldConfig.units?.$value,
+        init: initValue,
+    })
 
-    const $errors = domain
-        ? domain.store<ValidationError[]>([])
-        : createStore<ValidationError[]>([])
+    const $errors = createFormUnit.store<ValidationError[]>({
+        domain,
+        existing: fieldConfig.units?.$errors,
+        init: [],
+    })
+    
 
     const $firstError = $errors.map(
         (errors) => errors[0] ? errors[0] : null
@@ -39,17 +45,40 @@ export function createField(
 
     const $isDirty = $value.map((value) => value !== initValue)
 
-    const $touched = domain ? domain.store(false) : createStore(false)
+    const $touched = createFormUnit.store({
+        domain,
+        existing: fieldConfig.units?.$isTouched,
+        init: false,
+    })
 
-    const onChange = domain ? domain.event() : createEvent()
-    const onBlur = domain ? domain.event() : createEvent()
-    const changed = domain ? domain.event() : createEvent()
-    const addError = domain
-        ? domain.event<{ rule: string; errorText?: string }>()
-        : createEvent<{ rule: string; errorText?: string }>()
-    const validate = domain ? domain.event() : createEvent()
-    const resetErrors = domain ? domain.event() : createEvent()
-    const reset = domain ? domain.event() : createEvent()
+    const onChange = createFormUnit.event({
+        domain,
+        existing: fieldConfig.units?.onChange,
+    })
+    const onBlur = createFormUnit.event({
+        domain,
+        existing: fieldConfig.units?.onBlur,
+    })
+    const changed = createFormUnit.event({
+        domain,
+        existing: fieldConfig.units?.changed,
+    })
+    const addError = createFormUnit.event<{ rule: string; errorText?: string }>({
+        domain,
+        existing: fieldConfig.units?.addError,
+    })
+    const validate = createFormUnit.event({
+        domain,
+        existing: fieldConfig.units?.validate,
+    })
+    const resetErrors = createFormUnit.event({
+        domain,
+        existing: fieldConfig.units?.resetErrors,
+    })
+    const reset = createFormUnit.event({
+        domain,
+        existing: fieldConfig.units?.reset,
+    })
 
     return {
         changed,

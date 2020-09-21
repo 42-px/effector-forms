@@ -413,3 +413,36 @@ test("isDirty & touched", () => {
     expect(field.$touched.getState()).toBe(false)
 })
 
+
+test("external units", () => {
+    const units = {
+        $value: createStore(""),
+        $errors: createStore<ValidationError<string>[]>([]),
+        $isTouched: createStore<boolean>(false),
+        onChange: createEvent<string>(),
+        changed: createEvent<string>(),
+        onBlur: createEvent<void>(),
+        addError: createEvent<{ rule: string; errorText?: string }>(),
+        validate: createEvent<void>(),
+        reset: createEvent<void>(),
+        resetErrors: createEvent<void>(),
+    }
+
+    const fieldConfig: FieldConfig<any> = {
+        init: "",
+        units,
+    }
+
+    const field = createField("field", fieldConfig)
+    expect(field.$value).toBe(units.$value)
+    expect(field.$errors).toBe(units.$errors)
+    expect(field.$isTouched).toBe(units.$isTouched)
+    expect(field.onChange).toBe(units.onChange)
+    expect(field.changed).toBe(units.changed)
+    expect(field.onBlur).toBe(units.onBlur)
+    expect(field.addError).toBe(units.addError)
+    expect(field.validate).toBe(units.validate)
+    expect(field.reset).toBe(units.reset)
+    expect(field.resetErrors).toBe(units.resetErrors)
+})
+

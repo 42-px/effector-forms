@@ -13,6 +13,7 @@ import {
     AnyFieldsConfigs,
     AnyFormValues,
     FormConfig,
+    FormValues,
 } from "./types"
 import { eachValid } from "./validation"
 import {
@@ -20,6 +21,7 @@ import {
     bindValidation,
     bindChangeEvent,
 } from "./field"
+import { createFormUnit } from './create-form-unit'
 
 function createFormValuesStore(
     fields: AnyFields
@@ -34,12 +36,6 @@ function createFormValuesStore(
     return combine(shape)
 }
 
-
-export type FormValues<Fields extends AnyFieldsConfigs> = {
-  [K in keyof Fields]: Fields[K] extends FieldConfig<infer U>
-    ? U
-    : never
-}
 
 export type Form<Fields extends AnyFieldsConfigs> = {
   fields: {
@@ -69,6 +65,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         domain,
         fields: fieldsConfigs,
         validateOn,
+        units,
     } = config
 
     const fields: AnyFields = {}
@@ -101,23 +98,32 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         (touchedFlags) => touchedFlags.some(Boolean)
     )
   
-    const submitForm = domain ? domain.event<void>() : createEvent<void>()
-    const formValidated = domain 
-        ? domain.event<AnyFormValues>()
-        : createEvent<AnyFormValues>()
+    const submitForm = createFormUnit.event<void>({
+        domain,
+        existing: units?.submit,
+    })
+    
+    const formValidated = createFormUnit.event({
+        domain,
+        existing: units?.formValidated,
+    })
 
-    const setForm = domain
-        ? domain.event<Partial<AnyFormValues>>()
-        : createEvent<Partial<AnyFormValues>>()
 
-    const resetForm = domain
-        ? domain.event<void>()
-        : createEvent<void>()
-
-    const resetTouched = domain
-        ? domain.event<void>()
-        : createEvent<void>()
-
+    const setForm = createFormUnit.event({
+        domain,
+        existing: units?.setForm,
+    })
+    
+    const resetForm = createFormUnit.event({
+        domain,
+        existing: units?.reset,
+    })
+    
+    const resetTouched = createFormUnit.event({
+        domain,
+        existing: units?.resetTouched,
+    })
+    
     const submitWithFormData = sample($form, submitForm)
 
     // bind units

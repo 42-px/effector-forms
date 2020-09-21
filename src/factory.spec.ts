@@ -1,4 +1,4 @@
-import { restore, forward, createEffect } from "effector"
+import { restore, forward, createEffect, createEvent } from "effector"
 import * as yup from "yup"
 import { createForm } from "./factory"
 import { Rule, ValidationError } from "./types"
@@ -458,4 +458,31 @@ test("isDirty & touched", () => {
     expect(form.fields.password.$touched.getState()).toBe(false)
     expect(form.$touched.getState()).toBe(false)
 
+})
+
+test("external units", () => {
+    const units = {
+        submit: createEvent(),
+        reset: createEvent(),
+        resetTouched: createEvent(),
+        formValidated: createEvent<{ email: string }>(),
+        setForm: createEvent<{ email?: string }>(),
+    }
+    
+    const form = createForm({
+        fields: {
+            email: {
+                init: "",
+                rules: [],
+            },
+        },
+        units,
+        validateOn: ["submit"],
+    })
+
+    expect(form.submit).toBe(units.submit)
+    expect(form.reset).toBe(units.reset)
+    expect(form.resetTouched).toBe(units.resetTouched)
+    expect(form.formValidated).toBe(units.formValidated)
+    expect(form.setForm).toBe(units.setForm)
 })
