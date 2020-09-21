@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "es2017",
     "jsx": "react",
     "sourceMap": true,
     "baseUrl": "src",

@@ -1,10 +1,10 @@
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
-import { App } from './App'
+import * as React from "react"
+import * as ReactDOM from "react-dom"
+import { App } from "./App"
 
-ReactDOM.render(<App />, window.document.getElementById('root'))
+ReactDOM.render(<App />, window.document.getElementById("root"))
 
 if (module.hot) {
-  // eslint-disable-next-line react/no-render-return-value
-  module.hot.accept('./App', () => ReactDOM.render(<App />, document.getElementById('root')))
+    // eslint-disable-next-line max-len
+    module.hot.accept("./App", () => ReactDOM.render(<App />, document.getElementById("root")))
 }

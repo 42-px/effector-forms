@@ -1,12 +1,12 @@
 {
   "name": "effector-forms",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Effector form state factory",
   "main": "./dist/effector-forms.cjs.js",
-  "jsnext:main": "./dist/effector-forms.es.js",
-  "module": "./dist/effector-forms.es.js",
+  "jsnext:main": "./dist/index.js",
+  "module": "./dist/index.js",
   "umd:main": "./dist/effector-forms.umd.js",
-  "browser": "./dist/effector-forms.es.js",
+  "browser": "./dist/index.js",
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "test": "jest",
