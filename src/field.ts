@@ -1,4 +1,5 @@
 import {
+    createStore,
     Domain,
     Event,
     Store,
@@ -133,11 +134,15 @@ export function bindValidation({
         resetErrors,
         reset,
     } = field
+
+    const rulesSources = combine(rules.map(({ source }) => source || createStore(null)))
+
     const validator = createCombineValidator(rules)
     const eventsNames = [...formValidationEvents, ...fieldValidationEvents]
     const validationEvents: Event<{
         fieldValue: any
         form: AnyFormValues
+        rulesSources: any[]
     }>[] = []
 
     if (eventsNames.includes("submit")) {
@@ -145,6 +150,7 @@ export function bindValidation({
             source: combine({
                 fieldValue: $value,
                 form: $form,
+                rulesSources,
             }),
             clock: submitEvent,
         }))
@@ -155,6 +161,7 @@ export function bindValidation({
             source: combine({
                 fieldValue: $value,
                 form: $form,
+                rulesSources,
             }),
             clock: onBlur,
         }))
@@ -165,6 +172,7 @@ export function bindValidation({
             source: combine({
                 fieldValue: $value,
                 form: $form,
+                rulesSources,
             }),
             clock: changed,
         }))
@@ -174,6 +182,7 @@ export function bindValidation({
         source: combine({
             fieldValue: $value,
             form: $form,
+            rulesSources,
         }),
         clock: validate,
     }))
@@ -191,7 +200,7 @@ export function bindValidation({
     $errors
         .on(
             validationEvents,
-            (_, { form, fieldValue }) => validator(fieldValue, form)
+            (_, { form, fieldValue, rulesSources }) => validator(fieldValue, form, rulesSources)
         )
         .on(addErrorWithValue, (errors, newError) => [newError, ...errors])
         .reset(resetErrors, resetFormEvent, reset)

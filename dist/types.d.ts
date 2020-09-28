@@ -5,16 +5,17 @@ export declare type ValidationResult = {
     isValid: boolean;
     errorText?: string;
 };
-export declare type Validator<Value, Form = any> = (value: Value, form?: Form) => boolean | ValidationResult;
+export declare type Validator<Value, Form = any, Source = any> = (value: Value, form?: Form, source?: Source) => boolean | ValidationResult;
 export declare type ValidationError<Value = any> = {
     rule: string;
     value: Value;
     errorText?: string;
 };
-export declare type Rule<Value, Form = any> = {
+export declare type Rule<Value, Form = any, Source = any> = {
     name: string;
     errorText?: string;
-    validator: Validator<Value, Form>;
+    source?: Store<Source>;
+    validator: Validator<Value, Form, Source>;
 };
 export declare type Field<Value> = {
     name: string;

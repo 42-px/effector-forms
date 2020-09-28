@@ -6,14 +6,16 @@ import {
 } from "./types"
 
 export function createCombineValidator<Value = any, Form = any>(
-    rules: Rule<Value, Form>[]
+    rules: Rule<Value, Form, any>[]
 ) {
-    return (value: Value, form?: Form): ValidationError<Value>[] => {
+    return (value: Value, form?: Form, rulesSources?: any[]): ValidationError<Value>[] => {
 
         const errors: ValidationError<Value>[] = []
 
-        for (const rule of rules) {
-            const result = rule.validator(value, form)
+        for (let i = 0; i < rules.length; i++) {
+            const rule = rules[i]
+            const source = rulesSources ? rulesSources[i] : null
+            const result = rule.validator(value, form, source)
 
             if (typeof result === "boolean" && !result) {
                 errors.push({

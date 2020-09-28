@@ -446,3 +446,62 @@ test("external units", () => {
     expect(field.resetErrors).toBe(units.resetErrors)
 })
 
+
+test("validate with source", () => {
+    const validateOn: ValidationEvent[] = ["change"]
+    const $needToValidateEmail = createStore(false)
+    const setNeedToValidateFlag = createEvent<boolean>()
+
+    $needToValidateEmail.on(setNeedToValidateFlag, (_, v) => v)
+
+    const fieldConfig: FieldConfig<any> = {
+        init: "" as string,
+        rules: [
+            {
+                name: "required_if",
+                source: $needToValidateEmail,
+                validator: (value, _, needToValidateEmail) => {
+                    return !needToValidateEmail || Boolean(value)
+                }
+            },
+            email(),
+        ],
+        validateOn,
+    }
+
+    const field = createField("email", fieldConfig)
+    const $form = createStore<any>({ email: "" })
+    const setForm = createEvent<any>()
+    const submit = createEvent<void>()
+    const resetForm = createEvent<void>()
+    const resetTouched = createEvent<void>()
+
+    bindChangeEvent(field, setForm, resetForm, resetTouched)
+    bindValidation({
+        $form,
+        submitEvent: submit,
+        resetFormEvent: resetForm,
+        field,
+        rules: fieldConfig.rules || [],
+        fieldValidationEvents: validateOn,
+        formValidationEvents: ["submit"],
+    })
+
+    field.onChange("234@gmail.com")
+    expect(field.$firstError.getState()).toBeNull()
+    setNeedToValidateFlag(true)
+    field.onChange("")
+
+    expect(field.$firstError.getState()).toEqual({
+        rule: "required_if",
+        value: "",
+    })
+
+    setNeedToValidateFlag(false)
+    field.onChange("234")
+    expect(field.$firstError.getState()).toEqual({
+        rule: "email",
+        value: "234",
+    })
+})
+

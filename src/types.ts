@@ -9,9 +9,10 @@ export type ValidationResult = {
   errorText?: string
 }
 
-export type Validator<Value, Form = any> = (
+export type Validator<Value, Form = any, Source = any> = (
   value: Value,
-  form?: Form
+  form?: Form,
+  source?: Source,
 ) => boolean | ValidationResult
 
 export type ValidationError<Value = any> = {
@@ -20,10 +21,11 @@ export type ValidationError<Value = any> = {
   errorText?: string
 }
 
-export type Rule<Value, Form = any> = {
+export type Rule<Value, Form = any, Source = any> = {
   name: string
   errorText?: string
-  validator: Validator<Value, Form>
+  source?: Store<Source>
+  validator: Validator<Value, Form, Source>
 }
 
 export type Field<Value> = {
