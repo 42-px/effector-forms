@@ -486,3 +486,35 @@ test("external units", () => {
     expect(form.formValidated).toBe(units.formValidated)
     expect(form.setForm).toBe(units.setForm)
 })
+
+test("validate form manually", () => {
+    const form = createForm({
+        fields: {
+            email: {
+                init: "",
+                rules: [
+                    rules.required(),
+                ],
+            },
+            password: {
+                init: "",
+                rules: [
+                    rules.required(),
+                ],
+            },
+        },
+        validateOn: ["submit"],
+    })
+
+    expect(form.$isValid.getState()).toBe(true)
+    form.validate()
+    expect(form.$isValid.getState()).toBe(false)
+    expect(form.fields.email.$firstError.getState()).toEqual({
+        rule: "required",
+        value: "",
+    })
+    expect(form.fields.password.$firstError.getState()).toEqual({
+        rule: "required",
+        value: "",
+    })
+})

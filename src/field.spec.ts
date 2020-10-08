@@ -79,6 +79,7 @@ test("bind validation: validate on change", () => {
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
     const resetTouched = createEvent<void>()
+    const validateForm = createEvent<void>()
 
     bindChangeEvent(field, setForm, resetForm, resetTouched)
     bindValidation({
@@ -87,6 +88,7 @@ test("bind validation: validate on change", () => {
         resetFormEvent: resetForm,
         field,
         rules,
+        validateFormEvent: validateForm,
         fieldValidationEvents: validateOn,
         formValidationEvents: ["submit"],
     })
@@ -127,6 +129,7 @@ test("bind validation: validate on blur", () => {
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
     const resetTouched = createEvent<void>()
+    const validateForm = createEvent<void>()
 
     bindChangeEvent(field, setForm, resetForm, resetTouched)
     bindValidation({
@@ -135,6 +138,7 @@ test("bind validation: validate on blur", () => {
         resetFormEvent: resetForm,
         field,
         rules,
+        validateFormEvent: validateForm,
         fieldValidationEvents: validateOn,
         formValidationEvents: ["submit"],
     })
@@ -179,6 +183,7 @@ test("filter input by store", () => {
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
     const resetTouched = createEvent<void>()
+    const validateForm = createEvent<void>()
 
     bindChangeEvent(field, setForm, resetForm, resetTouched)
     bindValidation({
@@ -186,6 +191,7 @@ test("filter input by store", () => {
         submitEvent: submit,
         resetFormEvent: resetForm,
         field,
+        validateFormEvent: validateForm,
         rules: [],
         fieldValidationEvents: [],
         formValidationEvents: ["submit"],
@@ -211,6 +217,7 @@ test("filter input by func", () => {
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
     const resetTouched = createEvent<void>()
+    const validateForm = createEvent<void>()
 
     bindChangeEvent(field, setForm, resetForm, resetTouched)
     bindValidation({
@@ -218,6 +225,7 @@ test("filter input by func", () => {
         submitEvent: submit,
         resetFormEvent: resetForm,
         field,
+        validateFormEvent: validateForm,
         rules: [],
         fieldValidationEvents: [],
         formValidationEvents: ["submit"],
@@ -244,6 +252,7 @@ test("add error manually", () => {
     const setForm = createEvent<any>()
     const submit = createEvent<void>()
     const reset = createEvent<void>()
+    const validateForm = createEvent<void>()
 
     const resetTouched = createEvent<void>()
 
@@ -253,6 +262,7 @@ test("add error manually", () => {
         submitEvent: submit,
         resetFormEvent: reset,
         field,
+        validateFormEvent: validateForm,
         rules: [],
         fieldValidationEvents: ["change"],
         formValidationEvents: ["submit"],
@@ -295,6 +305,7 @@ test("validate manually", () => {
     const submit = createEvent<void>()
     const reset = createEvent<void>()
     const resetTouched = createEvent<void>()
+    const validateForm = createEvent<void>()
 
     bindChangeEvent(field, setForm, reset, resetTouched)
     bindValidation({
@@ -303,6 +314,7 @@ test("validate manually", () => {
         resetFormEvent: reset,
         field,
         rules,
+        validateFormEvent: validateForm,
         fieldValidationEvents: ["submit"],
         formValidationEvents: ["submit"],
     })
@@ -341,6 +353,7 @@ test("reset errors", () => {
     const submit = createEvent<void>()
     const reset = createEvent<void>()
     const resetTouched = createEvent<void>()
+    const validateForm = createEvent<void>()
 
     bindChangeEvent(field, setForm, reset, resetTouched)
     bindValidation({
@@ -349,6 +362,7 @@ test("reset errors", () => {
         resetFormEvent: reset,
         field,
         rules,
+        validateFormEvent: validateForm,
         fieldValidationEvents: ["submit"],
         formValidationEvents: ["submit"],
     })
@@ -377,6 +391,7 @@ test("isDirty & touched", () => {
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
     const resetTouched = createEvent<void>()
+    const validateForm = createEvent<void>()
 
     bindChangeEvent(field, setForm, resetForm, resetTouched)
     bindValidation({
@@ -385,6 +400,7 @@ test("isDirty & touched", () => {
         resetFormEvent: resetForm,
         field,
         rules: [],
+        validateFormEvent: validateForm,
         fieldValidationEvents: [],
         formValidationEvents: ["submit"],
     })
@@ -475,6 +491,7 @@ test("validate with source", () => {
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
     const resetTouched = createEvent<void>()
+    const validateForm = createEvent<void>()
 
     bindChangeEvent(field, setForm, resetForm, resetTouched)
     bindValidation({
@@ -482,6 +499,7 @@ test("validate with source", () => {
         submitEvent: submit,
         resetFormEvent: resetForm,
         field,
+        validateFormEvent: validateForm,
         rules: fieldConfig.rules || [],
         fieldValidationEvents: validateOn,
         formValidationEvents: ["submit"],

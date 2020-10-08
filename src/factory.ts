@@ -48,6 +48,7 @@ export type Form<Fields extends AnyFieldsConfigs> = {
   $isDirty: Store<boolean>
   $touched: Store<boolean>
   submit: Event<void>
+  validate: Event<void>
   reset: Event<void>
   set: Event<Partial<FormValues<Fields>>>
   setForm: Event<Partial<FormValues<Fields>>>
@@ -96,6 +97,11 @@ export function createForm<Fields extends AnyFieldsConfigs>(
     const $touched = combine(touchedFlagsArr).map(
         (touchedFlags) => touchedFlags.some(Boolean)
     )
+
+    const validate = createFormUnit.event<void>({
+        domain,
+        existing: units?.validate,
+    })
   
     const submitForm = createFormUnit.event<void>({
         domain,
@@ -141,6 +147,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
             rules: fieldConfig.rules,
             submitEvent: submitForm,
             resetFormEvent: resetForm,
+            validateFormEvent: validate,
             field,
             formValidationEvents: validateOn ? validateOn : ["submit"],
             fieldValidationEvents: fieldConfig.validateOn
@@ -163,6 +170,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         $isDirty: $isDirty,
         $touched: $touched,
         submit: submitForm,
+        validate,
         resetTouched,
         reset: resetForm,
         setForm,

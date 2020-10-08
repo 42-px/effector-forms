@@ -94,6 +94,7 @@ export type FormConfig<Fields extends AnyFieldsConfigs> = {
   validateOn?: ValidationEvent[]
   units?: {
     submit?: Event<void>
+    validate?: Event<void>
     reset?: Event<void>
     resetTouched?: Event<void>
     formValidated?: Event<FormValues<Fields>>

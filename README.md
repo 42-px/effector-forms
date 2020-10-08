@@ -793,7 +793,16 @@ const somethingHappened = createEvent()
 
 forward({
   from: somethingHappened,
-  to: form.fields.validate,
+  to: form.fields.username.validate,
+})
+```
+
+Validate all fields:
+
+```ts
+forward({
+  from: somethingHappened,
+  to: form.validate,
 })
 ```
 
