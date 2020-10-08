@@ -6,6 +6,7 @@ import {
     combine, 
     sample,
     guard,
+    merge,
 } from "effector"
 import {
     ValidationError,
@@ -184,7 +185,9 @@ export function bindValidation({
                 form: $form,
                 rulesSources,
             }),
-            clock: [changed, resetValue, resetValues],
+            clock: merge(
+                [changed, resetValue, resetValues]
+            ),
         }))
     }
 

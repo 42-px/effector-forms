@@ -565,4 +565,11 @@ test("reset values", () => {
     expect(form.fields.password.$value.getState()).toBe("")
     expect(form.fields.password.$firstError.getState()).toBeNull()
 
+    form.fields.email.onChange("123")
+    form.fields.password.onChange("123")
+    expect(form.fields.email.$value.getState()).toBe("123")
+    expect(form.fields.email.$firstError.getState()).toBeNull()
+    expect(form.fields.password.$value.getState()).toBe("123")
+    expect(form.fields.password.$firstError.getState()).toBeNull()
+
 })
