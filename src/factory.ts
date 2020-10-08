@@ -130,6 +130,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
     })
     
     const submitWithFormData = sample($form, submitForm)
+    const validateWithFormData = sample($form, validate)
 
     // bind units
     for (const fieldName in fields) {
@@ -158,6 +159,12 @@ export function createForm<Fields extends AnyFieldsConfigs>(
 
     guard({
         source: submitWithFormData,
+        filter: $isFormValid,
+        target: formValidated,
+    })
+
+    guard({
+        source: validateWithFormData,
         filter: $isFormValid,
         target: formValidated,
     })

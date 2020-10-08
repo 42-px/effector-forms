@@ -506,6 +506,9 @@ test("validate form manually", () => {
         validateOn: ["submit"],
     })
 
+    const formValidatedListener = jest.fn()
+    form.formValidated.watch(formValidatedListener)
+
     expect(form.$isValid.getState()).toBe(true)
     form.validate()
     expect(form.$isValid.getState()).toBe(false)
@@ -517,4 +520,9 @@ test("validate form manually", () => {
         rule: "required",
         value: "",
     })
+    expect(formValidatedListener.mock.calls.length).toBe(0)
+    form.fields.email.onChange("2222")
+    form.fields.password.onChange("123123")
+    form.validate()
+    expect(formValidatedListener.mock.calls.length).toBe(1)
 })
