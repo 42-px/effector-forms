@@ -53,6 +53,7 @@ export type Form<Fields extends AnyFieldsConfigs> = {
   set: Event<Partial<FormValues<Fields>>>
   setForm: Event<Partial<FormValues<Fields>>>
   resetTouched: Event<void>
+  resetValues: Event<void>
   formValidated: Event<FormValues<Fields>>
 }
 
@@ -123,6 +124,11 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         domain,
         existing: units?.reset,
     })
+
+    const resetValues = createFormUnit.event({
+        domain,
+        existing: units?.resetValues,
+    })
     
     const resetTouched = createFormUnit.event({
         domain,
@@ -139,7 +145,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         const fieldConfig = fieldsConfigs[fieldName]
         const field = fields[fieldName]
 
-        bindChangeEvent(field, setForm, resetForm, resetTouched)
+        bindChangeEvent(field, setForm, resetForm, resetTouched, resetValues)
 
         if (!fieldConfig.rules) continue
 
@@ -148,6 +154,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
             rules: fieldConfig.rules,
             submitEvent: submitForm,
             resetFormEvent: resetForm,
+            resetValues,
             validateFormEvent: validate,
             field,
             formValidationEvents: validateOn ? validateOn : ["submit"],
@@ -180,6 +187,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         validate,
         resetTouched,
         reset: resetForm,
+        resetValues,
         setForm,
         set: setForm,
         formValidated,

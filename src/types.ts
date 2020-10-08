@@ -45,6 +45,7 @@ export type Field<Value> = {
   reset: Event<void>
   set: Event<Value>
   resetErrors: Event<void>
+  resetValue: Event<void>
   filter?: Store<boolean> | FilterFunc<Value>
 }
 
@@ -64,6 +65,7 @@ export type FieldConfig<Value> = {
     onBlur?: Event<void>
     addError?: Event<{ rule: string; errorText?: string }>
     validate?: Event<void>
+    resetValue?: Event<void>
     reset?: Event<void>
     resetErrors?: Event<void>
   }
@@ -96,6 +98,7 @@ export type FormConfig<Fields extends AnyFieldsConfigs> = {
     submit?: Event<void>
     validate?: Event<void>
     reset?: Event<void>
+    resetValues?: Event<void>
     resetTouched?: Event<void>
     formValidated?: Event<FormValues<Fields>>
     setForm?: Event<Partial<FormValues<Fields>>>

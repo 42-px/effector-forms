@@ -818,6 +818,15 @@ form.fields.email.reset()
 form.reset()
 ```
 
+
+form.reset event resets both values ​​and errors
+
+## Reset values only
+```ts
+const form = createForm(formConfig)
+form.resetValues()
+```
+
 ## Reset errors
 
 You can manually reset any field validation errors:
@@ -835,6 +844,7 @@ form.fields.username.onChange("invalid email")
 form.submit()
 form.fields.username.resetErrors()
 ```
+
 
 ## Register form (full example)
 

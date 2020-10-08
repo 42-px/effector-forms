@@ -79,6 +79,10 @@ export function createField(
         domain,
         existing: fieldConfig.units?.resetErrors,
     })
+    const resetValue = createFormUnit.event({
+        domain,
+        existing: fieldConfig.units?.resetValue,
+    })
     const reset = createFormUnit.event({
         domain,
         existing: fieldConfig.units?.reset,
@@ -101,6 +105,7 @@ export function createField(
         set: onChange,
         reset,
         resetErrors,
+        resetValue,
         filter: fieldConfig.filter,
     }
 }
@@ -110,6 +115,7 @@ type BindValidationParams = {
   validateFormEvent: Event<void>
   submitEvent: Event<void>
   resetFormEvent: Event<void>
+  resetValues: Event<void>
   field: Field<any>
   rules: Rule<any, any>[]
   formValidationEvents: ValidationEvent[]
@@ -121,6 +127,7 @@ export function bindValidation({
     validateFormEvent,
     submitEvent,
     resetFormEvent,
+    resetValues,
     field,
     rules,
     formValidationEvents,
@@ -134,6 +141,7 @@ export function bindValidation({
         addError,
         validate,
         resetErrors,
+        resetValue,
         reset,
     } = field
 
@@ -176,7 +184,7 @@ export function bindValidation({
                 form: $form,
                 rulesSources,
             }),
-            clock: changed,
+            clock: [changed, resetValue, resetValues],
         }))
     }
 
@@ -222,10 +230,11 @@ export function bindValidation({
 }
 
 export function bindChangeEvent(
-    { $value, $touched, onChange, changed, name, reset, filter }: Field<any>,
+    { $value, $touched, onChange, changed, name, reset, resetValue,  filter }: Field<any>,
     setForm: Event<Partial<AnyFormValues>>,
     resetForm: Event<void>,
     resetTouched: Event<void>,
+    resetValues: Event<void>,
 ): void {
 
     $touched
@@ -246,6 +255,6 @@ export function bindChangeEvent(
                 ? updateSet[name] 
                 : curr
         )
-        .reset(reset, resetForm)
+        .reset(reset, resetValue, resetValues, resetForm)
     
 }

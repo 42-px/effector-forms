@@ -526,3 +526,43 @@ test("validate form manually", () => {
     form.validate()
     expect(formValidatedListener.mock.calls.length).toBe(1)
 })
+
+
+test("reset values", () => {
+    const form = createForm({
+        fields: {
+            email: {
+                init: "",
+                rules: [
+                    rules.required(),
+                ],
+                validateOn: ["change"],
+            },
+            password: {
+                init: "",
+                rules: [
+                    rules.required(),
+                ],
+            },
+        },
+        validateOn: ["submit"],
+    })
+
+
+    form.fields.email.onChange("123")
+    form.fields.password.onChange("123")
+    expect(form.fields.email.$value.getState()).toBe("123")
+    expect(form.fields.email.$firstError.getState()).toBeNull()
+    expect(form.fields.password.$value.getState()).toBe("123")
+    expect(form.fields.password.$firstError.getState()).toBeNull()
+
+    form.resetValues()
+    expect(form.fields.email.$value.getState()).toBe("")
+    expect(form.fields.email.$firstError.getState()).toEqual({
+        rule: "required",
+        value: "",
+    })
+    expect(form.fields.password.$value.getState()).toBe("")
+    expect(form.fields.password.$firstError.getState()).toBeNull()
+
+})
