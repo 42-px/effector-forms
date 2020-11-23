@@ -433,7 +433,7 @@ Validation rule is an object with name and validator properties:
 }
 ```
 
-To reuse validation rules, put them in a separate module. Very often the validator needs a parameter. For this reason, we recommend using "facrory-style" when creating your validators library:
+To reuse validation rules, put them in a separate module. Very often the validator needs a parameter. For this reason, we recommend using "factory-style" when creating your validators library:
 
 ```ts
 export const rules = {
@@ -450,7 +450,7 @@ export const rules = {
         validator: (value) => value.length >= min 
     }),
     maxLength: (max: number): Rule<string> => ({
-        name: "minLength",
+        name: "maxLength",
         validator: (value) => value.length <= max 
     }),
 }
