@@ -845,6 +845,26 @@ form.submit()
 form.fields.username.resetErrors()
 ```
 
+Reset forms errors (all fields):
+```ts
+const form = createForm({
+  fields: {
+    email: {
+      init: "",
+      rules: emailRules,
+    },
+    password: {
+      init: "",
+      rules: passwordRules,
+    },
+  },
+})
+
+form.fields.username.onChange("invalid email")
+form.fields.username.onChange("invalid password")
+form.resetErrors() // clear all errors
+```
+
 
 ## Register form (full example)
 

@@ -117,6 +117,7 @@ type BindValidationParams = {
   submitEvent: Event<void>
   resetFormEvent: Event<void>
   resetValues: Event<void>
+  resetErrors: Event<void>
   field: Field<any>
   rules: Rule<any, any>[]
   formValidationEvents: ValidationEvent[]
@@ -131,6 +132,7 @@ export function bindValidation({
     resetValues,
     field,
     rules,
+    resetErrors: resetErrorsFormEvent,
     formValidationEvents,
     fieldValidationEvents,
 }: BindValidationParams): void {
@@ -146,7 +148,10 @@ export function bindValidation({
         reset,
     } = field
 
-    const rulesSources = combine(rules.map(({ source }) => source || createStore(null)))
+    // eslint-disable-next-line max-len
+    const rulesSources = combine(
+        rules.map(({ source }) => source || createStore(null))
+    )
 
     const validator = createCombineValidator(rules)
     const eventsNames = [...formValidationEvents, ...fieldValidationEvents]
@@ -222,10 +227,14 @@ export function bindValidation({
     $errors
         .on(
             validationEvents,
-            (_, { form, fieldValue, rulesSources }) => validator(fieldValue, form, rulesSources)
+            (_, { form, fieldValue, rulesSources }) => validator(
+                fieldValue,
+                form,
+                rulesSources,
+            )
         )
         .on(addErrorWithValue, (errors, newError) => [newError, ...errors])
-        .reset(resetErrors, resetFormEvent, reset)
+        .reset(resetErrors, resetFormEvent, reset, resetErrorsFormEvent)
 
     if (!eventsNames.includes("change")) {
         $errors.reset(changed)
@@ -233,7 +242,15 @@ export function bindValidation({
 }
 
 export function bindChangeEvent(
-    { $value, $touched, onChange, changed, name, reset, resetValue,  filter }: Field<any>,
+    {
+        $value,
+        $touched,
+        onChange,
+        changed,
+        name,
+        reset,
+        resetValue, 
+        filter }: Field<any>,
     setForm: Event<Partial<AnyFormValues>>,
     resetForm: Event<void>,
     resetTouched: Event<void>,

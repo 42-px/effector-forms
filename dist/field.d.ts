@@ -7,11 +7,12 @@ declare type BindValidationParams = {
     submitEvent: Event<void>;
     resetFormEvent: Event<void>;
     resetValues: Event<void>;
+    resetErrors: Event<void>;
     field: Field<any>;
     rules: Rule<any, any>[];
     formValidationEvents: ValidationEvent[];
     fieldValidationEvents: ValidationEvent[];
 };
-export declare function bindValidation({ $form, validateFormEvent, submitEvent, resetFormEvent, resetValues, field, rules, formValidationEvents, fieldValidationEvents, }: BindValidationParams): void;
+export declare function bindValidation({ $form, validateFormEvent, submitEvent, resetFormEvent, resetValues, field, rules, resetErrors: resetErrorsFormEvent, formValidationEvents, fieldValidationEvents, }: BindValidationParams): void;
 export declare function bindChangeEvent({ $value, $touched, onChange, changed, name, reset, resetValue, filter }: Field<any>, setForm: Event<Partial<AnyFormValues>>, resetForm: Event<void>, resetTouched: Event<void>, resetValues: Event<void>): void;
 export {};

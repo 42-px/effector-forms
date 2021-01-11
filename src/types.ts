@@ -100,6 +100,7 @@ export type FormConfig<Fields extends AnyFieldsConfigs> = {
     reset?: Event<void>
     resetValues?: Event<void>
     resetTouched?: Event<void>
+    resetErrors?: Event<void>
     formValidated?: Event<FormValues<Fields>>
     setForm?: Event<Partial<FormValues<Fields>>>
   }

@@ -16,6 +16,7 @@ export declare type Form<Fields extends AnyFieldsConfigs> = {
     setForm: Event<Partial<FormValues<Fields>>>;
     resetTouched: Event<void>;
     resetValues: Event<void>;
+    resetErrors: Event<void>;
     formValidated: Event<FormValues<Fields>>;
 };
 export declare function createForm<Fields extends AnyFieldsConfigs>(config: FormConfig<Fields>): Form<Fields>;

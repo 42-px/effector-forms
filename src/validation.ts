@@ -8,7 +8,11 @@ import {
 export function createCombineValidator<Value = any, Form = any>(
     rules: Rule<Value, Form, any>[]
 ) {
-    return (value: Value, form?: Form, rulesSources?: any[]): ValidationError<Value>[] => {
+    return (
+        value: Value,
+        form?: Form,
+        rulesSources?: any[]
+    ): ValidationError<Value>[] => {
 
         const errors: ValidationError<Value>[] = []
 

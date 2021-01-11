@@ -299,6 +299,45 @@ test("reset form", () => {
 
 })
 
+
+test("reset errors", () => {
+    const form = createForm({
+        fields: {
+            email: {
+                init: "",
+                rules: [
+                    rules.required(),
+                ],
+            },
+            password: {
+                init: "",
+                rules: [
+                    rules.required()
+                ],
+            }
+        },
+    })
+
+    form.submit()
+    expect(form.fields.email.$isValid.getState()).toBe(false)
+    expect(form.fields.password.$isValid.getState()).toBe(false)
+
+    form.fields.password.resetErrors()
+
+    expect(form.fields.email.$isValid.getState()).toBe(false)
+    expect(form.fields.password.$isValid.getState()).toBe(true)
+
+    form.fields.email.onChange("123")
+    form.submit()
+    expect(form.fields.email.$isValid.getState()).toBe(true)
+    expect(form.fields.password.$isValid.getState()).toBe(false)
+
+    form.resetErrors()
+
+    expect(form.fields.email.$isValid.getState()).toBe(true)
+    expect(form.fields.password.$isValid.getState()).toBe(true)
+})
+
 test("use YUP", () => {
     function createRule<V, T = any>({
         schema,

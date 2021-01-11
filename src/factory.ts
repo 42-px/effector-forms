@@ -54,6 +54,7 @@ export type Form<Fields extends AnyFieldsConfigs> = {
   setForm: Event<Partial<FormValues<Fields>>>
   resetTouched: Event<void>
   resetValues: Event<void>
+  resetErrors: Event<void>
   formValidated: Event<FormValues<Fields>>
 }
 
@@ -129,6 +130,11 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         domain,
         existing: units?.resetValues,
     })
+
+    const resetErrors = createFormUnit.event({
+        domain,
+        existing: units?.resetErrors,
+    })
     
     const resetTouched = createFormUnit.event({
         domain,
@@ -155,6 +161,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
             submitEvent: submitForm,
             resetFormEvent: resetForm,
             resetValues,
+            resetErrors,
             validateFormEvent: validate,
             field,
             formValidationEvents: validateOn ? validateOn : ["submit"],
@@ -188,6 +195,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         resetTouched,
         reset: resetForm,
         resetValues,
+        resetErrors,
         setForm,
         set: setForm,
         formValidated,
