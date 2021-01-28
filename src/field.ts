@@ -15,6 +15,7 @@ import {
     AnyFormValues,
     ValidationEvent,
     Rule,
+    RuleResolver,
 } from "./types"
 import { createCombineValidator } from "./validation"
 import { createFormUnit } from "./create-form-unit"
@@ -119,7 +120,7 @@ type BindValidationParams = {
   resetValues: Event<void>
   resetErrors: Event<void>
   field: Field<any>
-  rules: Rule<any, any>[]
+  rules: Rule<any, any>[] | RuleResolver<any, any>
   formValidationEvents: ValidationEvent[]
   fieldValidationEvents: ValidationEvent[]
 }
@@ -148,10 +149,9 @@ export function bindValidation({
         reset,
     } = field
 
-    // eslint-disable-next-line max-len
-    const rulesSources = combine(
-        rules.map(({ source }) => source || createStore(null))
-    )
+    const rulesSources = typeof rules === "function" 
+        ? createStore<any[]>([])
+        : combine(rules.map(({ source }) => source || createStore(null)))
 
     const validator = createCombineValidator(rules)
     const eventsNames = [...formValidationEvents, ...fieldValidationEvents]
