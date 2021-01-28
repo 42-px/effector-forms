@@ -41,9 +41,10 @@ export declare type Field<Value> = {
     filter?: Store<boolean> | FilterFunc<Value>;
 };
 declare type FilterFunc<Value> = (value: Value) => boolean;
+export declare type RuleResolver<Value = any, Form = any> = (value: Value, form: Form) => Rule<Value, Form, void>[];
 export declare type FieldConfig<Value> = {
     init: Value | InitFieldValue<Value>;
-    rules?: Rule<Value>[];
+    rules?: Rule<Value>[] | RuleResolver<Value, any>;
     filter?: Store<boolean> | FilterFunc<Value>;
     validateOn?: ValidationEvent[];
     units?: {

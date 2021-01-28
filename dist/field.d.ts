@@ -1,5 +1,5 @@
 import { Domain, Event, Store } from "effector";
-import { Field, FieldConfig, AnyFormValues, ValidationEvent, Rule } from "./types";
+import { Field, FieldConfig, AnyFormValues, ValidationEvent, Rule, RuleResolver } from "./types";
 export declare function createField(fieldName: string, fieldConfig: FieldConfig<any>, domain?: Domain): Field<any>;
 declare type BindValidationParams = {
     $form: Store<AnyFormValues>;
@@ -9,7 +9,7 @@ declare type BindValidationParams = {
     resetValues: Event<void>;
     resetErrors: Event<void>;
     field: Field<any>;
-    rules: Rule<any, any>[];
+    rules: Rule<any, any>[] | RuleResolver<any, any>;
     formValidationEvents: ValidationEvent[];
     fieldValidationEvents: ValidationEvent[];
 };

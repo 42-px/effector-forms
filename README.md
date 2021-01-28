@@ -10,6 +10,7 @@
 - [Interdependent validations](#interdependent-validations)
 - [Usage with domain](#usage-with-domain)
 - [Rules](#rules)
+- [Use rules factory](#use-rules-factory)
 - [isDirty & isTouched](#isdirty---istouched)
 - [Show errors](#show-errors)
 - [Use external validators lib](#use-external-validators-lib)
@@ -18,6 +19,7 @@
 - [Validate by external source](#validate-by-external-source)
 - [Validate manually](#validate-manually)
 - [Reset form](#reset-form)
+- [Reset values only](#reset-values-only)
 - [Reset errors](#reset-errors)
 - [Register form (full example)](#register-form--full-example-)
 - [Typescipt users tips](#typescipt-users-tips)
@@ -477,6 +479,28 @@ const form = createForm({
   },
 })
 ```
+
+## Use rules factory
+
+Sometimes you need to calculate validation rules based on the current state of the form.
+In this case, you can pass a factory function to rules:
+
+```ts
+const form = createForm({
+    fields: {
+        needNotification: {
+            init: false,
+            rules: [],
+        },
+        email: {
+            init: "" as string,
+            rules: (value: string, form) => form.needNotification ? [email()] : [],
+        },
+    },
+    validateOn: ["submit"],
+})
+```
+
 
 ## isDirty & isTouched
 
