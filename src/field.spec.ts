@@ -660,3 +660,56 @@ test("reset errors by form event", () => {
 
     expect(field.$firstError.getState()).toBeNull()
 })
+
+test("pass rules factory", () => {
+    const rules = (value: string) => {
+        if (value.length > 3) {
+            return [
+                email(),
+            ]
+        } else {
+            return []
+        }
+    }
+  
+    const fieldConfig: FieldConfig<any> = {
+        init: "" as string,
+        rules,
+        validateOn: ["change"],
+    }
+  
+    const field = createField("email", fieldConfig)
+    const $form = createStore<any>({ email: "" })
+    const setForm = createEvent<any>()
+    const submit = createEvent<void>()
+    const reset = createEvent<void>()
+    const resetTouched = createEvent<void>()
+    const validateForm = createEvent<void>()
+    const resetValues = createEvent<void>()
+    const resetFormErrors = createEvent<void>()
+  
+    bindChangeEvent(field, setForm, reset, resetTouched, resetValues)
+    bindValidation({
+        $form,
+        submitEvent: submit,
+        resetFormEvent: reset,
+        resetValues,
+        resetErrors: resetFormErrors,
+        field,
+        rules,
+        validateFormEvent: validateForm,
+        fieldValidationEvents: ["submit", "change"],
+        formValidationEvents: ["submit"],
+    })
+  
+    field.onChange("12")
+    expect(field.$value.getState()).toBe("12")
+    expect(field.$firstError.getState()).toBeNull()
+    field.onChange("1234")
+    expect(field.$firstError.getState()).toEqual({
+        rule: "email",
+        value: "1234",
+    })
+    field.onChange("12")
+    expect(field.$firstError.getState()).toBeNull()
+  })

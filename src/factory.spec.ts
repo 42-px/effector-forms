@@ -3,6 +3,13 @@ import * as yup from "yup"
 import { createForm } from "./factory"
 import { Rule } from "./types"
 
+function email() {
+    return {
+        name: "email",
+        validator: (value: string) => /\S+@\S+\.\S+/.test(value)
+    }
+}
+
 const rules = {
     required: (): Rule<string> => ({
         name: "required",
@@ -612,3 +619,41 @@ test("reset values", () => {
     expect(form.fields.password.$firstError.getState()).toBeNull()
 
 })
+
+
+test("pass rule factory", () => {
+    const form = createForm({
+        fields: {
+            needNotification: {
+                init: false,
+                rules: [],
+            },
+            email: {
+                init: "" as string,
+                rules: (value: string, form) => form.needNotification ? [email()] : [],
+            },
+        },
+        validateOn: ["submit"],
+    })
+  
+    form.submit()
+    expect(form.fields.needNotification.$value.getState()).toBe(false)
+    expect(form.fields.email.$value.getState()).toBe("")
+    expect(form.$eachValid.getState()).toBe(true)
+  
+    form.fields.needNotification.onChange(true)
+    form.submit()
+    expect(form.fields.needNotification.$value.getState()).toBe(true)
+    expect(form.$eachValid.getState()).toBe(false)
+    expect(form.fields.email.$firstError.getState()).toEqual({
+        rule: "email",
+        value: "",
+    })
+  
+    const correctEmail = "email@example.com"
+    form.fields.email.onChange(correctEmail)
+    form.submit()
+    expect(form.fields.needNotification.$value.getState()).toBe(true)
+    expect(form.fields.email.$value.getState()).toBe(correctEmail)
+    expect(form.$eachValid.getState()).toBe(true)
+  })
