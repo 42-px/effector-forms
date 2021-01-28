@@ -3,18 +3,22 @@ import {
     ValidationError,
     Rule,
     AnyFields,
+    RuleResolver,
 } from "./types"
 
 export function createCombineValidator<Value = any, Form = any>(
-    rules: Rule<Value, Form, any>[]
+    rulesOrResolver: Rule<Value, Form, any>[] | RuleResolver<Value, Form>
 ) {
     return (
         value: Value,
-        form?: Form,
+        form: Form,
         rulesSources?: any[]
     ): ValidationError<Value>[] => {
 
         const errors: ValidationError<Value>[] = []
+        const rules = typeof rulesOrResolver === "function"
+        ? rulesOrResolver(value, form)
+        : rulesOrResolver
 
         for (let i = 0; i < rules.length; i++) {
             const rule = rules[i]
