@@ -90,16 +90,26 @@ export function createField(
         existing: fieldConfig.units?.reset,
     })
 
+    const $isValid = $firstError.map((firstError) => firstError === null)
+
     return {
         changed,
         name: fieldName,
         $value,
         $errors,
         $firstError,
-        $isValid: $firstError.map((firstError) => firstError === null),
+        $isValid,
         $isDirty,
         $isTouched: $touched,
         $touched,
+        $field: combine({
+            value: $value,
+            errors: $errors,
+            firstError: $firstError,
+            isValid: $isValid,
+            isDirty: $isDirty,
+            isTouched: $touched,
+        }),
         onChange,
         onBlur,
         addError,
