@@ -11,6 +11,7 @@ import {
 import {
     ValidationError,
     Field,
+    FieldData,
     FieldConfig,
     AnyFormValues,
     ValidationEvent,
@@ -92,6 +93,15 @@ export function createField(
 
     const $isValid = $firstError.map((firstError) => firstError === null)
 
+    const $field = combine({
+        value: $value,
+        errors: $errors,
+        firstError: $firstError,
+        isValid: $isValid,
+        isDirty: $isDirty,
+        isTouched: $touched,
+    })
+
     return {
         changed,
         name: fieldName,
@@ -102,14 +112,7 @@ export function createField(
         $isDirty,
         $isTouched: $touched,
         $touched,
-        $field: combine({
-            value: $value,
-            errors: $errors,
-            firstError: $firstError,
-            isValid: $isValid,
-            isDirty: $isDirty,
-            isTouched: $touched,
-        }),
+        $field: $field as Store<FieldData<any>>,
         onChange,
         onBlur,
         addError,
@@ -172,14 +175,16 @@ export function bindValidation({
     }>[] = []
 
     if (eventsNames.includes("submit")) {
-        validationEvents.push(sample({
+        const validationTrigger = sample({
             source: combine({
                 fieldValue: $value,
                 form: $form,
                 rulesSources,
             }),
             clock: submitEvent,
-        }))
+        })
+
+        validationEvents.push(validationTrigger)
     }
 
     if (eventsNames.includes("blur")) {

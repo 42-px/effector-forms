@@ -17,8 +17,8 @@ export function createCombineValidator<Value = any, Form = any>(
 
         const errors: ValidationError<Value>[] = []
         const rules = typeof rulesOrResolver === "function"
-        ? rulesOrResolver(value, form)
-        : rulesOrResolver
+            ? rulesOrResolver(value, form)
+            : rulesOrResolver
 
         for (let i = 0; i < rules.length; i++) {
             const rule = rules[i]

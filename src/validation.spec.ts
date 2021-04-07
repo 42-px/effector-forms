@@ -27,7 +27,7 @@ test("create combine validator", () => {
 
     const validate = createCombineValidator(rules)
 
-    expect(validate("")).toEqual([
+    expect(validate("", {})).toEqual([
         {
             rule: "required",
             value: "",
@@ -42,7 +42,7 @@ test("create combine validator", () => {
         },
     ])
 
-    expect(validate("12")).toEqual([
+    expect(validate("12", {})).toEqual([
         {
             rule: "minLength",
             value: "12",
@@ -53,12 +53,12 @@ test("create combine validator", () => {
         },
     ])
 
-    expect(validate("email@example.com")).toEqual([])
+    expect(validate("email@example.com", {})).toEqual([])
 
     
     const longEmail = "loooooooooooooooooooooooooooooooooooongemail@example.com"
     // eslint-disable-next-line max-len
-    expect(validate(longEmail)).toEqual([
+    expect(validate(longEmail, {})).toEqual([
         {
             rule: "maxLength",
             value: longEmail,

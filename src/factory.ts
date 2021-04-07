@@ -48,9 +48,9 @@ export type Form<Fields extends AnyFieldsConfigs> = {
   $isDirty: Store<boolean>
   $touched: Store<boolean>
   $meta: Store<{
-    isValid: boolean,
-    isDirty: boolean,
-    touched: boolean,
+    isValid: boolean
+    isDirty: boolean
+    touched: boolean
   }>
   submit: Event<void>
   validate: Event<void>
@@ -185,13 +185,14 @@ export function createForm<Fields extends AnyFieldsConfigs>(
     guard({
         source: submitWithFormData,
         filter: $isFormValid,
-        target: formValidated,
+        // TODO: fix
+        target: formValidated as unknown as Event<AnyFormValues>,
     })
 
     guard({
         source: validateWithFormData,
         filter: $isFormValid,
-        target: formValidated,
+        target: formValidated as unknown as Event<AnyFormValues>,
     })
 
     return {

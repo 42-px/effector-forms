@@ -9,6 +9,11 @@ export declare type Form<Fields extends AnyFieldsConfigs> = {
     $isValid: Store<boolean>;
     $isDirty: Store<boolean>;
     $touched: Store<boolean>;
+    $meta: Store<{
+        isValid: boolean;
+        isDirty: boolean;
+        touched: boolean;
+    }>;
     submit: Event<void>;
     validate: Event<void>;
     reset: Event<void>;
