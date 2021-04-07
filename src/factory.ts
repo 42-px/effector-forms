@@ -47,6 +47,11 @@ export type Form<Fields extends AnyFieldsConfigs> = {
   $isValid: Store<boolean>
   $isDirty: Store<boolean>
   $touched: Store<boolean>
+  $meta: Store<{
+    isValid: boolean,
+    isDirty: boolean,
+    touched: boolean,
+  }>
   submit: Event<void>
   validate: Event<void>
   reset: Event<void>
@@ -99,6 +104,12 @@ export function createForm<Fields extends AnyFieldsConfigs>(
     const $touched = combine(touchedFlagsArr).map(
         (touchedFlags) => touchedFlags.some(Boolean)
     )
+
+    const $meta = combine({
+        isValid: $eachValid,
+        isDirty: $isDirty,
+        touched: $touched,
+    })
 
     const validate = createFormUnit.event<void>({
         domain,
@@ -190,6 +201,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         $isValid: $eachValid,
         $isDirty: $isDirty,
         $touched: $touched,
+        $meta,
         submit: submitForm,
         validate,
         resetTouched,

@@ -128,9 +128,11 @@ export function useForm<Fields extends AnyFieldsConfigs>(
         values[fieldName] = connectedField.value
     }
 
-    const eachValid = useStore(form.$eachValid)
-    const isDirty = useStore(form.$isDirty)
-    const touched = useStore(form.$touched)
+    const {
+        isValid: eachValid,
+        isDirty,
+        touched,
+    } = useStore(form.$meta)
 
 
     const hasError = (fieldName?: string): boolean => {
