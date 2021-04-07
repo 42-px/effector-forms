@@ -28,6 +28,15 @@ export type Rule<Value, Form = any, Source = any> = {
   validator: Validator<Value, Form, Source>
 }
 
+export type FieldData<Value> = {
+  value: Value
+  errors: ValidationError<Value>[]
+  firstError: ValidationError<Value> | null
+  isValid: boolean
+  isDirty: boolean
+  isTouched: boolean
+} 
+
 export type Field<Value> = {
   name: string
   $value: Store<Value>
@@ -37,6 +46,7 @@ export type Field<Value> = {
   $isDirty: Store<boolean>
   $isTouched: Store<boolean>
   $touched: Store<boolean>
+  $field: Store<FieldData<Value>>
   onChange: Event<Value>
   changed: Event<Value>
   onBlur: Event<void>
@@ -51,6 +61,7 @@ export type Field<Value> = {
 
 type FilterFunc<Value> = (value: Value) => boolean
 
+// eslint-disable-next-line max-len
 export type RuleResolver<Value = any, Form = any> = (value: Value, form: Form) => Rule<Value, Form, void>[]
 
 export type FieldConfig<Value> = {

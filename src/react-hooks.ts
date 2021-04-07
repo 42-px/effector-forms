@@ -6,7 +6,8 @@ import {
     FormValues,
     ValidationError,
     FieldConfig,
-    AnyFieldsConfigs
+    AnyFieldsConfigs,
+    AnyFormValues
 } from "./types"
 
 type ErrorTextMap = {
@@ -44,12 +45,14 @@ type AnyConnectedFields = {
 }
 
 export function useField<Value>(field: Field<Value>): ConnectedField<Value> {
-    const value = useStore(field.$value)
-    const errors = useStore(field.$errors)
-    const firstError = useStore(field.$firstError)
-    const isValid = useStore(field.$isValid)
-    const isDirty = useStore(field.$isDirty)
-    const touched = useStore(field.$touched)
+    const {
+        value,
+        errors,
+        firstError,
+        isValid,
+        isDirty,
+        isTouched: touched,
+    } = useStore(field.$field)
 
     return {
         name: field.name,
@@ -115,18 +118,21 @@ export function useForm<Fields extends AnyFieldsConfigs>(
     form: Form<Fields>
 ) {
     const connectedFields = {} as AnyConnectedFields
+    const values = {} as AnyFormValues
 
     for (const fieldName in form.fields) {
         if (!form.fields.hasOwnProperty(fieldName)) continue 
         const field = form.fields[fieldName]
-
-        connectedFields[fieldName] = useField(field)
+        const connectedField = useField(field)
+        connectedFields[fieldName] = connectedField
+        values[fieldName] = connectedField.value
     }
 
-    const values = useStore(form.$values)
-    const eachValid = useStore(form.$eachValid)
-    const isDirty = useStore(form.$isDirty)
-    const touched = useStore(form.$touched)
+    const {
+        isValid: eachValid,
+        isDirty,
+        touched,
+    } = useStore(form.$meta)
 
 
     const hasError = (fieldName?: string): boolean => {
