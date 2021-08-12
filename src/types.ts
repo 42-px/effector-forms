@@ -51,7 +51,10 @@ export type Field<Value> = {
 
 type FilterFunc<Value> = (value: Value) => boolean
 
-export type RuleResolver<Value = any, Form = any> = (value: Value, form: Form) => Rule<Value, Form, void>[]
+export type RuleResolver<
+  Value = any,
+  Form = any
+> = (value: Value, form: Form) => Rule<Value, Form, void>[]
 
 export type FieldConfig<Value> = {
   init: Value | InitFieldValue<Value>

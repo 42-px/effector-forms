@@ -1,9 +1,25 @@
 import { babel } from "@rollup/plugin-babel"
-import replace from "@rollup/plugin-replace"
 import { terser } from "rollup-plugin-terser"
+import replace from "@rollup/plugin-replace"
 import typescript from "rollup-plugin-typescript2"
 import pkg from "./package.json"
 import babelConfig from "./babel.config.json"
+
+const paths = pkg.exports["./ssr"]
+
+
+babelConfig.plugins = [
+    "@babel/plugin-proposal-optional-chaining",
+    [
+        "module-resolver",
+        {
+            "alias": {
+                "@": "./src",
+                "effector-react": "effector-react/ssr"
+            }
+        }
+    ]
+]
 
 export default {
     external: [
@@ -11,37 +27,25 @@ export default {
         "effector-react",
         "react",
         "object-assign",
-        "react-dom"
+        "react-dom",
     ],
     input: "src/index.ts",
     output: [
         {
-            file: pkg.main,
+            file: paths.require,
             format: "cjs",
             sourcemap: true,
         },
         {
-            file: pkg.module,
+            file: paths.import,
             format: "es",
             sourcemap: true,
         },
-        {
-            file: pkg["umd:main"],
-            format: "umd",
-            sourcemap: true,
-            name: "EffectorForm",
-        },
-        {
-            file: "./dist/effector-forms.iife.js",
-            format: "iife",
-            name: "EffectorForm",
-            sourcemap: true,
-        }
     ],
     plugins: [
         typescript(),
         replace({
-            "SSR_BUILD": false,
+            "SSR_BUILD": true,
             "preventAssignment": false,
         }),
         babel({

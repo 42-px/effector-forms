@@ -21,6 +21,7 @@ import {
     bindChangeEvent,
 } from "./field"
 import { createFormUnit } from "./create-form-unit"
+import { isSSR } from "./ssr"
 
 function createFormValuesStore(
     fields: AnyFields
@@ -69,6 +70,10 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         validateOn,
         units,
     } = config
+
+    if (isSSR() && !domain) {
+        throw new Error("domain option is required in ssr mode!")
+    }
 
     const fields: AnyFields = {}
 
@@ -172,13 +177,13 @@ export function createForm<Fields extends AnyFieldsConfigs>(
     }
 
     guard({
-        source: submitWithFormData,
+        source: submitWithFormData as unknown as Event<FormValues<Fields>>,
         filter: $isFormValid,
         target: formValidated,
     })
 
     guard({
-        source: validateWithFormData,
+        source: validateWithFormData as unknown as Event<FormValues<Fields>>,
         filter: $isFormValid,
         target: formValidated,
     })

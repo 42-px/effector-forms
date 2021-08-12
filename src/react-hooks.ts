@@ -44,6 +44,7 @@ type AnyConnectedFields = {
 }
 
 export function useField<Value>(field: Field<Value>): ConnectedField<Value> {
+    // TODO: скомбайнить связанное состояние
     const value = useStore(field.$value)
     const errors = useStore(field.$errors)
     const firstError = useStore(field.$firstError)

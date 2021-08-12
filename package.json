@@ -7,8 +7,24 @@
   "module": "./dist/index.js",
   "umd:main": "./dist/effector-forms.umd.js",
   "browser": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/effector-forms.cjs.js",
+      "node": "./dist/effector-forms.cjs.js",
+      "default": "./dist/index.js"
+    },
+    "./ssr": {
+      "import": "./ssr/index.js",
+      "require": "./ssr/index.cjs.js",
+      "node": "./ssr/index.cjs.js",
+      "default": "./ssr/index.js"
+    }
+  },
   "scripts": {
-    "build": "rollup -c rollup.config.js",
+    "build:ssr": "cross-env NODE_ENV=production rollup -c rollup.ssr.config.js",
+    "build:nossr": "cross-env NODE_ENV=production rollup -c rollup.config.js",
+    "build": "npm run build:nossr && npm run build:ssr",
     "test": "jest",
     "example": "cross-env NODE_ENV=development webpack-dev-server --config ./webpack.example.config.js",
     "lint": "eslint \"./**/*.{js,ts,tsx}\" --fix",
@@ -44,6 +60,8 @@
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-react": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-replace": "^2.4.1",
     "@testing-library/react": "^10.4.8",
     "@types/jest": "^26.0.9",
     "@types/react": "^16.9.46",
@@ -54,7 +72,7 @@
     "babel-jest": "^26.2.2",
     "babel-loader": "^8.1.0",
     "babel-plugin-module-resolver": "^4.0.0",
-    "cross-env": "^7.0.2",
+    "cross-env": "^7.0.3",
     "eslint": "^7.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.20.6",
@@ -64,7 +82,6 @@
     "react-hot-loader": "^4.12.21",
     "react-test-renderer": "^16.13.1",
     "rollup": "^2.10.2",
-    "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.27.1",
     "typescript": "^3.9.2",
@@ -73,7 +90,8 @@
     "webpack-dev-server": "^3.11.0"
   },
   "files": [
-    "dist"
+    "dist",
+    "ssr"
   ],
   "typings": "./dist",
   "dependencies": {}

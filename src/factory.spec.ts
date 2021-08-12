@@ -630,7 +630,9 @@ test("pass rule factory", () => {
             },
             email: {
                 init: "" as string,
-                rules: (value: string, form) => form.needNotification ? [email()] : [],
+                rules: (value: string, form) => {
+                    return form.needNotification ? [email()] : []
+                }
             },
         },
         validateOn: ["submit"],
@@ -656,4 +658,4 @@ test("pass rule factory", () => {
     expect(form.fields.needNotification.$value.getState()).toBe(true)
     expect(form.fields.email.$value.getState()).toBe(correctEmail)
     expect(form.$eachValid.getState()).toBe(true)
-  })
+})
