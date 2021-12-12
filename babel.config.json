@@ -41,15 +41,7 @@
             }
           }
         ],
-        "@babel/plugin-transform-modules-commonjs",
-        [
-          "transform-inline-environment-variables",
-          {
-            "include": [
-              "NODE_ENV"
-            ]
-          }
-        ]
+        "@babel/plugin-transform-modules-commonjs"
       ]
     }
   }
