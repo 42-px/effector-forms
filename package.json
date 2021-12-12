@@ -89,7 +89,7 @@
     "dist",
     "dist-ssr",
     "dist-types",
-    "ssr"
+    "ssr.ts"
   ],
   "types": "./dist-types"
 }
