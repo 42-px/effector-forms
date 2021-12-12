@@ -89,7 +89,8 @@
   "files": [
     "dist",
     "dist-ssr",
-    "dist-types"
+    "dist-types",
+    "ssr"
   ],
   "types": "./dist-types"
 }
