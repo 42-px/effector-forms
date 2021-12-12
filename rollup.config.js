@@ -1,54 +1,93 @@
 import { babel } from "@rollup/plugin-babel"
 import replace from "@rollup/plugin-replace"
 import { terser } from "rollup-plugin-terser"
-import typescript from "rollup-plugin-typescript2"
+import typescript from "@rollup/plugin-typescript"
+import { nodeResolve } from "@rollup/plugin-node-resolve"
+import commonjs from "@rollup/plugin-commonjs"
+
 import pkg from "./package.json"
 import babelConfig from "./babel.config.json"
 
-export default {
+const isSSR = process.env.SSR === "true"
+
+const extensions = [".js", ".ts", ".tsx", ".jsx"]
+const paths = isSSR ? pkg.exports["./ssr"] : pkg.exports["."]
+
+if (isSSR) {
+    babelConfig.plugins = babelConfig.plugins || []
+    babelConfig.plugins.push(
+        [
+            "module-resolver",
+            {
+                "alias": {
+                    "effector-react": "effector-react/ssr"
+                }
+            }
+        ]
+    )
+}
+
+
+const config = {
     external: [
         "effector",
-        "effector-react",
-        "react",
-        "object-assign",
-        "react-dom"
+        /effector\-react/
     ],
     input: "src/index.ts",
     output: [
         {
-            file: pkg.main,
+            file: paths.require,
             format: "cjs",
             sourcemap: true,
         },
         {
-            file: pkg.module,
+            file: paths.import,
             format: "es",
             sourcemap: true,
         },
+    ],
+    plugins: [
+        typescript({ tsconfig: "./tsconfig.json" }),
+        replace({
+            "process.env.SSR_BUILD": `"${isSSR}"`,
+            "preventAssignment": true,
+        }),
+        babel({
+            babelHelpers: "bundled",
+            exclude: "node_modules/**",
+            extensions,
+            ...babelConfig,
+        }),
+        nodeResolve({ extensions }),
+        commonjs({ extensions }),
+        terser(),
+    ]
+}
+
+if (!isSSR) {
+    config.output.push(...[
         {
             file: pkg["umd:main"],
             format: "umd",
             sourcemap: true,
             name: "EffectorForm",
+            globals: {
+                "effector": "effector",
+                "effector-react": "effectorReact",
+            }, 
         },
         {
             file: "./dist/effector-forms.iife.js",
             format: "iife",
             name: "EffectorForm",
             sourcemap: true,
+            globals: {
+                "effector": "effector",
+                "effector-react": "effectorReact",
+            },
         }
-    ],
-    plugins: [
-        typescript(),
-        replace({
-            "SSR_BUILD": false,
-            "preventAssignment": false,
-        }),
-        babel({
-            exclude: "node_modules/**",
-            extensions: [".js", ".ts", ".tsx"],
-            ...babelConfig,
-        }),
-        terser(),
-    ]
+    ])
 }
+
+
+export default config

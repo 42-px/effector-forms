@@ -18,7 +18,7 @@ const rules = {
     }),
     minLength: (min: number): Rule<string> => ({
         name: "minLength",
-        validator: (value) => value.length >= min 
+        validator: (value) => value.length >= min
     }),
 }
 
@@ -52,7 +52,7 @@ test("use form", (done) => {
             errors,
             error,
             errorText,
-        } = useForm(form) 
+        } = useForm(form)
 
         expect(values).toEqual({
             email: "invalid email value",

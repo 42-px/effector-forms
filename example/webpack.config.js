@@ -8,7 +8,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin")
 module.exports = {
     mode: "development",
     devtool: "inline-source-map",
-    entry: path.resolve("./example/index.tsx"),
+    entry: path.resolve("./index.tsx"),
     devServer: {
         hot: true,
         hotOnly: true,
@@ -41,7 +41,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             filename: "index.html",
-            template: path.resolve("./example/index.html"),
+            template: path.resolve("./index.html"),
         }),
     ],
 }

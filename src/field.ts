@@ -3,7 +3,7 @@ import {
     Domain,
     Event,
     Store,
-    combine, 
+    combine,
     sample,
     guard,
     merge,
@@ -41,7 +41,7 @@ export function createField(
         existing: fieldConfig.units?.$errors,
         init: [],
     })
-    
+
 
     const $firstError = $errors.map(
         (errors) => errors[0] ? errors[0] : null
@@ -69,7 +69,7 @@ export function createField(
     })
     const addError = createFormUnit.event<{
         rule: string
-        errorText?: string 
+        errorText?: string
     }>({
         domain,
         existing: fieldConfig.units?.addError,
@@ -126,16 +126,16 @@ export function createField(
 }
 
 type BindValidationParams = {
-  $form: Store<AnyFormValues>
-  validateFormEvent: Event<void>
-  submitEvent: Event<void>
-  resetFormEvent: Event<void>
-  resetValues: Event<void>
-  resetErrors: Event<void>
-  field: Field<any>
-  rules: Rule<any, any>[] | RuleResolver<any, any>
-  formValidationEvents: ValidationEvent[]
-  fieldValidationEvents: ValidationEvent[]
+    $form: Store<AnyFormValues>
+    validateFormEvent: Event<void>
+    submitEvent: Event<void>
+    resetFormEvent: Event<void>
+    resetValues: Event<void>
+    resetErrors: Event<void>
+    field: Field<any>
+    rules: Rule<any, any>[] | RuleResolver<any, any>
+    formValidationEvents: ValidationEvent[]
+    fieldValidationEvents: ValidationEvent[]
 }
 
 export function bindValidation({
@@ -162,7 +162,7 @@ export function bindValidation({
         reset,
     } = field
 
-    const rulesSources = typeof rules === "function" 
+    const rulesSources = typeof rules === "function"
         ? createStore<any[]>([])
         : combine(rules.map(({ source }) => source || createStore(null)))
 
@@ -236,7 +236,7 @@ export function bindValidation({
             rule,
             value,
             errorText,
-        }),  
+        }),
     })
 
     $errors
@@ -264,7 +264,7 @@ export function bindChangeEvent(
         changed,
         name,
         reset,
-        resetValue, 
+        resetValue,
         filter }: Field<any>,
     setForm: Event<Partial<AnyFormValues>>,
     resetForm: Event<void>,
@@ -286,10 +286,10 @@ export function bindChangeEvent(
         .on(changed, (_, value) => value)
         .on(
             setForm,
-            (curr, updateSet) => updateSet.hasOwnProperty(name) 
-                ? updateSet[name] 
+            (curr, updateSet) => updateSet.hasOwnProperty(name)
+                ? updateSet[name]
                 : curr
         )
         .reset(reset, resetValue, resetValues, resetForm)
-    
+
 }

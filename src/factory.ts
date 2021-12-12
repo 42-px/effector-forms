@@ -27,7 +27,7 @@ function createFormValuesStore(
     fields: AnyFields
 ): Store<AnyFormValues> {
     const shape: { [key: string]: Store<any> } = {}
-  
+
     for (const fieldName in fields) {
         if (!fields.hasOwnProperty(fieldName)) continue
         shape[fieldName] = fields[fieldName].$value
@@ -38,30 +38,30 @@ function createFormValuesStore(
 
 
 export type Form<Fields extends AnyFieldsConfigs> = {
-  fields: {
-    [K in keyof Fields]: Fields[K] extends FieldConfig<infer U>
-      ? Field<U>
-      : never
-  }
-  $values: Store<FormValues<Fields>>
-  $eachValid: Store<boolean>
-  $isValid: Store<boolean>
-  $isDirty: Store<boolean>
-  $touched: Store<boolean>
-  $meta: Store<{
-    isValid: boolean
-    isDirty: boolean
-    touched: boolean
-  }>
-  submit: Event<void>
-  validate: Event<void>
-  reset: Event<void>
-  set: Event<Partial<FormValues<Fields>>>
-  setForm: Event<Partial<FormValues<Fields>>>
-  resetTouched: Event<void>
-  resetValues: Event<void>
-  resetErrors: Event<void>
-  formValidated: Event<FormValues<Fields>>
+    fields: {
+        [K in keyof Fields]: Fields[K] extends FieldConfig<infer U>
+        ? Field<U>
+        : never
+    }
+    $values: Store<FormValues<Fields>>
+    $eachValid: Store<boolean>
+    $isValid: Store<boolean>
+    $isDirty: Store<boolean>
+    $touched: Store<boolean>
+    $meta: Store<{
+        isValid: boolean
+        isDirty: boolean
+        touched: boolean
+    }>
+    submit: Event<void>
+    validate: Event<void>
+    reset: Event<void>
+    set: Event<Partial<FormValues<Fields>>>
+    setForm: Event<Partial<FormValues<Fields>>>
+    resetTouched: Event<void>
+    resetValues: Event<void>
+    resetErrors: Event<void>
+    formValidated: Event<FormValues<Fields>>
 }
 
 
@@ -84,7 +84,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
 
     const dirtyFlagsArr: Store<boolean>[] = []
     const touchedFlagsArr: Store<boolean>[] = []
- 
+
     // create units
     for (const fieldName in fieldsConfigs) {
         if (!fieldsConfigs.hasOwnProperty(fieldName)) continue
@@ -120,12 +120,12 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         domain,
         existing: units?.validate,
     })
-  
+
     const submitForm = createFormUnit.event<void>({
         domain,
         existing: units?.submit,
     })
-    
+
     const formValidated = createFormUnit.event({
         domain,
         existing: units?.formValidated,
@@ -136,7 +136,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         domain,
         existing: units?.setForm as Event<Partial<AnyFormValues>>,
     })
-    
+
     const resetForm = createFormUnit.event({
         domain,
         existing: units?.reset,
@@ -151,12 +151,12 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         domain,
         existing: units?.resetErrors,
     })
-    
+
     const resetTouched = createFormUnit.event({
         domain,
         existing: units?.resetTouched,
     })
-    
+
     const submitWithFormData = sample($form, submitForm)
     const validateWithFormData = sample($form, validate)
 
@@ -182,7 +182,7 @@ export function createForm<Fields extends AnyFieldsConfigs>(
             field,
             formValidationEvents: validateOn ? validateOn : ["submit"],
             fieldValidationEvents: fieldConfig.validateOn
-                ? fieldConfig.validateOn 
+                ? fieldConfig.validateOn
                 : [],
         })
     }
@@ -191,13 +191,13 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         source: submitWithFormData as unknown as Event<FormValues<Fields>>,
         filter: $isFormValid,
         // TODO: fix
-        target: formValidated as unknown as Event<AnyFormValues>,
+        target: formValidated,
     })
 
     guard({
         source: validateWithFormData as unknown as Event<FormValues<Fields>>,
         filter: $isFormValid,
-        target: formValidated as unknown as Event<AnyFormValues>,
+        target: formValidated,
     })
 
     return {

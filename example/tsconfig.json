@@ -14,12 +14,12 @@
       "@/*": [
         "./*"
       ],
+      "effector-forms": [
+        "../src/index"
+      ],
     },
   },
   "include": [
     "./src/**/*"
   ],
-  "exclude": [
-    "./src/**/*.spec.*"
-  ]
 }

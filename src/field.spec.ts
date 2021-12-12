@@ -712,4 +712,4 @@ test("pass rules factory", () => {
     })
     field.onChange("12")
     expect(field.$firstError.getState()).toBeNull()
-  })
+})

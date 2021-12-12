@@ -1,40 +1,55 @@
 {
   "presets": [
+    "@babel/preset-typescript",
     [
       "@babel/preset-env",
       {
-        "modules": false
+        "useBuiltIns": "entry",
+        "shippedProposals": true,
+        "corejs": 3,
+        "modules": false,
+        "targets": {
+          "chrome": "70",
+          "node": "current"
+        }
       }
     ]
   ],
   "plugins": [
-    "@babel/plugin-proposal-optional-chaining",
     [
-      "module-resolver",
+      "effector/babel-plugin",
       {
-        "alias": {
-          "@": "./src"
-        }
+        "factories": [
+          "src/create-form-unit",
+          "src/factory",
+          "src/field"
+        ]
       }
     ]
   ],
   "env": {
     "test": {
       "presets": [
-        "@babel/preset-typescript",
         "@babel/preset-react"
       ],
       "plugins": [
-        "@babel/plugin-transform-modules-commonjs"
-      ]
-    },
-    "development": {
-      "presets": [
-        "@babel/preset-typescript",
-        "@babel/preset-react"
-      ],
-      "plugins": [
-        "react-hot-loader/babel"
+        [
+          "module-resolver",
+          {
+            "alias": {
+              "@": "./src"
+            }
+          }
+        ],
+        "@babel/plugin-transform-modules-commonjs",
+        [
+          "transform-inline-environment-variables",
+          {
+            "include": [
+              "NODE_ENV"
+            ]
+          }
+        ]
       ]
     }
   }

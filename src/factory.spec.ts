@@ -21,7 +21,7 @@ const rules = {
     }),
     minLength: (min: number): Rule<string> => ({
         name: "minLength",
-        validator: (value) => value.length >= min 
+        validator: (value) => value.length >= min
     }),
 }
 
@@ -44,7 +44,7 @@ test("simple login form", () => {
         validateOn: ["submit"],
     })
 
-  
+
     const validated = jest.fn()
     form.formValidated.watch(validated)
 
@@ -69,7 +69,7 @@ test("simple login form", () => {
     form.fields.email.onChange("test@gma")
     expect(form.fields.email.$firstError.getState()).toBeNull()
     expect(form.$eachValid.getState()).toBe(false)
-    
+
     form.submit()
     expect(form.$eachValid.getState()).toBe(false)
     expect(form.fields.email.$firstError.getState()).toEqual({
@@ -120,7 +120,7 @@ test("register form", () => {
                         },
                     },
                 ],
-                validateOn: ["change"],           
+                validateOn: ["change"],
             },
         },
         validateOn: ["submit"],
@@ -195,68 +195,68 @@ test("set form", () => {
 })
 
 test("filter", (done) => {
-  type Credentials = {
-    email: string
-    password: string
-  }
-  const loginFx = createEffect<Credentials, void, Error>({
-      handler: ({ email }) => {
-          if (email === "test@example.com") {
-              return Promise.reject(new Error("already exists"))
-          }
-          return Promise.resolve()
-      }
-  })
-  const $serverError = restore(loginFx.failData, null)
+    type Credentials = {
+        email: string
+        password: string
+    }
+    const loginFx = createEffect<Credentials, void, Error>({
+        handler: ({ email }) => {
+            if (email === "test@example.com") {
+                return Promise.reject(new Error("already exists"))
+            }
+            return Promise.resolve()
+        }
+    })
+    const $serverError = restore(loginFx.failData, null)
 
-  const form = createForm({
-      filter: $serverError.map((error) => error === null),
-      fields: {
-          email: {
-              init: "",
-              rules: [
-                  rules.email(),
-              ],
-          },
-          password: {
-              init: "",
-              rules: [
-                  rules.required()
-              ],
-          },
-      },
-      validateOn: ["submit"],
-  })
+    const form = createForm({
+        filter: $serverError.map((error) => error === null),
+        fields: {
+            email: {
+                init: "",
+                rules: [
+                    rules.email(),
+                ],
+            },
+            password: {
+                init: "",
+                rules: [
+                    rules.required()
+                ],
+            },
+        },
+        validateOn: ["submit"],
+    })
 
-  $serverError.reset(form.$values.updates)
+    $serverError.reset(form.$values.updates)
 
-  forward({
-      from: form.formValidated,
-      to: loginFx,
-  })
+    forward({
+        from: form.formValidated,
+        to: loginFx,
+    })
 
 
-  const validated = jest.fn()
-  form.formValidated.watch(validated)
+    const validated = jest.fn()
+    form.formValidated.watch(validated)
 
-  form.fields.email.onChange("test@example.com")
-  form.fields.password.onChange("1234")
-  
-  form.submit()
-  expect(validated.mock.calls.length).toBe(1)
-  expect(form.$eachValid.getState()).toBe(true)
+    form.fields.email.onChange("test@example.com")
+    form.fields.password.onChange("1234")
 
-  loginFx.fail.watch(() => {
-      form.submit()
-      form.submit()
-      expect(validated.mock.calls.length).toBe(1)
+    form.submit()
+    expect(validated.mock.calls.length).toBe(1)
+    expect(form.$eachValid.getState()).toBe(true)
 
-      form.fields.email.onChange("test1@example.com")
+    loginFx.fail.watch(() => {
+        form.submit()
+        form.submit()
+        expect(validated.mock.calls.length).toBe(1)
 
-      loginFx.done.watch(() => done())
-      form.submit()
-      expect(validated.mock.calls.length).toBe(2)
-  })
+        form.fields.email.onChange("test1@example.com")
+
+        loginFx.done.watch(() => done())
+        form.submit()
+        expect(validated.mock.calls.length).toBe(2)
+    })
 })
 
 test("reset form", () => {
@@ -349,7 +349,7 @@ test("use YUP", () => {
     function createRule<V, T = any>({
         schema,
         name,
-    }: { schema: yup.Schema<T>; name: string }): Rule<V> {
+    }: { schema: yup.SchemaOf<T>; name: string }): Rule<V> {
         return {
             name,
             validator: (v: V) => {
@@ -359,7 +359,7 @@ test("use YUP", () => {
                         isValid: true,
                         value: v,
                     }
-                } catch (err) {
+                } catch (err: any) {
                     return {
                         isValid: false,
                         value: v,
@@ -557,7 +557,7 @@ test("external units", () => {
         formValidated: createEvent<{ email: string }>(),
         setForm: createEvent<{ email?: string }>(),
     }
-    
+
     const form = createForm({
         fields: {
             email: {
@@ -682,12 +682,12 @@ test("pass rule factory", () => {
         },
         validateOn: ["submit"],
     })
-  
+
     form.submit()
     expect(form.fields.needNotification.$value.getState()).toBe(false)
     expect(form.fields.email.$value.getState()).toBe("")
     expect(form.$eachValid.getState()).toBe(true)
-  
+
     form.fields.needNotification.onChange(true)
     form.submit()
     expect(form.fields.needNotification.$value.getState()).toBe(true)
@@ -696,7 +696,7 @@ test("pass rule factory", () => {
         rule: "email",
         value: "",
     })
-  
+
     const correctEmail = "email@example.com"
     form.fields.email.onChange(correctEmail)
     form.submit()
