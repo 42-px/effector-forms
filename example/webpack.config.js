@@ -8,10 +8,9 @@ const HtmlWebpackPlugin = require("html-webpack-plugin")
 module.exports = {
     mode: "development",
     devtool: "inline-source-map",
-    entry: path.resolve("./index.tsx"),
+    entry: path.resolve("./src/index.tsx"),
     devServer: {
         hot: true,
-        hotOnly: true,
         host: "localhost",
         port: 8080,
         historyApiFallback: true,
@@ -21,7 +20,7 @@ module.exports = {
         new webpack.HotModuleReplacementPlugin(),
     ],
     output: {
-        path: path.resolve("./example-dist"),
+        path: path.resolve("./dist"),
         publicPath: "/",
         filename: "js/[name].[hash].js",
         chunkFilename: "js/[id].[hash].js",

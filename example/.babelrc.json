@@ -14,7 +14,15 @@
     ]
   ],
   "plugins": [
-    "effector/babel-plugin"
+    "effector/babel-plugin",
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "effector-forms": "effector-forms/ssr"
+        }
+      }
+    ],
   ],
   "env": {
     "development": {

@@ -91,5 +91,5 @@
     "dist-ssr",
     "dist-types"
   ],
-  "types": "./dist-types/index.d.ts"
+  "types": "./dist-types"
 }

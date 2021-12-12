@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 // eslint-disable-next-line no-unused-vars
 import * as React from "react"
+import {} from "effector-react/ssr"
 import { createForm, Rule, useForm } from "effector-forms"
 
 const rules = {
@@ -68,7 +69,7 @@ const errorText = {
 export const App = () => {
     const form = useForm(registerForm)
 
-    const onSubmit = (e) => {
+    const onSubmit = (e: any) => {
         e.preventDefault()
         form.submit()
     }

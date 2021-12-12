@@ -173,4 +173,4 @@ export declare type Result<Fields extends AnyFieldsConfigs> = {
 };
 export declare function useForm<Fields extends AnyFieldsConfigs>(form: Form<Fields>): Result<Fields>;
 
-export {};
+export { };

@@ -14,9 +14,6 @@
       "@/*": [
         "./*"
       ],
-      "effector-forms": [
-        "../src/index"
-      ],
     },
   },
   "include": [
