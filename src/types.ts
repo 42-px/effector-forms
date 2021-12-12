@@ -28,6 +28,15 @@ export type Rule<Value, Form = any, Source = any> = {
   validator: Validator<Value, Form, Source>
 }
 
+export type FieldData<Value> = {
+  value: Value
+  errors: ValidationError<Value>[]
+  firstError: ValidationError<Value> | null
+  isValid: boolean
+  isDirty: boolean
+  isTouched: boolean
+} 
+
 export type Field<Value> = {
   name: string
   $value: Store<Value>
@@ -37,6 +46,7 @@ export type Field<Value> = {
   $isDirty: Store<boolean>
   $isTouched: Store<boolean>
   $touched: Store<boolean>
+  $field: Store<FieldData<Value>>
   onChange: Event<Value>
   changed: Event<Value>
   onBlur: Event<void>

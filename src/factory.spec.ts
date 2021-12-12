@@ -439,6 +439,11 @@ test("isDirty & touched", () => {
     expect(form.fields.email.$touched.getState()).toBe(false)
     expect(form.fields.password.$touched.getState()).toBe(false)
     expect(form.$touched.getState()).toBe(false)
+    expect(form.$meta.getState()).toEqual({
+        isValid: true,
+        isDirty: false,
+        touched: false,
+    })
 
     form.fields.email.onChange("123")
 
@@ -448,6 +453,12 @@ test("isDirty & touched", () => {
     expect(form.fields.email.$touched.getState()).toBe(true)
     expect(form.fields.password.$touched.getState()).toBe(false)
     expect(form.$touched.getState()).toBe(true)
+    expect(form.$meta.getState()).toEqual({
+        isValid: true,
+        isDirty: true,
+        touched: true,
+    })
+
 
     form.fields.password.onChange("123")
 
@@ -457,6 +468,12 @@ test("isDirty & touched", () => {
     expect(form.fields.email.$touched.getState()).toBe(true)
     expect(form.fields.password.$touched.getState()).toBe(true)
     expect(form.$touched.getState()).toBe(true)
+    expect(form.$meta.getState()).toEqual({
+        isValid: true,
+        isDirty: true,
+        touched: true,
+    })
+
 
     form.fields.email.onChange("")
 
@@ -466,6 +483,12 @@ test("isDirty & touched", () => {
     expect(form.fields.email.$touched.getState()).toBe(true)
     expect(form.fields.password.$touched.getState()).toBe(true)
     expect(form.$touched.getState()).toBe(true)
+    expect(form.$meta.getState()).toEqual({
+        isValid: true,
+        isDirty: true,
+        touched: true,
+    })
+
 
     form.fields.password.onChange("")
 
@@ -475,6 +498,11 @@ test("isDirty & touched", () => {
     expect(form.fields.email.$touched.getState()).toBe(true)
     expect(form.fields.password.$touched.getState()).toBe(true)
     expect(form.$touched.getState()).toBe(true)
+    expect(form.$meta.getState()).toEqual({
+        isValid: true,
+        isDirty: false,
+        touched: true,
+    })
 
     form.reset()
 
@@ -484,6 +512,12 @@ test("isDirty & touched", () => {
     expect(form.fields.email.$touched.getState()).toBe(false)
     expect(form.fields.password.$touched.getState()).toBe(false)
     expect(form.$touched.getState()).toBe(false)
+    expect(form.$meta.getState()).toEqual({
+        isValid: true,
+        isDirty: false,
+        touched: false,
+    })
+
 
     form.fields.email.onChange("123")
     form.fields.password.onChange("123")
@@ -494,6 +528,11 @@ test("isDirty & touched", () => {
     expect(form.fields.email.$touched.getState()).toBe(true)
     expect(form.fields.password.$touched.getState()).toBe(true)
     expect(form.$touched.getState()).toBe(true)
+    expect(form.$meta.getState()).toEqual({
+        isValid: true,
+        isDirty: true,
+        touched: true,
+    })
 
     form.resetTouched()
 
@@ -503,7 +542,11 @@ test("isDirty & touched", () => {
     expect(form.fields.email.$touched.getState()).toBe(false)
     expect(form.fields.password.$touched.getState()).toBe(false)
     expect(form.$touched.getState()).toBe(false)
-
+    expect(form.$meta.getState()).toEqual({
+        isValid: true,
+        isDirty: true,
+        touched: false,
+    })
 })
 
 test("external units", () => {
@@ -556,8 +599,10 @@ test("validate form manually", () => {
     form.formValidated.watch(formValidatedListener)
 
     expect(form.$isValid.getState()).toBe(true)
+    expect(form.$meta.getState().isValid).toBe(true)
     form.validate()
     expect(form.$isValid.getState()).toBe(false)
+    expect(form.$meta.getState().isValid).toBe(false)
     expect(form.fields.email.$firstError.getState()).toEqual({
         rule: "required",
         value: "",
