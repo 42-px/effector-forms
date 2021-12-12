@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
 // eslint-disable-next-line no-unused-vars
 import * as React from "react"
-import {} from "effector-react/ssr"
-import { createForm, Rule, useForm } from "effector-forms/ssr"
+import { createForm, Rule, useForm } from "effector-forms"
+import { createDomain } from "effector"
 
 const rules = {
     required: (): Rule<string> => ({
@@ -27,6 +27,7 @@ const rules = {
 
 
 const registerForm = createForm({
+    domain: createDomain(),
     fields: {
         email: {
             init: "" as string,
