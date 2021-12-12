@@ -22,7 +22,7 @@
     }
   },
   "scripts": {
-    "emit-dts": "dts-bundle-generator --no-check --project tsconfig.json --out-file ./dist-types/index.d.ts ./src/index.ts",
+    "emit-dts": "dts-bundle-generator --no-check --project tsconfig.json --out-file ./dist-types/index.d.ts ./src/index.ts && cp ./dist-types/index.d.ts ./ssr",
     "build:nossr": "cross-env SSR=false NODE_ENV=production rollup -c rollup.config.js",
     "build:ssr": "cross-env SSR=true NODE_ENV=production rollup -c rollup.config.js",
     "build": "npm run build:nossr && npm run build:ssr && npm run emit-dts",

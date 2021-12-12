@@ -2,7 +2,7 @@
 // eslint-disable-next-line no-unused-vars
 import * as React from "react"
 import {} from "effector-react/ssr"
-import { createForm, Rule, useForm } from "effector-forms"
+import { createForm, Rule, useForm } from "effector-forms/ssr"
 
 const rules = {
     required: (): Rule<string> => ({
