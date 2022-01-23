@@ -35,7 +35,7 @@ export type FieldData<Value> = {
   isValid: boolean
   isDirty: boolean
   isTouched: boolean
-} 
+}
 
 export type Field<Value> = {
   name: string
@@ -86,7 +86,7 @@ export type FieldConfig<Value> = {
   }
 }
 
-export type AnyFields ={
+export type AnyFields = {
   [key: string]: Field<any>
 }
 
@@ -98,14 +98,23 @@ export type AnyFormValues = {
   [key: string]: any
 }
 
-export type FormValues<Fields extends AnyFieldsConfigs> = {
-  [K in keyof Fields]: Fields[K] extends FieldConfig<infer U>
-    ? U
-    : never
+export type FormValues<Fields extends AnyFields> = {
+  [K in keyof Fields]: Fields[K] extends Field<infer U>
+   ? U
+   : never
 }
 
-export type FormConfig<Fields extends AnyFieldsConfigs> = {
-  fields: Fields
+export type FormFieldConfigs<Values extends AnyFormValues> = {
+  [K in keyof Values]: FieldConfig<Values[K]>
+}
+
+export type FormFields<Values extends AnyFormValues> = {
+  [K in keyof Values]: Field<Values[K]>
+}
+
+
+export type FormConfig<Values extends AnyFormValues> = {
+  fields: FormFieldConfigs<Values>
   domain?: Domain
   filter?: Store<boolean>
   validateOn?: ValidationEvent[]
@@ -116,7 +125,32 @@ export type FormConfig<Fields extends AnyFieldsConfigs> = {
     resetValues?: Event<void>
     resetTouched?: Event<void>
     resetErrors?: Event<void>
-    formValidated?: Event<FormValues<Fields>>
-    setForm?: Event<Partial<FormValues<Fields>>>
+    formValidated?: Event<Values>
+    setForm?: Event<Partial<AnyFormValues>>
   }
 }
+
+
+export type Form<Values extends AnyFormValues> = {
+  fields: FormFields<Values>
+  $values: Store<Values>
+  $eachValid: Store<boolean>
+  $isValid: Store<boolean>
+  $isDirty: Store<boolean>
+  $touched: Store<boolean>
+  $meta: Store<{
+    isValid: boolean
+    isDirty: boolean
+    touched: boolean
+  }>
+  submit: Event<void>
+  validate: Event<void>
+  reset: Event<void>
+  set: Event<Partial<Values>>
+  setForm: Event<Partial<Values>>
+  resetTouched: Event<void>
+  resetValues: Event<void>
+  resetErrors: Event<void>
+  formValidated: Event<Values>
+}
+

@@ -5,5 +5,6 @@ export {
     Rule,
     ValidationError,
     Validator,
-    FormValues
+    FormValues,
+    Form
 } from "./types"

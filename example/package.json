@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --config ./webpack.config.js",
-    "check:types": "tsc --noEmit"
+    "check-types": "tsc --noEmit"
   },
   "author": "",
   "license": "ISC",
