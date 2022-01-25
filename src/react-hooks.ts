@@ -1,12 +1,9 @@
 import { useStore } from "effector-react"
-import { Form } from "./factory"
 import {
     Field,
-    FormValues,
     ValidationError,
-    FieldConfig,
-    AnyFieldsConfigs,
-    AnyFormValues
+    AnyFormValues,
+    Form
 } from "./types"
 import { wrapEvent } from "./ssr"
 
@@ -36,10 +33,8 @@ type ConnectedField<Value> = {
   resetErrors: (v: void) => void
 }
 
-type ConnectedFields<Fields extends AnyFieldsConfigs> = {
-  [K in keyof Fields]: Fields[K] extends FieldConfig<infer U>
-  ? ConnectedField<U>
-  : never
+type ConnectedFields<Values extends AnyFormValues> = {
+  [K in keyof Values]: ConnectedField<Values[K]>
 }
 
 type AnyConnectedFields = {
@@ -91,39 +86,37 @@ export function useField<Value>(field: Field<Value>): ConnectedField<Value> {
 
 }
 
-type Result<Fields extends AnyFieldsConfigs> = {
-  fields: ConnectedFields<Fields>
-  values: FormValues<Fields>
-  hasError: (fieldName?: keyof Fields) => boolean
+type Result<Values extends AnyFormValues> = {
+  fields: ConnectedFields<Values>
+  values: Values
+  hasError: (fieldName?: keyof Values) => boolean
   eachValid: boolean
   isValid: boolean
   isDirty: boolean
   isTouched: boolean
   touched: boolean
-  errors: (fieldName: keyof Fields) => (
-    // eslint-disable-next-line max-len
-    Fields[typeof fieldName] extends FieldConfig<infer U> ? ValidationError<U>[] : never
+  errors: (fieldName: keyof Values) => (
+    ValidationError<Values[typeof fieldName]>[]
   )
-  error: (fieldName: keyof Fields) => (
-    // eslint-disable-next-line max-len
-    Fields[typeof fieldName] extends FieldConfig<infer U> ? ValidationError<U> : never
+  error: (fieldName: keyof Values) => (
+    ValidationError<Values[typeof fieldName]>
   ) | null
-  errorText: (fieldName: keyof Fields, map?: ErrorTextMap) => string
+  errorText: (fieldName: keyof Values, map?: ErrorTextMap) => string
   submit: (p: void) => void
   reset: (p: void) => void
-  setForm: (p: Partial<FormValues<Fields>>) => Partial<FormValues<Fields>>
-  set: (p: Partial<FormValues<Fields>>) => Partial<FormValues<Fields>>
-  formValidated: (p: FormValues<Fields>) => FormValues<Fields>
+  setForm: (p: Partial<Values>) => Partial<Values>
+  set: (p: Partial<Values>) => Partial<Values>
+  formValidated: (p: Values) => Values
 }
 
-export function useForm<Fields extends AnyFieldsConfigs>(
-    form: Form<Fields>
-): Result<Fields> {
+export function useForm<Values extends AnyFormValues>(
+    form: Form<Values>
+): Result<Values> {
     const connectedFields = {} as AnyConnectedFields
     const values = {} as AnyFormValues
 
     for (const fieldName in form.fields) {
-        if (!form.fields.hasOwnProperty(fieldName)) continue 
+        if (!form.fields.hasOwnProperty(fieldName)) continue
         const field = form.fields[fieldName]
         const connectedField = useField(field)
         connectedFields[fieldName] = connectedField
@@ -179,7 +172,7 @@ export function useForm<Fields extends AnyFieldsConfigs>(
     }
 
     return {
-        fields: connectedFields as ConnectedFields<Fields>,
+        fields: connectedFields as ConnectedFields<Values>,
         values,
         hasError,
         eachValid,
@@ -189,11 +182,11 @@ export function useForm<Fields extends AnyFieldsConfigs>(
         touched,
         errors,
         error,
-        reset: wrapEvent(form.reset),
         errorText,
+        reset: wrapEvent(form.reset),
         submit: wrapEvent(form.submit),
         setForm: wrapEvent(form.setForm),
         set: wrapEvent(form.setForm), // set form alias
         formValidated: wrapEvent(form.formValidated),
-    } as Result<Fields>
+    } as Result<Values>
 }

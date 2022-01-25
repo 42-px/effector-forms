@@ -6,13 +6,10 @@ import {
     guard,
 } from "effector"
 import {
-    FieldConfig,
-    Field,
     AnyFields,
-    AnyFieldsConfigs,
     AnyFormValues,
     FormConfig,
-    FormValues,
+    Form,
 } from "./types"
 import { eachValid } from "./validation"
 import {
@@ -36,37 +33,8 @@ function createFormValuesStore(
     return combine(shape)
 }
 
-
-export type Form<Fields extends AnyFieldsConfigs> = {
-    fields: {
-        [K in keyof Fields]: Fields[K] extends FieldConfig<infer U>
-        ? Field<U>
-        : never
-    }
-    $values: Store<FormValues<Fields>>
-    $eachValid: Store<boolean>
-    $isValid: Store<boolean>
-    $isDirty: Store<boolean>
-    $touched: Store<boolean>
-    $meta: Store<{
-        isValid: boolean
-        isDirty: boolean
-        touched: boolean
-    }>
-    submit: Event<void>
-    validate: Event<void>
-    reset: Event<void>
-    set: Event<Partial<FormValues<Fields>>>
-    setForm: Event<Partial<FormValues<Fields>>>
-    resetTouched: Event<void>
-    resetValues: Event<void>
-    resetErrors: Event<void>
-    formValidated: Event<FormValues<Fields>>
-}
-
-
-export function createForm<Fields extends AnyFieldsConfigs>(
-    config: FormConfig<Fields>
+export function createForm<Values extends AnyFormValues>(
+    config: FormConfig<Values>
 ) {
     const {
         filter: $filter,
@@ -188,14 +156,14 @@ export function createForm<Fields extends AnyFieldsConfigs>(
     }
 
     guard({
-        source: submitWithFormData as unknown as Event<FormValues<Fields>>,
+        source: submitWithFormData as unknown as Event<Values>,
         filter: $isFormValid,
         // TODO: fix
         target: formValidated,
     })
 
     guard({
-        source: validateWithFormData as unknown as Event<FormValues<Fields>>,
+        source: validateWithFormData as unknown as Event<Values>,
         filter: $isFormValid,
         target: formValidated,
     })
@@ -217,5 +185,5 @@ export function createForm<Fields extends AnyFieldsConfigs>(
         setForm,
         set: setForm,
         formValidated,
-    } as unknown as Form<Fields>
+    } as unknown as Form<Values>
 }

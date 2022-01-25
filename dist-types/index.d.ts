@@ -76,14 +76,23 @@ export declare type FieldConfig<Value> = {
 		resetErrors?: Event<void>;
 	};
 };
-export declare type AnyFieldsConfigs = {
-	[key: string]: FieldConfig<any>;
+export declare type AnyFields = {
+	[key: string]: Field<any>;
 };
-export declare type FormValues<Fields extends AnyFieldsConfigs> = {
-	[K in keyof Fields]: Fields[K] extends FieldConfig<infer U> ? U : never;
+export declare type AnyFormValues = {
+	[key: string]: any;
 };
-export declare type FormConfig<Fields extends AnyFieldsConfigs> = {
-	fields: Fields;
+export declare type FormValues<Fields extends AnyFields> = {
+	[K in keyof Fields]: Fields[K] extends Field<infer U> ? U : never;
+};
+export declare type FormFieldConfigs<Values extends AnyFormValues> = {
+	[K in keyof Values]: FieldConfig<Values[K]>;
+};
+export declare type FormFields<Values extends AnyFormValues> = {
+	[K in keyof Values]: Field<Values[K]>;
+};
+export declare type FormConfig<Values extends AnyFormValues> = {
+	fields: FormFieldConfigs<Values>;
 	domain?: Domain;
 	filter?: Store<boolean>;
 	validateOn?: ValidationEvent[];
@@ -94,15 +103,13 @@ export declare type FormConfig<Fields extends AnyFieldsConfigs> = {
 		resetValues?: Event<void>;
 		resetTouched?: Event<void>;
 		resetErrors?: Event<void>;
-		formValidated?: Event<FormValues<Fields>>;
-		setForm?: Event<Partial<FormValues<Fields>>>;
+		formValidated?: Event<Values>;
+		setForm?: Event<Partial<AnyFormValues>>;
 	};
 };
-export declare type Form<Fields extends AnyFieldsConfigs> = {
-	fields: {
-		[K in keyof Fields]: Fields[K] extends FieldConfig<infer U> ? Field<U> : never;
-	};
-	$values: Store<FormValues<Fields>>;
+export declare type Form<Values extends AnyFormValues> = {
+	fields: FormFields<Values>;
+	$values: Store<Values>;
 	$eachValid: Store<boolean>;
 	$isValid: Store<boolean>;
 	$isDirty: Store<boolean>;
@@ -115,14 +122,14 @@ export declare type Form<Fields extends AnyFieldsConfigs> = {
 	submit: Event<void>;
 	validate: Event<void>;
 	reset: Event<void>;
-	set: Event<Partial<FormValues<Fields>>>;
-	setForm: Event<Partial<FormValues<Fields>>>;
+	set: Event<Partial<Values>>;
+	setForm: Event<Partial<Values>>;
 	resetTouched: Event<void>;
 	resetValues: Event<void>;
 	resetErrors: Event<void>;
-	formValidated: Event<FormValues<Fields>>;
+	formValidated: Event<Values>;
 };
-export declare function createForm<Fields extends AnyFieldsConfigs>(config: FormConfig<Fields>): Form<Fields>;
+export declare function createForm<Values extends AnyFormValues>(config: FormConfig<Values>): Form<Values>;
 export declare type ErrorTextMap = {
 	[key: string]: string;
 };
@@ -149,28 +156,28 @@ export declare type ConnectedField<Value> = {
 	set: (v: Value) => Value;
 	resetErrors: (v: void) => void;
 };
-export declare type ConnectedFields<Fields extends AnyFieldsConfigs> = {
-	[K in keyof Fields]: Fields[K] extends FieldConfig<infer U> ? ConnectedField<U> : never;
+export declare type ConnectedFields<Values extends AnyFormValues> = {
+	[K in keyof Values]: ConnectedField<Values[K]>;
 };
 export declare function useField<Value>(field: Field<Value>): ConnectedField<Value>;
-export declare type Result<Fields extends AnyFieldsConfigs> = {
-	fields: ConnectedFields<Fields>;
-	values: FormValues<Fields>;
-	hasError: (fieldName?: keyof Fields) => boolean;
+export declare type Result<Values extends AnyFormValues> = {
+	fields: ConnectedFields<Values>;
+	values: Values;
+	hasError: (fieldName?: keyof Values) => boolean;
 	eachValid: boolean;
 	isValid: boolean;
 	isDirty: boolean;
 	isTouched: boolean;
 	touched: boolean;
-	errors: (fieldName: keyof Fields) => (Fields[typeof fieldName] extends FieldConfig<infer U> ? ValidationError<U>[] : never);
-	error: (fieldName: keyof Fields) => (Fields[typeof fieldName] extends FieldConfig<infer U> ? ValidationError<U> : never) | null;
-	errorText: (fieldName: keyof Fields, map?: ErrorTextMap) => string;
+	errors: (fieldName: keyof Values) => (ValidationError<Values[typeof fieldName]>[]);
+	error: (fieldName: keyof Values) => (ValidationError<Values[typeof fieldName]>) | null;
+	errorText: (fieldName: keyof Values, map?: ErrorTextMap) => string;
 	submit: (p: void) => void;
 	reset: (p: void) => void;
-	setForm: (p: Partial<FormValues<Fields>>) => Partial<FormValues<Fields>>;
-	set: (p: Partial<FormValues<Fields>>) => Partial<FormValues<Fields>>;
-	formValidated: (p: FormValues<Fields>) => FormValues<Fields>;
+	setForm: (p: Partial<Values>) => Partial<Values>;
+	set: (p: Partial<Values>) => Partial<Values>;
+	formValidated: (p: Values) => Values;
 };
-export declare function useForm<Fields extends AnyFieldsConfigs>(form: Form<Fields>): Result<Fields>;
+export declare function useForm<Values extends AnyFormValues>(form: Form<Values>): Result<Values>;
 
 export {};
