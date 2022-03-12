@@ -44,10 +44,6 @@ export function createForm<Values extends AnyFormValues>(
         units,
     } = config
 
-    if (isSSR() && !domain) {
-        throw new Error("domain option is required in ssr mode!")
-    }
-
     const fields: AnyFields = {}
 
     const dirtyFlagsArr: Store<boolean>[] = []
@@ -125,8 +121,14 @@ export function createForm<Values extends AnyFormValues>(
         existing: units?.resetTouched,
     })
 
-    const submitWithFormData = sample($form, submitForm)
-    const validateWithFormData = sample($form, validate)
+    const submitWithFormData = sample({
+        source: $form,
+        clock: submitForm,
+    });
+    const validateWithFormData = sample({
+        source: $form,
+        clock: validate,
+    });
 
     // bind units
     for (const fieldName in fields) {

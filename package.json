@@ -1,6 +1,6 @@
 {
   "name": "effector-forms",
-  "version": "0.0.23-alpha.8",
+  "version": "0.0.23-alpha.9",
   "description": "Effector form state factory",
   "main": "./dist/effector-forms.cjs.js",
   "jsnext:main": "./dist/index.js",
@@ -48,8 +48,8 @@
   },
   "homepage": "https://github.com/aanation/effector-forms#readme",
   "peerDependencies": {
-    "effector": "^21.8.12",
-    "effector-react": "^21.3.3"
+    "effector": "^22.1.2",
+    "effector-react": "^22.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
