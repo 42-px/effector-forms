@@ -72,7 +72,7 @@ const config = {
         }),
         nodeResolve({ extensions }),
         commonjs({ extensions }),
-        // terser(),
+        terser(),
     ]
 }
 

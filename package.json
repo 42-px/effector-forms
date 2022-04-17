@@ -1,6 +1,6 @@
 {
   "name": "effector-forms",
-  "version": "0.0.23-beta.1",
+  "version": "0.0.23-beta.2",
   "description": "Effector form state factory",
   "main": "./dist/effector-forms.cjs.js",
   "jsnext:main": "./dist/index.js",
@@ -32,7 +32,7 @@
     "build:noscope": "cross-env SCOPE=false NODE_ENV=production rollup -c rollup.config.js",
     "build:scope": "cross-env SCOPE=true NODE_ENV=production rollup -c rollup.config.js",
     "build:legacy-ssr": "cross-env SCOPE=true LEGACY_SSR_ALIAS=true NODE_ENV=production rollup -c rollup.config.js",
-    "build": "npm run build:noscope && npm run build:scope && npm run build:legacy-ssr && npm run emit-dts",
+    "build": "npm run build:noscope && npm run build:scope && npm run emit-dts",
     "check-types": "tsc --noEmit",
     "test": "cross-env IS_SCOPE_BUILD=false jest",
     "lint": "eslint \"./**/*.{js,ts,tsx}\"",
