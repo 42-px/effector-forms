@@ -1,6 +1,6 @@
 {
   "name": "effector-forms",
-  "version": "0.0.23-beta.2",
+  "version": "0.0.23-beta.3",
   "description": "Effector form state factory",
   "main": "./dist/effector-forms.cjs.js",
   "jsnext:main": "./dist/index.js",
@@ -13,6 +13,12 @@
       "require": "./dist/effector-forms.cjs.js",
       "node": "./dist/effector-forms.cjs.js",
       "default": "./dist/index.js"
+    },
+    "./legacy": {
+      "import": "./dist-legacy/index.js",
+      "require": "./dist-legacy/index.cjs.js",
+      "node": "./dist-legacy/index.cjs.js",
+      "default": "./dist-legacy/index.js"
     },
     "./scope": {
       "import": "./dist-scope/index.js",
@@ -94,6 +100,7 @@
   },
   "files": [
     "dist",
+    "dist-legacy",
     "dist-scope",
     "dist-ssr",
     "dist-types",
