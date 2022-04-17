@@ -18,7 +18,6 @@ import {
     bindChangeEvent,
 } from "./field"
 import { createFormUnit } from "./create-form-unit"
-import { isSSR } from "./ssr"
 
 function createFormValuesStore(
     fields: AnyFields
@@ -43,11 +42,6 @@ export function createForm<Values extends AnyFormValues>(
         validateOn,
         units,
     } = config
-
-    if (isSSR() && !domain) {
-        throw new Error("domain option is required in ssr mode!")
-    }
-
     const fields: AnyFields = {}
 
     const dirtyFlagsArr: Store<boolean>[] = []
@@ -59,7 +53,9 @@ export function createForm<Values extends AnyFormValues>(
 
         const fieldConfig = fieldsConfigs[fieldName]
 
-        const field = createField(fieldName, fieldConfig, domain)
+        const field = createField(fieldName, fieldConfig, domain, {
+            sid: fieldName
+        })
 
         fields[fieldName] = field
         dirtyFlagsArr.push(field.$isDirty)
@@ -125,8 +121,14 @@ export function createForm<Values extends AnyFormValues>(
         existing: units?.resetTouched,
     })
 
-    const submitWithFormData = sample($form, submitForm)
-    const validateWithFormData = sample($form, validate)
+    const submitWithFormData = sample({
+        source: $form,
+        clock: submitForm,
+    })
+    const validateWithFormData = sample({
+        source: $form,
+        clock: validate
+    })
 
     // bind units
     for (const fieldName in fields) {
@@ -152,7 +154,7 @@ export function createForm<Values extends AnyFormValues>(
             fieldValidationEvents: fieldConfig.validateOn
                 ? fieldConfig.validateOn
                 : [],
-        })
+        }, { sid: fieldName })
     }
 
     guard({

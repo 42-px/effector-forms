@@ -5,7 +5,7 @@ import {
     AnyFormValues,
     Form
 } from "./types"
-import { wrapEvent } from "./ssr"
+import { wrapEvent } from "./scope"
 
 type ErrorTextMap = {
   [key: string]: string

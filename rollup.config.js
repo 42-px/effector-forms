@@ -8,19 +8,19 @@ import commonjs from "@rollup/plugin-commonjs"
 import pkg from "./package.json"
 import babelConfig from "./babel.config.json"
 
-const isSSR = process.env.SSR === "true"
+const isScope = process.env.SCOPE === "true"
 
 const extensions = [".js", ".ts", ".tsx", ".jsx"]
-const paths = isSSR ? pkg.exports["./ssr"] : pkg.exports["."]
+const paths = isScope ? pkg.exports["./scope"] : pkg.exports["."]
 
-if (isSSR) {
+if (isScope) {
     babelConfig.plugins = babelConfig.plugins || []
     babelConfig.plugins.push(
         [
             "module-resolver",
             {
                 "alias": {
-                    "effector-react": "effector-react/ssr"
+                    "effector-react": "effector-react/scope"
                 }
             }
         ]
@@ -49,7 +49,7 @@ const config = {
     plugins: [
         typescript({ tsconfig: "./tsconfig.json" }),
         replace({
-            "process.env.SSR_BUILD": `"${isSSR}"`,
+            "process.env.IS_SCOPE_BUILD": `"${isScope}"`,
             "preventAssignment": true,
         }),
         babel({
@@ -60,11 +60,11 @@ const config = {
         }),
         nodeResolve({ extensions }),
         commonjs({ extensions }),
-        terser(),
+        // terser(),
     ]
 }
 
-if (!isSSR) {
+if (!isScope) {
     config.output.push(...[
         {
             file: pkg["umd:main"],

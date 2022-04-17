@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 var effector = require('effector');
-var effectorReact = require('effector-react');
+var scope = require('effector-react/scope');
 
 function createCombineValidator(rulesOrResolver) {
   return (value, form, rulesSources) => {
@@ -659,7 +659,7 @@ function createForm(config) {
 }
 
 function wrapEvent(event) {
-  return event;
+  return scope.useEvent(event) ;
 }
 
 function useField(field) {
@@ -670,7 +670,7 @@ function useField(field) {
     isValid,
     isDirty,
     isTouched: touched
-  } = effectorReact.useStore(field.$field);
+  } = scope.useStore(field.$field);
   return {
     name: field.name,
     value,
@@ -723,7 +723,7 @@ function useForm(form) {
     isValid: eachValid,
     isDirty,
     touched
-  } = effectorReact.useStore(form.$meta);
+  } = scope.useStore(form.$meta);
 
   const hasError = fieldName => {
     if (!fieldName) {
@@ -798,4 +798,4 @@ function useForm(form) {
 exports.createForm = createForm;
 exports.useField = useField;
 exports.useForm = useForm;
-//# sourceMappingURL=effector-forms.cjs.js.map
+//# sourceMappingURL=index.cjs.js.map

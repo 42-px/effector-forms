@@ -25,6 +25,7 @@ export function createField(
     fieldName: string,
     fieldConfig: FieldConfig<any>,
     domain?: Domain,
+    effectorData?: any,
 ): Field<any> {
     const initValue = typeof fieldConfig.init === "function"
         ? fieldConfig.init()
@@ -34,13 +35,13 @@ export function createField(
         domain,
         existing: fieldConfig.units?.$value,
         init: initValue,
-    })
+    }, effectorData)
 
     const $errors = createFormUnit.store<ValidationError[]>({
         domain,
         existing: fieldConfig.units?.$errors,
         init: [],
-    })
+    }, effectorData)
 
 
     const $firstError = $errors.map(
@@ -53,7 +54,7 @@ export function createField(
         domain,
         existing: fieldConfig.units?.$isTouched,
         init: false,
-    })
+    }, effectorData)
 
     const onChange = createFormUnit.event({
         domain,
@@ -149,7 +150,8 @@ export function bindValidation({
     resetErrors: resetErrorsFormEvent,
     formValidationEvents,
     fieldValidationEvents,
-}: BindValidationParams): void {
+}: BindValidationParams,
+effectorData?: any): void {
     const {
         $value,
         $errors,
@@ -163,8 +165,10 @@ export function bindValidation({
     } = field
 
     const rulesSources = typeof rules === "function"
-        ? createStore<any[]>([])
-        : combine(rules.map(({ source }) => source || createStore(null)))
+        ? createStore<any[]>([], effectorData)
+        : combine(
+            rules.map(({ source }) => source || createStore(null, effectorData))
+        )
 
     const validator = createCombineValidator(rules)
     const eventsNames = [...formValidationEvents, ...fieldValidationEvents]

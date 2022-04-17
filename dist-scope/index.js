@@ -1,9 +1,5 @@
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-var effector = require('effector');
-var effectorReact = require('effector-react');
+import { combine, createStore, createEvent, sample, merge, guard, withFactory } from 'effector';
+import { useEvent, useStore } from 'effector-react/scope';
 
 function createCombineValidator(rulesOrResolver) {
   return (value, form, rulesSources) => {
@@ -46,7 +42,7 @@ function eachValid(fields) {
     firstErrors.push($firstError);
   }
 
-  const $firstErrors = effector.combine({
+  const $firstErrors = combine({
     and: [firstErrors],
     or: {
       name: "$firstErrors",
@@ -68,7 +64,7 @@ function store({
   return domain ? domain.store(init, {
     and: effectorData,
     sid: "-efg263"
-  }) : effector.createStore(init, {
+  }) : createStore(init, {
     and: effectorData,
     sid: "-dyefrw"
   });
@@ -84,7 +80,7 @@ function event({
 
   return domain ? domain.event({
     sid: "-y6riru"
-  }) : effector.createEvent({
+  }) : createEvent({
     sid: "-y6rhv4"
   });
 }
@@ -184,7 +180,7 @@ function createField(fieldName, fieldConfig, domain, effectorData) {
     sid: "ocz45p"
   });
   const $isValid = $firstError.map(firstError => firstError === null);
-  const $field = effector.combine({
+  const $field = combine({
     and: [{
       value: $value,
       errors: $errors,
@@ -243,14 +239,14 @@ function bindValidation({
     resetValue,
     reset
   } = field;
-  const rulesSources = typeof rules === "function" ? effector.createStore([], {
+  const rulesSources = typeof rules === "function" ? createStore([], {
     and: effectorData,
     name: "rulesSources",
     sid: "-9d7qjb"
-  }) : effector.combine({
+  }) : combine({
     and: [rules.map(({
       source
-    }) => source || effector.createStore(null, {
+    }) => source || createStore(null, {
       and: effectorData,
       name: "and",
       sid: "5j6y42"
@@ -265,9 +261,9 @@ function bindValidation({
   const validationEvents = [];
 
   if (eventsNames.includes("submit")) {
-    const validationTrigger = effector.sample({
+    const validationTrigger = sample({
       and: [{
-        source: effector.combine({
+        source: combine({
           and: [{
             fieldValue: $value,
             form: $form,
@@ -289,9 +285,9 @@ function bindValidation({
   }
 
   if (eventsNames.includes("blur")) {
-    validationEvents.push(effector.sample({
+    validationEvents.push(sample({
       and: [{
-        source: effector.combine({
+        source: combine({
           and: [{
             fieldValue: $value,
             form: $form,
@@ -311,9 +307,9 @@ function bindValidation({
   }
 
   if (eventsNames.includes("change")) {
-    validationEvents.push(effector.sample({
+    validationEvents.push(sample({
       and: [{
-        source: effector.combine({
+        source: combine({
           and: [{
             fieldValue: $value,
             form: $form,
@@ -324,7 +320,7 @@ function bindValidation({
             sid: "-uicuuj"
           }
         }),
-        clock: effector.merge([changed, resetValue, resetValues], {
+        clock: merge([changed, resetValue, resetValues], {
           name: "clock",
           sid: "wzy69w"
         })
@@ -335,9 +331,9 @@ function bindValidation({
     }));
   }
 
-  validationEvents.push(effector.sample({
+  validationEvents.push(sample({
     and: [{
-      source: effector.combine({
+      source: combine({
         and: [{
           fieldValue: $value,
           form: $form,
@@ -354,9 +350,9 @@ function bindValidation({
       sid: "6tlenr"
     }
   }));
-  validationEvents.push(effector.sample({
+  validationEvents.push(sample({
     and: [{
-      source: effector.combine({
+      source: combine({
         and: [{
           fieldValue: $value,
           form: $form,
@@ -373,7 +369,7 @@ function bindValidation({
       sid: "kjwg3e"
     }
   }));
-  const addErrorWithValue = effector.sample({
+  const addErrorWithValue = sample({
     and: [{
       source: $value,
       clock: addError,
@@ -412,7 +408,7 @@ function bindChangeEvent({
   filter
 }, setForm, resetForm, resetTouched, resetValues) {
   $touched.on(changed, () => true).reset(reset, resetForm, resetTouched);
-  effector.guard({
+  guard({
     and: [{
       source: onChange,
       filter: filter || (() => true),
@@ -433,7 +429,7 @@ function createFormValuesStore(fields) {
     shape[fieldName] = fields[fieldName].$value;
   }
 
-  return effector.combine({
+  return combine({
     and: [shape],
     or: {
       sid: "39yu4w"
@@ -457,7 +453,7 @@ function createForm(config) {
     if (!fieldsConfigs.hasOwnProperty(fieldName)) continue;
     const fieldConfig = fieldsConfigs[fieldName];
 
-    const field = effector.withFactory({
+    const field = withFactory({
       sid: "rtd41h",
       fn: () => createField(fieldName, fieldConfig, domain, {
         sid: fieldName
@@ -473,28 +469,28 @@ function createForm(config) {
 
   const $form = createFormValuesStore(fields);
   const $eachValid = eachValid(fields);
-  const $isFormValid = $filter ? effector.combine({
+  const $isFormValid = $filter ? combine({
     and: [$eachValid, $filter, (valid, filter) => valid && filter],
     or: {
       name: "$isFormValid",
       sid: "-ovgxdl"
     }
   }) : $eachValid;
-  const $isDirty = effector.combine({
+  const $isDirty = combine({
     and: [dirtyFlagsArr],
     or: {
       name: "$isDirty",
       sid: "-pfy1ud"
     }
   }).map(dirtyFlags => dirtyFlags.some(Boolean));
-  const $touched = effector.combine({
+  const $touched = combine({
     and: [touchedFlagsArr],
     or: {
       name: "$touched",
       sid: "tnl99w"
     }
   }).map(touchedFlags => touchedFlags.some(Boolean));
-  const $meta = effector.combine({
+  const $meta = combine({
     and: [{
       isValid: $eachValid,
       isDirty: $isDirty,
@@ -561,7 +557,7 @@ function createForm(config) {
     name: "resetTouched",
     sid: "v4r70l"
   });
-  const submitWithFormData = effector.sample({
+  const submitWithFormData = sample({
     and: [{
       source: $form,
       clock: submitForm
@@ -571,7 +567,7 @@ function createForm(config) {
       sid: "-8687cn"
     }
   });
-  const validateWithFormData = effector.sample({
+  const validateWithFormData = sample({
     and: [{
       source: $form,
       clock: validate
@@ -587,7 +583,7 @@ function createForm(config) {
     const fieldConfig = fieldsConfigs[fieldName];
     const field = fields[fieldName];
 
-    effector.withFactory({
+    withFactory({
       sid: "o5cv6a",
       fn: () => bindChangeEvent(field, setForm, resetForm, resetTouched, resetValues),
       name: "none",
@@ -596,7 +592,7 @@ function createForm(config) {
 
     if (!fieldConfig.rules) continue;
 
-    effector.withFactory({
+    withFactory({
       sid: "oijxey",
       fn: () => bindValidation({
         $form,
@@ -617,7 +613,7 @@ function createForm(config) {
     });
   }
 
-  effector.guard({
+  guard({
     and: [{
       source: submitWithFormData,
       filter: $isFormValid,
@@ -628,7 +624,7 @@ function createForm(config) {
       sid: "2i4n6l"
     }
   });
-  effector.guard({
+  guard({
     and: [{
       source: validateWithFormData,
       filter: $isFormValid,
@@ -659,7 +655,7 @@ function createForm(config) {
 }
 
 function wrapEvent(event) {
-  return event;
+  return useEvent(event) ;
 }
 
 function useField(field) {
@@ -670,7 +666,7 @@ function useField(field) {
     isValid,
     isDirty,
     isTouched: touched
-  } = effectorReact.useStore(field.$field);
+  } = useStore(field.$field);
   return {
     name: field.name,
     value,
@@ -723,7 +719,7 @@ function useForm(form) {
     isValid: eachValid,
     isDirty,
     touched
-  } = effectorReact.useStore(form.$meta);
+  } = useStore(form.$meta);
 
   const hasError = fieldName => {
     if (!fieldName) {
@@ -795,7 +791,5 @@ function useForm(form) {
   };
 }
 
-exports.createForm = createForm;
-exports.useField = useField;
-exports.useForm = useForm;
-//# sourceMappingURL=effector-forms.cjs.js.map
+export { createForm, useField, useForm };
+//# sourceMappingURL=index.js.map

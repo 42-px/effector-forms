@@ -14,20 +14,20 @@
       "node": "./dist/effector-forms.cjs.js",
       "default": "./dist/index.js"
     },
-    "./ssr": {
-      "import": "./dist-ssr/index.js",
-      "require": "./dist-ssr/index.cjs.js",
-      "node": "./dist-ssr/index.cjs.js",
-      "default": "./dist-ssr/index.js"
+    "./scope": {
+      "import": "./dist-scope/index.js",
+      "require": "./dist-scope/index.cjs.js",
+      "node": "./dist-scope/index.cjs.js",
+      "default": "./dist-scope/index.js"
     }
   },
   "scripts": {
     "emit-dts": "dts-bundle-generator --no-check --project tsconfig.json --out-file ./dist-types/index.d.ts ./src/index.ts",
-    "build:nossr": "cross-env SSR=false NODE_ENV=production rollup -c rollup.config.js",
-    "build:ssr": "cross-env SSR=true NODE_ENV=production rollup -c rollup.config.js",
-    "build": "npm run build:nossr && npm run build:ssr && npm run emit-dts",
+    "build:noscope": "cross-env SCOPE=false NODE_ENV=production rollup -c rollup.config.js",
+    "build:scope": "cross-env SCOPE=true NODE_ENV=production rollup -c rollup.config.js",
+    "build": "npm run build:noscope && npm run build:scope && npm run emit-dts",
     "check-types": "tsc --noEmit",
-    "test": "cross-env SSR_BUILD=false jest",
+    "test": "cross-env IS_SCOPE_BUILD=false jest",
     "lint": "eslint \"./**/*.{js,ts,tsx}\"",
     "lint:fix": "eslint \"./**/*.{js,ts,tsx}\" --fix",
     "peers": "npm-install-peers"
@@ -48,8 +48,8 @@
   },
   "homepage": "https://github.com/aanation/effector-forms#readme",
   "peerDependencies": {
-    "effector": "^21.8.12",
-    "effector-react": "^21.3.3"
+    "effector": ">=22.0.0 <23.0.0",
+    "effector-react": ">=22.0.0 <23.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
@@ -82,14 +82,14 @@
     "rollup": "^2.61.1",
     "rollup-plugin-terser": "^7.0.2",
     "ts-node": "^10.4.0",
-    "typescript": "^4.5.3",
+    "typescript": "^4.6.3",
     "yup": "^0.32.11"
   },
   "files": [
     "dist",
-    "dist-ssr",
+    "dist-scope",
     "dist-types",
-    "ssr.ts"
+    "scope.ts"
   ],
   "types": "./dist-types"
 }

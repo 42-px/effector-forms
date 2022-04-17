@@ -44,7 +44,6 @@ test("simple login form", () => {
         validateOn: ["submit"],
     })
 
-
     const validated = jest.fn()
     form.formValidated.watch(validated)
 

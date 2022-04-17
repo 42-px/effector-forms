@@ -6,11 +6,16 @@ type CreateStoreParams<Value> = {
   existing?: Store<Value>
 }
 
-function store<Value>({ init, domain, existing }: CreateStoreParams<Value>) {
+function store<Value>(
+    { init, domain, existing }: CreateStoreParams<Value>,
+    effectorData?: any
+) {
     if (existing) {
         return existing
     }
-    return domain ? domain.store(init) : createStore(init)
+    return domain
+        ? domain.store(init, effectorData)
+        : createStore(init, effectorData)
 }
 
 type CreateEventParams<Value> = {
