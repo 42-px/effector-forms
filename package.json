@@ -1,6 +1,6 @@
 {
   "name": "effector-forms",
-  "version": "0.0.23-beta.3",
+  "version": "0.0.23-beta.4",
   "description": "Effector form state factory",
   "main": "./dist/effector-forms.cjs.js",
   "jsnext:main": "./dist/index.js",
@@ -105,7 +105,8 @@
     "dist-ssr",
     "dist-types",
     "scope.ts",
-    "ssr.ts"
+    "ssr.ts",
+    "legacy.ts"
   ],
   "types": "./dist-types"
 }
