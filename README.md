@@ -1,5 +1,7 @@
 # Effector forms
 
+- [Effector 21](#effector-21)
+- [SSR](#ssr)
 - [Motivation](#motivation)
 - [Usage](#usage)
 - [useField](#usefield)
@@ -25,7 +27,24 @@
 - [Typescipt users tips](#typescipt-users-tips)
 - [Advanced](#advanced)
   * [Use external units](#use-external-units)
-- [SSR](#ssr)
+
+## Effector 21
+
+For effector 21 use alias:
+```ts
+import { createForm } from "effector-forms/legacy"
+```
+
+# SSR
+
+If used with server side rendering, import factories from *effector-forms/scope* (effector 22):
+
+```ts
+import { createForm } from 'effector-forms/scope' 
+```
+
+For effector 21 (with SSR), use the alias "effector-forms/ssr" instead
+
 
 ## Motivation
 
@@ -54,7 +73,6 @@ If you also need validation, it really hurts. This library was created to improv
 The library comes with hooks for react/react-native, however you can use it with VueJS or Forest as well (in the case of VueJS, you have to connect it to the view layer yourself). 
 
 **Good typescript support!** :heart: :v: :+1:
-
 
 ## Usage
 
@@ -1112,13 +1130,5 @@ const form = createForm({
 })
 ```
 
-# SSR
 
-If used with server rendering, import factories from *effector-forms/scope* (effector 22):
-
-```ts
-import {} from 'effector-forms/scope' 
-```
-
-For effector 21, use the alias "effector-forms/ssr" instead
 
