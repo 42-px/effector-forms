@@ -12,7 +12,7 @@
   "dependencies": {
     "effector": "^22.3.0",
     "effector-forms": "^0.0.23-alpha.10",
-    "effector-react": "^22.0.6",
+    "effector-react": "^21.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },

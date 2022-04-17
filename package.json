@@ -1,6 +1,6 @@
 {
   "name": "effector-forms",
-  "version": "0.0.23-alpha.10",
+  "version": "0.0.23-beta.1",
   "description": "Effector form state factory",
   "main": "./dist/effector-forms.cjs.js",
   "jsnext:main": "./dist/index.js",
@@ -19,13 +19,20 @@
       "require": "./dist-scope/index.cjs.js",
       "node": "./dist-scope/index.cjs.js",
       "default": "./dist-scope/index.js"
+    },
+    "./ssr": {
+      "import": "./dist-ssr/index.js",
+      "require": "./dist-ssr/index.cjs.js",
+      "node": "./dist-ssr/index.cjs.js",
+      "default": "./dist-ssr/index.js"
     }
   },
   "scripts": {
     "emit-dts": "dts-bundle-generator --no-check --project tsconfig.json --out-file ./dist-types/index.d.ts ./src/index.ts",
     "build:noscope": "cross-env SCOPE=false NODE_ENV=production rollup -c rollup.config.js",
     "build:scope": "cross-env SCOPE=true NODE_ENV=production rollup -c rollup.config.js",
-    "build": "npm run build:noscope && npm run build:scope && npm run emit-dts",
+    "build:legacy-ssr": "cross-env SCOPE=true LEGACY_SSR_ALIAS=true NODE_ENV=production rollup -c rollup.config.js",
+    "build": "npm run build:noscope && npm run build:scope && npm run build:legacy-ssr && npm run emit-dts",
     "check-types": "tsc --noEmit",
     "test": "cross-env IS_SCOPE_BUILD=false jest",
     "lint": "eslint \"./**/*.{js,ts,tsx}\"",
@@ -48,8 +55,8 @@
   },
   "homepage": "https://github.com/aanation/effector-forms#readme",
   "peerDependencies": {
-    "effector": ">=22.0.0 <23.0.0",
-    "effector-react": ">=22.0.0 <23.0.0"
+    "effector": ">=21.0.0 <23.0.0",
+    "effector-react": ">=21.0.0 <23.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
@@ -88,8 +95,10 @@
   "files": [
     "dist",
     "dist-scope",
+    "dist-ssr",
     "dist-types",
-    "scope.ts"
+    "scope.ts",
+    "ssr.ts"
   ],
   "types": "./dist-types"
 }

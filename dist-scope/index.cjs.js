@@ -1,2 +1,802 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e=require("effector"),r=require("effector-react/scope");const i={store:function({init:r,domain:i,existing:n},o){return n||(i?i.store(r,{and:o,sid:"-efg263"}):e.createStore(r,{and:o,sid:"-dyefrw"}))},event:function({domain:r,existing:i}){return i||(r?r.event({sid:"-y6riru"}):e.createEvent({sid:"-y6rhv4"}))}};function n(r,n,o,s){var t,a,d,u,l,c,m,v,f,h,g;const p="function"==typeof n.init?n.init():n.init,E=i.store({domain:o,existing:null===(t=n.units)||void 0===t?void 0:t.$value,init:p},{and:s,name:"$value",sid:"yg99i6"}),x=i.store({domain:o,existing:null===(a=n.units)||void 0===a?void 0:a.$errors,init:[]},{and:s,name:"$errors",sid:"-y2xdpq"}),V=x.map((e=>e[0]?e[0]:null)),y=E.map((e=>e!==p)),$=i.store({domain:o,existing:null===(d=n.units)||void 0===d?void 0:d.$isTouched,init:!1},{and:s,name:"$touched",sid:"sulkei"}),b=i.event({domain:o,existing:null===(u=n.units)||void 0===u?void 0:u.onChange},{name:"onChange",sid:"-bvxucw"}),w=i.event({domain:o,existing:null===(l=n.units)||void 0===l?void 0:l.onBlur},{name:"onBlur",sid:"mo0ar0"}),F=i.event({domain:o,existing:null===(c=n.units)||void 0===c?void 0:c.changed},{name:"changed",sid:"bcod8v"}),k=i.event({domain:o,existing:null===(m=n.units)||void 0===m?void 0:m.addError},{name:"addError",sid:"3cou8n"}),T=i.event({domain:o,existing:null===(v=n.units)||void 0===v?void 0:v.validate},{name:"validate",sid:"-s3sqr5"}),S=i.event({domain:o,existing:null===(f=n.units)||void 0===f?void 0:f.resetErrors},{name:"resetErrors",sid:"z8u2jo"}),j=i.event({domain:o,existing:null===(h=n.units)||void 0===h?void 0:h.resetValue},{name:"resetValue",sid:"-x0qhaf"}),D=i.event({domain:o,existing:null===(g=n.units)||void 0===g?void 0:g.reset},{name:"reset",sid:"ocz45p"}),O=V.map((e=>null===e));return{changed:F,name:r,$value:E,$errors:x,$firstError:V,$isValid:O,$isDirty:y,$isTouched:$,$touched:$,$field:e.combine({and:[{value:E,errors:x,firstError:V,isValid:O,isDirty:y,isTouched:$}],or:{name:"$field",sid:"-vj0i5c"}}),onChange:b,onBlur:w,addError:k,validate:T,set:b,reset:D,resetErrors:S,resetValue:j,filter:n.filter}}function o({$form:r,validateFormEvent:i,submitEvent:n,resetFormEvent:o,resetValues:s,field:t,rules:a,resetErrors:d,formValidationEvents:u,fieldValidationEvents:l},c){const{$value:m,$errors:v,onBlur:f,changed:h,addError:g,validate:p,resetErrors:E,resetValue:x,reset:V}=t,y="function"==typeof a?e.createStore([],{and:c,name:"rulesSources",sid:"-9d7qjb"}):e.combine({and:[a.map((({source:r})=>r||e.createStore(null,{and:c,name:"and",sid:"5j6y42"})))],or:{name:"rulesSources",sid:"-8w6454"}}),$=(b=a,(e,r,i)=>{const n=[],o="function"==typeof b?b(e,r):b;for(let s=0;s<o.length;s++){const t=o[s],a=i?i[s]:null,d=t.validator(e,r,a);"boolean"!=typeof d||d||n.push({rule:t.name,errorText:t.errorText,value:e}),"object"!=typeof d||d.isValid||n.push({rule:t.name,errorText:d.errorText,value:e})}return n});var b;const w=[...u,...l],F=[];if(w.includes("submit")){const i=e.sample({and:[{source:e.combine({and:[{fieldValue:m,form:r,rulesSources:y}],or:{name:"source",sid:"-k8128n"}}),clock:n}],or:{name:"validationTrigger",sid:"-6xbmu5"}});F.push(i)}w.includes("blur")&&F.push(e.sample({and:[{source:e.combine({and:[{fieldValue:m,form:r,rulesSources:y}],or:{name:"source",sid:"pucwwk"}}),clock:f}],or:{sid:"-m25isl"}})),w.includes("change")&&F.push(e.sample({and:[{source:e.combine({and:[{fieldValue:m,form:r,rulesSources:y}],or:{name:"source",sid:"-uicuuj"}}),clock:e.merge([h,x,s],{name:"clock",sid:"wzy69w"})}],or:{sid:"-7dr8kk"}})),F.push(e.sample({and:[{source:e.combine({and:[{fieldValue:m,form:r,rulesSources:y}],or:{name:"source",sid:"-gb07m8"}}),clock:p}],or:{sid:"6tlenr"}})),F.push(e.sample({and:[{source:e.combine({and:[{fieldValue:m,form:r,rulesSources:y}],or:{name:"source",sid:"-2kp66l"}}),clock:i}],or:{sid:"kjwg3e"}}));const k=e.sample({and:[{source:m,clock:g,fn:(e,{rule:r,errorText:i})=>({rule:r,value:e,errorText:i})}],or:{name:"addErrorWithValue",sid:"-vn5aoo"}});v.on(F,((e,{form:r,fieldValue:i,rulesSources:n})=>$(i,r,n))).on(k,((e,r)=>[r,...e])).reset(E,o,V,d),w.includes("change")||v.reset(h)}function s({$value:r,$touched:i,onChange:n,changed:o,name:s,reset:t,resetValue:a,filter:d},u,l,c,m){i.on(o,(()=>!0)).reset(t,l,c),e.guard({and:[{source:n,filter:d||(()=>!0),target:o}],or:{sid:"-ylchks"}}),r.on(o,((e,r)=>r)).on(u,((e,r)=>r.hasOwnProperty(s)?r[s]:e)).reset(t,a,m,l)}function t(e){return r.useEvent(e)}function a(e){const{value:i,errors:n,firstError:o,isValid:s,isDirty:a,isTouched:d}=r.useStore(e.$field);return{name:e.name,value:i,errors:n,firstError:o,isValid:s,isDirty:a,touched:d,isTouched:d,onChange:t(e.onChange),onBlur:t(e.onBlur),addError:t(e.addError),validate:t(e.validate),reset:t(e.reset),set:t(e.onChange),resetErrors:t(e.resetErrors),hasError:()=>null!==o,errorText:e=>o?e&&e[o.rule]?e[o.rule]:o.errorText||"":""}}exports.createForm=function(r){const{filter:t,domain:a,fields:d,validateOn:u,units:l}=r,c={},m=[],v=[];for(const r in d){if(!d.hasOwnProperty(r))continue;const i=d[r],o=e.withFactory({sid:"rtd41h",fn:()=>n(r,i,a,{sid:r}),name:"field",method:"createField"});c[r]=o,m.push(o.$isDirty),v.push(o.$touched)}const f=function(r){const i={};for(const e in r)r.hasOwnProperty(e)&&(i[e]=r[e].$value);return e.combine({and:[i],or:{sid:"39yu4w"}})}(c),h=function(r){const i=[];for(const e in r){if(!r.hasOwnProperty(e))continue;const{$firstError:n}=r[e];i.push(n)}return e.combine({and:[i],or:{name:"$firstErrors",sid:"-1vosn1"}}).map((e=>e.every((e=>null===e))))}(c),g=t?e.combine({and:[h,t,(e,r)=>e&&r],or:{name:"$isFormValid",sid:"-ovgxdl"}}):h,p=e.combine({and:[m],or:{name:"$isDirty",sid:"-pfy1ud"}}).map((e=>e.some(Boolean))),E=e.combine({and:[v],or:{name:"$touched",sid:"tnl99w"}}).map((e=>e.some(Boolean))),x=e.combine({and:[{isValid:h,isDirty:p,touched:E}],or:{name:"$meta",sid:"-9ioo9w"}}),V=i.event({domain:a,existing:null==l?void 0:l.validate},{name:"validate",sid:"wz51wd"}),y=i.event({domain:a,existing:null==l?void 0:l.submit},{name:"submitForm",sid:"-6yv0jz"}),$=i.event({domain:a,existing:null==l?void 0:l.formValidated},{name:"formValidated",sid:"o8v59j"}),b=i.event({domain:a,existing:null==l?void 0:l.setForm},{name:"setForm",sid:"-ov1sdv"}),w=i.event({domain:a,existing:null==l?void 0:l.reset},{name:"resetForm",sid:"-wbw2km"}),F=i.event({domain:a,existing:null==l?void 0:l.resetValues},{name:"resetValues",sid:"wkobmp"}),k=i.event({domain:a,existing:null==l?void 0:l.resetErrors},{name:"resetErrors",sid:"qq5hdg"}),T=i.event({domain:a,existing:null==l?void 0:l.resetTouched},{name:"resetTouched",sid:"v4r70l"}),S=e.sample({and:[{source:f,clock:y}],or:{name:"submitWithFormData",sid:"-8687cn"}}),j=e.sample({and:[{source:f,clock:V}],or:{name:"validateWithFormData",sid:"qsjkn9"}});for(const r in c){if(!c.hasOwnProperty(r))continue;const i=d[r],n=c[r];e.withFactory({sid:"o5cv6a",fn:()=>s(n,b,w,T,F),name:"none",method:"bindChangeEvent"}),i.rules&&e.withFactory({sid:"oijxey",fn:()=>o({$form:f,rules:i.rules,submitEvent:y,resetFormEvent:w,resetValues:F,resetErrors:k,validateFormEvent:V,field:n,formValidationEvents:u||["submit"],fieldValidationEvents:i.validateOn?i.validateOn:[]},{sid:r}),name:"none",method:"bindValidation"})}return e.guard({and:[{source:S,filter:g,target:$}],or:{sid:"2i4n6l"}}),e.guard({and:[{source:j,filter:g,target:$}],or:{sid:"2wz37c"}}),{fields:c,$values:f,$eachValid:h,$isValid:h,$isDirty:p,$touched:E,$meta:x,submit:y,validate:V,resetTouched:T,reset:w,resetValues:F,resetErrors:k,setForm:b,set:b,formValidated:$}},exports.useField=a,exports.useForm=function(e){const i={},n={};for(const r in e.fields){if(!e.fields.hasOwnProperty(r))continue;const o=a(e.fields[r]);i[r]=o,n[r]=o.value}const{isValid:o,isDirty:s,touched:d}=r.useStore(e.$meta);return{fields:i,values:n,hasError:e=>e?!!i[e]&&Boolean(i[e].firstError):!o,eachValid:o,isValid:o,isDirty:s,isTouched:d,touched:d,errors:e=>i[e]?i[e].errors:[],error:e=>i[e]?i[e].firstError:null,errorText:(e,r)=>{const n=i[e];return n&&n.firstError?r&&r[n.firstError.rule]?r[n.firstError.rule]:n.firstError.errorText||"":""},reset:t(e.reset),submit:t(e.submit),setForm:t(e.setForm),set:t(e.setForm),formValidated:t(e.formValidated)}};
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+var effector = require('effector');
+var scope = require('effector-react/scope');
+
+function createCombineValidator(rulesOrResolver) {
+  return (value, form, rulesSources) => {
+    const errors = [];
+    const rules = typeof rulesOrResolver === "function" ? rulesOrResolver(value, form) : rulesOrResolver;
+
+    for (let i = 0; i < rules.length; i++) {
+      const rule = rules[i];
+      const source = rulesSources ? rulesSources[i] : null;
+      const result = rule.validator(value, form, source);
+
+      if (typeof result === "boolean" && !result) {
+        errors.push({
+          rule: rule.name,
+          errorText: rule.errorText,
+          value
+        });
+      }
+
+      if (typeof result === "object" && !result.isValid) {
+        errors.push({
+          rule: rule.name,
+          errorText: result.errorText,
+          value
+        });
+      }
+    }
+
+    return errors;
+  };
+}
+function eachValid(fields) {
+  const firstErrors = [];
+
+  for (const fieldName in fields) {
+    if (!fields.hasOwnProperty(fieldName)) continue;
+    const {
+      $firstError
+    } = fields[fieldName];
+    firstErrors.push($firstError);
+  }
+
+  const $firstErrors = effector.combine({
+    and: [firstErrors],
+    or: {
+      name: "$firstErrors",
+      sid: "-1vosn1"
+    }
+  });
+  return $firstErrors.map(errors => errors.every(error => error === null));
+}
+
+function store({
+  init,
+  domain,
+  existing
+}, effectorData) {
+  if (existing) {
+    return existing;
+  }
+
+  return domain ? domain.store(init, {
+    and: effectorData,
+    sid: "-efg263"
+  }) : effector.createStore(init, {
+    and: effectorData,
+    sid: "-dyefrw"
+  });
+}
+
+function event({
+  domain,
+  existing
+}) {
+  if (existing) {
+    return existing;
+  }
+
+  return domain ? domain.event({
+    sid: "-y6riru"
+  }) : effector.createEvent({
+    sid: "-y6rhv4"
+  });
+}
+
+const createFormUnit = {
+  store,
+  event
+};
+
+function createField(fieldName, fieldConfig, domain, effectorData) {
+  var _fieldConfig$units, _fieldConfig$units2, _fieldConfig$units3, _fieldConfig$units4, _fieldConfig$units5, _fieldConfig$units6, _fieldConfig$units7, _fieldConfig$units8, _fieldConfig$units9, _fieldConfig$units10, _fieldConfig$units11;
+
+  const initValue = typeof fieldConfig.init === "function" ? fieldConfig.init() : fieldConfig.init;
+  const $value = createFormUnit.store({
+    domain,
+    existing: (_fieldConfig$units = fieldConfig.units) === null || _fieldConfig$units === void 0 ? void 0 : _fieldConfig$units.$value,
+    init: initValue
+  }, {
+    and: effectorData,
+    name: "$value",
+    sid: "yg99i6"
+  });
+  const $errors = createFormUnit.store({
+    domain,
+    existing: (_fieldConfig$units2 = fieldConfig.units) === null || _fieldConfig$units2 === void 0 ? void 0 : _fieldConfig$units2.$errors,
+    init: []
+  }, {
+    and: effectorData,
+    name: "$errors",
+    sid: "-y2xdpq"
+  });
+  const $firstError = $errors.map(errors => errors[0] ? errors[0] : null);
+  const $isDirty = $value.map(value => value !== initValue);
+  const $touched = createFormUnit.store({
+    domain,
+    existing: (_fieldConfig$units3 = fieldConfig.units) === null || _fieldConfig$units3 === void 0 ? void 0 : _fieldConfig$units3.$isTouched,
+    init: false
+  }, {
+    and: effectorData,
+    name: "$touched",
+    sid: "sulkei"
+  });
+  const onChange = createFormUnit.event({
+    domain,
+    existing: (_fieldConfig$units4 = fieldConfig.units) === null || _fieldConfig$units4 === void 0 ? void 0 : _fieldConfig$units4.onChange
+  }, {
+    name: "onChange",
+    sid: "-bvxucw"
+  });
+  const onBlur = createFormUnit.event({
+    domain,
+    existing: (_fieldConfig$units5 = fieldConfig.units) === null || _fieldConfig$units5 === void 0 ? void 0 : _fieldConfig$units5.onBlur
+  }, {
+    name: "onBlur",
+    sid: "mo0ar0"
+  });
+  const changed = createFormUnit.event({
+    domain,
+    existing: (_fieldConfig$units6 = fieldConfig.units) === null || _fieldConfig$units6 === void 0 ? void 0 : _fieldConfig$units6.changed
+  }, {
+    name: "changed",
+    sid: "bcod8v"
+  });
+  const addError = createFormUnit.event({
+    domain,
+    existing: (_fieldConfig$units7 = fieldConfig.units) === null || _fieldConfig$units7 === void 0 ? void 0 : _fieldConfig$units7.addError
+  }, {
+    name: "addError",
+    sid: "3cou8n"
+  });
+  const validate = createFormUnit.event({
+    domain,
+    existing: (_fieldConfig$units8 = fieldConfig.units) === null || _fieldConfig$units8 === void 0 ? void 0 : _fieldConfig$units8.validate
+  }, {
+    name: "validate",
+    sid: "-s3sqr5"
+  });
+  const resetErrors = createFormUnit.event({
+    domain,
+    existing: (_fieldConfig$units9 = fieldConfig.units) === null || _fieldConfig$units9 === void 0 ? void 0 : _fieldConfig$units9.resetErrors
+  }, {
+    name: "resetErrors",
+    sid: "z8u2jo"
+  });
+  const resetValue = createFormUnit.event({
+    domain,
+    existing: (_fieldConfig$units10 = fieldConfig.units) === null || _fieldConfig$units10 === void 0 ? void 0 : _fieldConfig$units10.resetValue
+  }, {
+    name: "resetValue",
+    sid: "-x0qhaf"
+  });
+  const reset = createFormUnit.event({
+    domain,
+    existing: (_fieldConfig$units11 = fieldConfig.units) === null || _fieldConfig$units11 === void 0 ? void 0 : _fieldConfig$units11.reset
+  }, {
+    name: "reset",
+    sid: "ocz45p"
+  });
+  const $isValid = $firstError.map(firstError => firstError === null);
+  const $field = effector.combine({
+    and: [{
+      value: $value,
+      errors: $errors,
+      firstError: $firstError,
+      isValid: $isValid,
+      isDirty: $isDirty,
+      isTouched: $touched
+    }],
+    or: {
+      name: "$field",
+      sid: "-vj0i5c"
+    }
+  });
+  return {
+    changed,
+    name: fieldName,
+    $value,
+    $errors,
+    $firstError,
+    $isValid,
+    $isDirty,
+    $isTouched: $touched,
+    $touched,
+    $field: $field,
+    onChange,
+    onBlur,
+    addError,
+    validate,
+    set: onChange,
+    reset,
+    resetErrors,
+    resetValue,
+    filter: fieldConfig.filter
+  };
+}
+function bindValidation({
+  $form,
+  validateFormEvent,
+  submitEvent,
+  resetFormEvent,
+  resetValues,
+  field,
+  rules,
+  resetErrors: resetErrorsFormEvent,
+  formValidationEvents,
+  fieldValidationEvents
+}, effectorData) {
+  const {
+    $value,
+    $errors,
+    onBlur,
+    changed,
+    addError,
+    validate,
+    resetErrors,
+    resetValue,
+    reset
+  } = field;
+  const rulesSources = typeof rules === "function" ? effector.createStore([], {
+    and: effectorData,
+    name: "rulesSources",
+    sid: "-9d7qjb"
+  }) : effector.combine({
+    and: [rules.map(({
+      source
+    }) => source || effector.createStore(null, {
+      and: effectorData,
+      name: "and",
+      sid: "5j6y42"
+    }))],
+    or: {
+      name: "rulesSources",
+      sid: "-8w6454"
+    }
+  });
+  const validator = createCombineValidator(rules);
+  const eventsNames = [...formValidationEvents, ...fieldValidationEvents];
+  const validationEvents = [];
+
+  if (eventsNames.includes("submit")) {
+    const validationTrigger = effector.sample({
+      and: [{
+        source: effector.combine({
+          and: [{
+            fieldValue: $value,
+            form: $form,
+            rulesSources
+          }],
+          or: {
+            name: "source",
+            sid: "-k8128n"
+          }
+        }),
+        clock: submitEvent
+      }],
+      or: {
+        name: "validationTrigger",
+        sid: "-6xbmu5"
+      }
+    });
+    validationEvents.push(validationTrigger);
+  }
+
+  if (eventsNames.includes("blur")) {
+    validationEvents.push(effector.sample({
+      and: [{
+        source: effector.combine({
+          and: [{
+            fieldValue: $value,
+            form: $form,
+            rulesSources
+          }],
+          or: {
+            name: "source",
+            sid: "pucwwk"
+          }
+        }),
+        clock: onBlur
+      }],
+      or: {
+        sid: "-m25isl"
+      }
+    }));
+  }
+
+  if (eventsNames.includes("change")) {
+    validationEvents.push(effector.sample({
+      and: [{
+        source: effector.combine({
+          and: [{
+            fieldValue: $value,
+            form: $form,
+            rulesSources
+          }],
+          or: {
+            name: "source",
+            sid: "-uicuuj"
+          }
+        }),
+        clock: effector.merge([changed, resetValue, resetValues], {
+          name: "clock",
+          sid: "wzy69w"
+        })
+      }],
+      or: {
+        sid: "-7dr8kk"
+      }
+    }));
+  }
+
+  validationEvents.push(effector.sample({
+    and: [{
+      source: effector.combine({
+        and: [{
+          fieldValue: $value,
+          form: $form,
+          rulesSources
+        }],
+        or: {
+          name: "source",
+          sid: "-gb07m8"
+        }
+      }),
+      clock: validate
+    }],
+    or: {
+      sid: "6tlenr"
+    }
+  }));
+  validationEvents.push(effector.sample({
+    and: [{
+      source: effector.combine({
+        and: [{
+          fieldValue: $value,
+          form: $form,
+          rulesSources
+        }],
+        or: {
+          name: "source",
+          sid: "-2kp66l"
+        }
+      }),
+      clock: validateFormEvent
+    }],
+    or: {
+      sid: "kjwg3e"
+    }
+  }));
+  const addErrorWithValue = effector.sample({
+    and: [{
+      source: $value,
+      clock: addError,
+      fn: (value, {
+        rule,
+        errorText
+      }) => ({
+        rule,
+        value,
+        errorText
+      })
+    }],
+    or: {
+      name: "addErrorWithValue",
+      sid: "-vn5aoo"
+    }
+  });
+  $errors.on(validationEvents, (_, {
+    form,
+    fieldValue,
+    rulesSources
+  }) => validator(fieldValue, form, rulesSources)).on(addErrorWithValue, (errors, newError) => [newError, ...errors]).reset(resetErrors, resetFormEvent, reset, resetErrorsFormEvent);
+
+  if (!eventsNames.includes("change")) {
+    $errors.reset(changed);
+  }
+}
+function bindChangeEvent({
+  $value,
+  $touched,
+  onChange,
+  changed,
+  name,
+  reset,
+  resetValue,
+  filter
+}, setForm, resetForm, resetTouched, resetValues) {
+  $touched.on(changed, () => true).reset(reset, resetForm, resetTouched);
+  effector.guard({
+    and: [{
+      source: onChange,
+      filter: filter || (() => true),
+      target: changed
+    }],
+    or: {
+      sid: "-ylchks"
+    }
+  });
+  $value.on(changed, (_, value) => value).on(setForm, (curr, updateSet) => updateSet.hasOwnProperty(name) ? updateSet[name] : curr).reset(reset, resetValue, resetValues, resetForm);
+}
+
+function wrapEvent(event) {
+  return scope.useEvent(event) ;
+}
+
+function createFormValuesStore(fields) {
+  const shape = {};
+
+  for (const fieldName in fields) {
+    if (!fields.hasOwnProperty(fieldName)) continue;
+    shape[fieldName] = fields[fieldName].$value;
+  }
+
+  return effector.combine({
+    and: [shape],
+    or: {
+      sid: "3r0gj3"
+    }
+  });
+}
+
+function createForm(config) {
+  const {
+    filter: $filter,
+    domain,
+    fields: fieldsConfigs,
+    validateOn,
+    units
+  } = config;
+
+  const fields = {};
+  const dirtyFlagsArr = [];
+  const touchedFlagsArr = []; // create units
+
+  for (const fieldName in fieldsConfigs) {
+    if (!fieldsConfigs.hasOwnProperty(fieldName)) continue;
+    const fieldConfig = fieldsConfigs[fieldName];
+
+    const field = effector.withFactory({
+      sid: "tpjlm9",
+      fn: () => createField(fieldName, fieldConfig, domain, {
+        sid: fieldName
+      }),
+      name: "field",
+      method: "createField"
+    });
+
+    fields[fieldName] = field;
+    dirtyFlagsArr.push(field.$isDirty);
+    touchedFlagsArr.push(field.$touched);
+  }
+
+  const $form = createFormValuesStore(fields);
+  const $eachValid = eachValid(fields);
+  const $isFormValid = $filter ? effector.combine({
+    and: [$eachValid, $filter, (valid, filter) => valid && filter],
+    or: {
+      name: "$isFormValid",
+      sid: "-mzafst"
+    }
+  }) : $eachValid;
+  const $isDirty = effector.combine({
+    and: [dirtyFlagsArr],
+    or: {
+      name: "$isDirty",
+      sid: "-dlthzi"
+    }
+  }).map(dirtyFlags => dirtyFlags.some(Boolean));
+  const $touched = effector.combine({
+    and: [touchedFlagsArr],
+    or: {
+      name: "$touched",
+      sid: "-tje8ud"
+    }
+  }).map(touchedFlags => touchedFlags.some(Boolean));
+  const $meta = effector.combine({
+    and: [{
+      isValid: $eachValid,
+      isDirty: $isDirty,
+      touched: $touched
+    }],
+    or: {
+      name: "$meta",
+      sid: "2bfvkz"
+    }
+  });
+  const validate = createFormUnit.event({
+    domain,
+    existing: units === null || units === void 0 ? void 0 : units.validate
+  }, {
+    name: "validate",
+    sid: "yvbjh5"
+  });
+  const submitForm = createFormUnit.event({
+    domain,
+    existing: units === null || units === void 0 ? void 0 : units.submit
+  }, {
+    name: "submitForm",
+    sid: "4v9jaw"
+  });
+  const formValidated = createFormUnit.event({
+    domain,
+    existing: units === null || units === void 0 ? void 0 : units.formValidated
+  }, {
+    name: "formValidated",
+    sid: "q51mub"
+  });
+  const setForm = createFormUnit.event({
+    domain,
+    existing: units === null || units === void 0 ? void 0 : units.setForm
+  }, {
+    name: "setForm",
+    sid: "-myvat3"
+  });
+  const resetForm = createFormUnit.event({
+    domain,
+    existing: units === null || units === void 0 ? void 0 : units.reset
+  }, {
+    name: "resetForm",
+    sid: "-khripr"
+  });
+  const resetValues = createFormUnit.event({
+    domain,
+    existing: units === null || units === void 0 ? void 0 : units.resetValues
+  }, {
+    name: "resetValues",
+    sid: "ygut7h"
+  });
+  const resetErrors = createFormUnit.event({
+    domain,
+    existing: units === null || units === void 0 ? void 0 : units.resetErrors
+  }, {
+    name: "resetErrors",
+    sid: "-wgu0qt"
+  });
+  const resetTouched = createFormUnit.event({
+    domain,
+    existing: units === null || units === void 0 ? void 0 : units.resetTouched
+  }, {
+    name: "resetTouched",
+    sid: "x0xold"
+  });
+  const submitWithFormData = effector.sample({
+    and: [{
+      source: $form,
+      clock: submitForm
+    }],
+    or: {
+      name: "submitWithFormData",
+      sid: "-6a1prv"
+    }
+  });
+  const validateWithFormData = effector.sample({
+    and: [{
+      source: $form,
+      clock: validate
+    }],
+    or: {
+      name: "validateWithFormData",
+      sid: "-wefxh0"
+    }
+  }); // bind units
+
+  for (const fieldName in fields) {
+    if (!fields.hasOwnProperty(fieldName)) continue;
+    const fieldConfig = fieldsConfigs[fieldName];
+    const field = fields[fieldName];
+
+    effector.withFactory({
+      sid: "oj3q0b",
+      fn: () => bindChangeEvent(field, setForm, resetForm, resetTouched, resetValues),
+      name: "none",
+      method: "bindChangeEvent"
+    });
+
+    if (!fieldConfig.rules) continue;
+
+    effector.withFactory({
+      sid: "okr3se",
+      fn: () => bindValidation({
+        $form,
+        rules: fieldConfig.rules,
+        submitEvent: submitForm,
+        resetFormEvent: resetForm,
+        resetValues,
+        resetErrors,
+        validateFormEvent: validate,
+        field,
+        formValidationEvents: validateOn ? validateOn : ["submit"],
+        fieldValidationEvents: fieldConfig.validateOn ? fieldConfig.validateOn : []
+      }, {
+        sid: fieldName
+      }),
+      name: "none",
+      method: "bindValidation"
+    });
+  }
+
+  effector.guard({
+    and: [{
+      source: submitWithFormData,
+      filter: $isFormValid,
+      // TODO: fix
+      target: formValidated
+    }],
+    or: {
+      sid: "2vvi0m"
+    }
+  });
+  effector.guard({
+    and: [{
+      source: validateWithFormData,
+      filter: $isFormValid,
+      target: formValidated
+    }],
+    or: {
+      sid: "2z69ks"
+    }
+  });
+  return {
+    fields,
+    $values: $form,
+    $eachValid,
+    $isValid: $eachValid,
+    $isDirty: $isDirty,
+    $touched: $touched,
+    $meta,
+    submit: submitForm,
+    validate,
+    resetTouched,
+    reset: resetForm,
+    resetValues,
+    resetErrors,
+    setForm,
+    set: setForm,
+    formValidated
+  };
+}
+
+function useField(field) {
+  const {
+    value,
+    errors,
+    firstError,
+    isValid,
+    isDirty,
+    isTouched: touched
+  } = scope.useStore(field.$field);
+  return {
+    name: field.name,
+    value,
+    errors,
+    firstError,
+    isValid,
+    isDirty,
+    touched,
+    isTouched: touched,
+    onChange: wrapEvent(field.onChange),
+    onBlur: wrapEvent(field.onBlur),
+    addError: wrapEvent(field.addError),
+    validate: wrapEvent(field.validate),
+    reset: wrapEvent(field.reset),
+    set: wrapEvent(field.onChange),
+    resetErrors: wrapEvent(field.resetErrors),
+    hasError: () => {
+      return firstError !== null;
+    },
+    errorText: map => {
+      if (!firstError) {
+        return "";
+      }
+
+      if (!map) {
+        return firstError.errorText || "";
+      }
+
+      if (map[firstError.rule]) {
+        return map[firstError.rule];
+      }
+
+      return firstError.errorText || "";
+    }
+  };
+}
+function useForm(form) {
+  const connectedFields = {};
+  const values = {};
+
+  for (const fieldName in form.fields) {
+    if (!form.fields.hasOwnProperty(fieldName)) continue;
+    const field = form.fields[fieldName];
+    const connectedField = useField(field);
+    connectedFields[fieldName] = connectedField;
+    values[fieldName] = connectedField.value;
+  }
+
+  const {
+    isValid: eachValid,
+    isDirty,
+    touched
+  } = scope.useStore(form.$meta);
+
+  const hasError = fieldName => {
+    if (!fieldName) {
+      return !eachValid;
+    }
+
+    if (connectedFields[fieldName]) {
+      return Boolean(connectedFields[fieldName].firstError);
+    }
+
+    return false;
+  };
+
+  const error = fieldName => {
+    if (connectedFields[fieldName]) {
+      return connectedFields[fieldName].firstError;
+    }
+
+    return null;
+  };
+
+  const errors = fieldName => {
+    if (connectedFields[fieldName]) {
+      return connectedFields[fieldName].errors;
+    }
+
+    return [];
+  };
+
+  const errorText = (fieldName, map) => {
+    const field = connectedFields[fieldName];
+
+    if (!field) {
+      return "";
+    }
+
+    if (!field.firstError) {
+      return "";
+    }
+
+    if (!map) {
+      return field.firstError.errorText || "";
+    }
+
+    if (map[field.firstError.rule]) {
+      return map[field.firstError.rule];
+    }
+
+    return field.firstError.errorText || "";
+  };
+
+  return {
+    fields: connectedFields,
+    values,
+    hasError,
+    eachValid,
+    isValid: eachValid,
+    isDirty,
+    isTouched: touched,
+    touched,
+    errors,
+    error,
+    errorText,
+    reset: wrapEvent(form.reset),
+    submit: wrapEvent(form.submit),
+    setForm: wrapEvent(form.setForm),
+    set: wrapEvent(form.setForm),
+    formValidated: wrapEvent(form.formValidated)
+  };
+}
+
+exports.createForm = createForm;
+exports.useField = useField;
+exports.useForm = useForm;
 //# sourceMappingURL=index.cjs.js.map

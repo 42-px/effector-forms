@@ -9,9 +9,18 @@ import pkg from "./package.json"
 import babelConfig from "./babel.config.json"
 
 const isScope = process.env.SCOPE === "true"
+const legacySSRAlias = process.env.LEGACY_SSR_ALIAS === "true"
 
 const extensions = [".js", ".ts", ".tsx", ".jsx"]
-const paths = isScope ? pkg.exports["./scope"] : pkg.exports["."]
+let paths = pkg.exports["."]
+
+if (isScope) {
+    if (legacySSRAlias) {
+        paths = pkg.exports["./ssr"]
+    } else {
+        paths = pkg.exports["./scope"]
+    }
+}
 
 if (isScope) {
     babelConfig.plugins = babelConfig.plugins || []
@@ -20,7 +29,9 @@ if (isScope) {
             "module-resolver",
             {
                 "alias": {
-                    "effector-react": "effector-react/scope"
+                    "effector-react": legacySSRAlias 
+                        ? "effector-react/ssr"
+                        : "effector-react/scope"
                 }
             }
         ]
@@ -50,6 +61,7 @@ const config = {
         typescript({ tsconfig: "./tsconfig.json" }),
         replace({
             "process.env.IS_SCOPE_BUILD": `"${isScope}"`,
+            "process.env.IS_LEGACY_SSR_BUILD": `"${legacySSRAlias}"`,
             "preventAssignment": true,
         }),
         babel({
@@ -60,7 +72,7 @@ const config = {
         }),
         nodeResolve({ extensions }),
         commonjs({ extensions }),
-        terser(),
+        // terser(),
     ]
 }
 

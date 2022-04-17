@@ -1,5 +1,5 @@
 import { combine, createStore, createEvent, sample, merge, guard, withFactory } from 'effector';
-import { useEvent, useStore } from 'effector-react/scope';
+import { useEvent, useStore } from 'effector-react/ssr';
 
 function createCombineValidator(rulesOrResolver) {
   return (value, form, rulesSources) => {
@@ -449,6 +449,10 @@ function createForm(config) {
     validateOn,
     units
   } = config;
+
+  if (!domain) {
+    throw new Error("domain option is required in ssr mode!");
+  }
 
   const fields = {};
   const dirtyFlagsArr = [];

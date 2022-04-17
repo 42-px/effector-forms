@@ -25,7 +25,7 @@
 - [Typescipt users tips](#typescipt-users-tips)
 - [Advanced](#advanced)
   * [Use external units](#use-external-units)
-- [Coming soon](#coming-soon)
+- [SSR](#ssr)
 
 ## Motivation
 
@@ -1112,8 +1112,13 @@ const form = createForm({
 })
 ```
 
+# SSR
 
-## Coming soon
+If used with server rendering, import factories from *effector-forms/scope* (effector 22):
 
-* dynamic fields
-* async (effect) validators
+```ts
+import {} from 'effector-forms/scope' 
+```
+
+For effector 21, use the alias "effector-forms/ssr" instead
+
