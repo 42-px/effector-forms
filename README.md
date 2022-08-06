@@ -687,11 +687,12 @@ export const rules = {
 yup validation wrapper:
 ```ts
 import * as yup from 'yup'
+import { Rule } from "effector-forms";
 
 export function createRule<V, T = any>({
     schema,
     name,
-}: { schema: yup.Schema<T>, name: string }): Rule<V> {
+}: { schema: yup.SchemaOf<T>, name: string }): Rule<V> {
     return {
         name,
         validator: (v: V) => {
