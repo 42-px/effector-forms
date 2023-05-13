@@ -60,6 +60,7 @@ const registerForm = createForm({
     validateOn: ["submit"],
 })
 
+
 sample({
     clock: initForm,
     fn: () => ({
@@ -85,8 +86,8 @@ const newForm = createForm({
     }
 })
 
-console.log(registerForm)
-console.log(newForm)
+console.log(registerForm.fields)
+console.log(newForm.fields)
 
 
 export const App = () => {

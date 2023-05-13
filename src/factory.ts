@@ -34,7 +34,8 @@ function createFormValuesStore(
 }
 
 export function createForm<Values extends AnyFormValues>(
-    config: FormConfig<Values>
+    config: FormConfig<Values>,
+    effectorData?: any,
 ) {
     const {
         filter: $filter,
@@ -55,9 +56,7 @@ export function createForm<Values extends AnyFormValues>(
 
         const fieldConfig = fieldsConfigs[fieldName]
 
-        const field = createField(fieldName, fieldConfig, domain, {
-            sid: fieldName
-        })
+        const field = createField(fieldName, fieldConfig, domain, effectorData)
 
         fields[fieldName] = field
         dirtyFlagsArr.push(field.$isDirty)

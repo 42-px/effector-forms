@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --config ./webpack.config.js",
+    "build": "cross-env NODE_ENV=production webpack --config ./webpack.config.prod.js",
     "check-types": "tsc --noEmit"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "effector": "^22.8.5",
-    "effector-forms": "^1.1.0",
+    "effector-forms": "^1.2.0",
     "effector-react": "^22.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"

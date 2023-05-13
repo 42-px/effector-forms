@@ -4,7 +4,9 @@
     "@babel/preset-react"
   ],
   "plugins": [
-    "effector/babel-plugin"
+    [
+      "effector/babel-plugin"
+    ]
   ],
   "env": {
     "development": {
