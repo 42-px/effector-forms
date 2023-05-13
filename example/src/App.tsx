@@ -2,7 +2,7 @@
 // eslint-disable-next-line no-unused-vars
 import * as React from "react"
 import { createForm, Rule, useForm } from "effector-forms"
-import { createDomain } from "effector"
+import { createDomain, createEvent, forward, sample } from "effector"
 
 const rules = {
     required: (): Rule<string> => ({
@@ -21,9 +21,11 @@ const rules = {
     }),
     minLength: (min: number): Rule<string> => ({
         name: "minLength",
-        validator: (value) => value.length >= min 
+        validator: (value) => value.length >= min
     }),
 }
+
+const initForm = createEvent<void>()
 
 
 const registerForm = createForm({
@@ -56,6 +58,14 @@ const registerForm = createForm({
         },
     },
     validateOn: ["submit"],
+})
+
+sample({
+    clock: initForm,
+    fn: () => ({
+        email: "myemail@example.com"
+    }),
+    target: registerForm.setInitialForm,
 })
 
 registerForm.formValidated.watch(() => {
@@ -124,12 +134,17 @@ export const App = () => {
             </div>
             <div>
                 <button onClick={() => form.reset()} type="button">
-          Reset
+                    Reset
                 </button>
             </div>
             <div>
                 <button type="submit">
-          Register
+                    Register
+                </button>
+            </div>
+            <div>
+                <button type="button" onClick={() => initForm()}>
+                    Init form
                 </button>
             </div>
             <div>
