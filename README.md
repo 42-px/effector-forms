@@ -7,6 +7,7 @@
 - [Form state](#form-state)
 - [Submit Filter](#submit-filter)
 - [Set form](#set-form)
+- [Set initial form](#setInitialForm)
 - [Validation triggers](#validation-triggers)
 - [Interdependent validations](#interdependent-validations)
 - [Usage with domain](#usage-with-domain)
@@ -17,6 +18,7 @@
 - [Use external validators lib](#use-external-validators-lib)
   * [Usage with Yup](#usage-with-yup)
 - [Add custom error manually](#add-custom-error-manually)
+- [Bulk errors](#bulk-errors)
 - [Validate by external source](#validate-by-external-source)
 - [Validate manually](#validate-manually)
 - [Reset form](#reset-form)
@@ -784,6 +786,24 @@ guard({
     (error) => error.name === "already-exists" ? { rule: "already-exists" } : null
   ),
   filter: Boolean,
+  target: loginForm.fields.email.addError,
+})
+```
+
+## Bulk errors
+
+You can add multiple errors for many fields at once with the form.addErrors event:
+
+```ts
+guard({
+  clock: loginFx.failData.map(
+    (errors) => errors.map((err) => ({
+      field: err.field,
+      rule: "backend",
+      errorText: err.msg,
+    }))
+  ),
+  filter: (errors) => errors.length > 0,
   target: loginForm.fields.email.addError,
 })
 ```

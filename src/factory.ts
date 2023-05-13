@@ -10,6 +10,7 @@ import {
     AnyFormValues,
     FormConfig,
     Form,
+    AddErrorPayload,
 } from "./types"
 import { eachValid } from "./validation"
 import {
@@ -106,6 +107,11 @@ export function createForm<Values extends AnyFormValues>(
         existing: units?.setForm as Event<Partial<AnyFormValues>>,
     })
 
+    const addErrors = createFormUnit.event<AddErrorPayload[]>({
+        domain,
+        existing: units?.addErrors,
+    })
+
     const resetForm = createFormUnit.event({
         domain,
         existing: units?.reset,
@@ -157,6 +163,7 @@ export function createForm<Values extends AnyFormValues>(
                 $values: $form,
                 submit: submitForm,
                 reset: resetForm,
+                addErrors,
                 resetValues,
                 resetErrors,
                 validate,
@@ -191,6 +198,7 @@ export function createForm<Values extends AnyFormValues>(
         submit: submitForm,
         validate,
         resetTouched,
+        addErrors,
         reset: resetForm,
         resetValues,
         resetErrors,

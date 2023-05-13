@@ -15,6 +15,7 @@ import {
     FieldConfig,
     AnyFormValues,
     ValidationEvent,
+    AddErrorPayload,
 } from "./types"
 import { createCombineValidator } from "./validation"
 import { createFormUnit } from "./create-form-unit"
@@ -140,6 +141,7 @@ type BindValidationParams = {
         reset: Event<void>
         resetValues: Event<void>
         resetErrors: Event<void>
+        addErrors: Event<AddErrorPayload[]>
         validate: Event<void>
         validateOn?: ValidationEvent[]
     }
@@ -246,6 +248,15 @@ export function bindValidation(
         }),
     })
 
+    const addErrorsWithValue = sample({
+        source: $value,
+        clock: form.addErrors,
+        fn: (value, errors) => ({
+            value,
+            newErrors: errors,
+        })
+    })
+
     $errors
         .on(
             validationEvents,
@@ -256,6 +267,20 @@ export function bindValidation(
             )
         )
         .on(addErrorWithValue, (errors, newError) => [newError, ...errors])
+        .on(addErrorsWithValue, (currErrors, { value, newErrors }) => {
+            const matchedErrors: ValidationError[] = []
+
+            for (const newError of newErrors) {
+                if (newError.field !== field.name) continue
+                matchedErrors.push({
+                    value,
+                    rule: newError.rule,
+                    errorText: newError.errorText,
+                })
+            }
+
+            return [...matchedErrors, ...currErrors]
+        })
         .reset(resetErrors, form.reset, reset, form.resetErrors)
 
     if (!eventsNames.includes("change")) {

@@ -114,6 +114,11 @@ export type FormFields<Values extends AnyFormValues> = {
   [K in keyof Values]: Field<Values[K]>
 }
 
+export type AddErrorPayload = {
+  field: string
+  rule: string
+  errorText?: string
+}
 
 export type FormConfig<Values extends AnyFormValues> = {
   fields: FormFieldConfigs<Values>
@@ -123,6 +128,7 @@ export type FormConfig<Values extends AnyFormValues> = {
   units?: {
     submit?: Event<void>
     validate?: Event<void>
+    addErrors?: Event<AddErrorPayload[]>
     reset?: Event<void>
     resetValues?: Event<void>
     resetTouched?: Event<void>
@@ -149,6 +155,7 @@ export type Form<Values extends AnyFormValues> = {
   submit: Event<void>
   validate: Event<void>
   reset: Event<void>
+  addErrors: Event<AddErrorPayload[]>
   set: Event<Partial<Values>>
   setForm: Event<Partial<Values>>
   setInitialForm: Event<Partial<Values>>

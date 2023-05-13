@@ -794,3 +794,48 @@ test("field without rules", () => {
         value: ""
     }])
 })
+
+test("addErrors", () => {
+    const form = createForm({
+        fields: {
+            name: {
+                init: "",
+            },
+            email: {
+                init: "",
+            },
+            password: {
+                init: "",
+            }
+        }
+    })
+
+    expect(form.fields.name.$isValid.getState()).toBe(true)
+    expect(form.fields.email.$isValid.getState()).toBe(true)
+    expect(form.fields.password.$isValid.getState()).toBe(true)
+    expect(form.$isValid.getState()).toBe(true)
+
+    form.addErrors([
+        { field: "name", rule: "custom-rule", errorText: "invalid" },
+        { field: "name", rule: "custom-rule2", errorText: "invalid" },
+        { field: "email", rule: "custom-rule", errorText: "invalid" },
+    ])
+
+    expect(form.fields.name.$isValid.getState()).toBe(false)
+    expect(form.fields.email.$isValid.getState()).toBe(false)
+    expect(form.fields.password.$isValid.getState()).toBe(true)
+    expect(form.$isValid.getState()).toBe(false)
+
+    expect(form.fields.name.$errors.getState()).toEqual(
+        [
+            { rule: "custom-rule", errorText: "invalid", value: "" },
+            { rule: "custom-rule2", errorText: "invalid", value: "" },
+        ]
+    )
+    expect(form.fields.email.$errors.getState()).toEqual(
+        [
+            { rule: "custom-rule", errorText: "invalid", value: "" },
+        ]
+    )
+    expect(form.fields.password.$errors.getState()).toEqual([])
+})
