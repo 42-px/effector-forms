@@ -18,7 +18,6 @@ import {
     bindChangeEvent,
 } from "./field"
 import { createFormUnit } from "./create-form-unit"
-import { isScope, isLegacySSRBuild } from "./scope"
 
 function createFormValuesStore(
     fields: AnyFields
@@ -43,10 +42,6 @@ export function createForm<Values extends AnyFormValues>(
         validateOn,
         units,
     } = config
-
-    if (isScope() && isLegacySSRBuild() && !domain) {
-        throw new Error("domain option is required in ssr mode!")
-    }
 
     const fields: AnyFields = {}
 

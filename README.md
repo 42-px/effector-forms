@@ -1,6 +1,5 @@
 # Effector forms
 
-- [Effector 21](#effector-21)
 - [SSR](#ssr)
 - [Motivation](#motivation)
 - [Usage](#usage)
@@ -27,13 +26,7 @@
 - [Typescipt users tips](#typescipt-users-tips)
 - [Advanced](#advanced)
   * [Use external units](#use-external-units)
-
-## Effector 21
-
-For effector 21 use alias:
-```ts
-import { createForm } from "effector-forms/legacy"
-```
+- [Effector 21](#effector-21)
 
 # SSR
 
@@ -42,9 +35,6 @@ If used with server side rendering, import factories from *effector-forms/scope*
 ```ts
 import { createForm } from 'effector-forms/scope' 
 ```
-
-For effector 21 (with SSR), use the alias "effector-forms/ssr" instead
-
 
 ## Motivation
 
@@ -1129,6 +1119,16 @@ const form = createForm({
   validateOn: ["submit"],
 })
 ```
+
+## Effector 21
+
+Effector 21 is no longer supported. For effector 21, use version effector-forms@0.0.24 and earlier
+
+```ts
+import { createForm } from "effector-forms/legacy"
+```
+
+For effector 21 with SSR, use the alias "effector-forms/ssr" instead
 
 
 

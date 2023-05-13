@@ -9,17 +9,12 @@ import pkg from "./package.json"
 import babelConfig from "./babel.config.json"
 
 const isScope = process.env.SCOPE === "true"
-const legacySSRAlias = process.env.LEGACY_SSR_ALIAS === "true"
 
 const extensions = [".js", ".ts", ".tsx", ".jsx"]
 let paths = pkg.exports["."]
 
 if (isScope) {
-    if (legacySSRAlias) {
-        paths = pkg.exports["./ssr"]
-    } else {
-        paths = pkg.exports["./scope"]
-    }
+    paths = pkg.exports["./scope"]
 }
 
 if (isScope) {
@@ -29,9 +24,7 @@ if (isScope) {
             "module-resolver",
             {
                 "alias": {
-                    "effector-react": legacySSRAlias 
-                        ? "effector-react/ssr"
-                        : "effector-react/scope"
+                    "effector-react": "effector-react/scope"
                 }
             }
         ]
@@ -61,7 +54,6 @@ const config = {
         typescript({ tsconfig: "./tsconfig.json" }),
         replace({
             "process.env.IS_SCOPE_BUILD": `"${isScope}"`,
-            "process.env.IS_LEGACY_SSR_BUILD": `"${legacySSRAlias}"`,
             "preventAssignment": true,
         }),
         babel({
@@ -86,7 +78,7 @@ if (!isScope) {
             globals: {
                 "effector": "effector",
                 "effector-react": "effectorReact",
-            }, 
+            },
         },
         {
             file: "./dist/effector-forms.iife.js",

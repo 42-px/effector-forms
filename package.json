@@ -14,30 +14,17 @@
       "node": "./dist/effector-forms.cjs.js",
       "default": "./dist/index.js"
     },
-    "./legacy": {
-      "import": "./dist-legacy/index.js",
-      "require": "./dist-legacy/index.cjs.js",
-      "node": "./dist-legacy/index.cjs.js",
-      "default": "./dist-legacy/index.js"
-    },
     "./scope": {
       "import": "./dist-scope/index.js",
       "require": "./dist-scope/index.cjs.js",
       "node": "./dist-scope/index.cjs.js",
       "default": "./dist-scope/index.js"
-    },
-    "./ssr": {
-      "import": "./dist-ssr/index.js",
-      "require": "./dist-ssr/index.cjs.js",
-      "node": "./dist-ssr/index.cjs.js",
-      "default": "./dist-ssr/index.js"
     }
   },
   "scripts": {
     "emit-dts": "dts-bundle-generator --no-check --project tsconfig.json --out-file ./dist-types/index.d.ts ./src/index.ts",
     "build:noscope": "cross-env SCOPE=false NODE_ENV=production rollup -c rollup.config.js",
     "build:scope": "cross-env SCOPE=true NODE_ENV=production rollup -c rollup.config.js",
-    "build:legacy-ssr": "cross-env SCOPE=true LEGACY_SSR_ALIAS=true NODE_ENV=production rollup -c rollup.config.js",
     "build": "npm run build:noscope && npm run build:scope && npm run emit-dts",
     "check-types": "tsc --noEmit",
     "test": "cross-env IS_SCOPE_BUILD=false jest",
@@ -100,13 +87,9 @@
   },
   "files": [
     "dist",
-    "dist-legacy",
     "dist-scope",
-    "dist-ssr",
     "dist-types",
-    "scope.ts",
-    "ssr.ts",
-    "legacy.ts"
+    "scope.ts"
   ],
   "types": "./dist-types"
 }
