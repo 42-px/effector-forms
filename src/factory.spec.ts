@@ -839,3 +839,36 @@ test("addErrors", () => {
     )
     expect(form.fields.password.$errors.getState()).toEqual([])
 })
+
+test("sids", () => {
+    const loginForm = createForm({
+        fields: {
+            username: { init: "" },
+            password: { init: "" },
+            confirm: { init: "" },
+        },
+    })
+
+    const registerForm = createForm({
+        fields: {
+            username: { init: "" },
+            password: { init: "" },
+            confirm: { init: "" },
+        },
+    })
+
+    const loginUsername = loginForm.fields.username
+    const registerUsername = registerForm.fields.username
+
+    expect(
+        loginUsername.$value.sid !== registerUsername.$errors.sid
+    ).toBeTruthy()
+
+    expect(
+        registerUsername.$value.sid !== registerUsername.$errors.sid
+    ).toBeTruthy()
+
+    expect(
+        loginUsername.$value.sid !== registerUsername.$value.sid
+    ).toBeTruthy()
+})

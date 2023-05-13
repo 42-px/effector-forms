@@ -34,13 +34,17 @@ export function createField(
         domain,
         existing: fieldConfig.units?.$value,
         init: initValue,
-    }, effectorData)
+    }, {
+        sid: `${fieldName}-$value`
+    })
 
     const $errors = createFormUnit.store<ValidationError[]>({
         domain,
         existing: fieldConfig.units?.$errors,
         init: [],
-    }, effectorData)
+    }, {
+        sid: `${fieldName}-$errors`
+    })
 
 
     const $firstError = $errors.map(
@@ -51,13 +55,17 @@ export function createField(
         domain,
         existing: fieldConfig.units?.$initValue,
         init: initValue,
+    }, {
+        sid: `${fieldName}-$initValue`
     })
 
     const $touched = createFormUnit.store({
         domain,
         existing: fieldConfig.units?.$isTouched,
         init: false,
-    }, effectorData)
+    }, {
+        sid: `${fieldName}-$touched`
+    })
 
     const $isDirty = combine($value, $initValue,
         (value, initValue) => value !== initValue,
@@ -170,9 +178,12 @@ export function bindValidation(
     } = field
 
     const rulesSources = typeof rules === "function"
-        ? createStore<any[]>([], effectorData)
+        ? createStore<any[]>([], { sid: `${field.name}-$rulesSources` })
         : combine(
-            rules.map(({ source }) => source || createStore(null, effectorData))
+            rules.map(({ source }, i) => {
+                const sid = `${field.name}-$rulesSources-${i}`
+                return source || createStore(null, { sid })
+            })
         )
 
     const validator = createCombineValidator(rules)

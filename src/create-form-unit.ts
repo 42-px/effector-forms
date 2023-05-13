@@ -1,9 +1,9 @@
 import { createStore, createEvent, Domain, Store, Event } from "effector"
 
 type CreateStoreParams<Value> = {
-  init: Value
-  domain?: Domain
-  existing?: Store<Value>
+    init: Value
+    domain?: Domain
+    existing?: Store<Value>
 }
 
 function store<Value>(
@@ -19,8 +19,8 @@ function store<Value>(
 }
 
 type CreateEventParams<Value> = {
-  domain?: Domain
-  existing?: Event<Value>
+    domain?: Domain
+    existing?: Event<Value>
 }
 
 function event<Value>({ domain, existing }: CreateEventParams<Value>) {

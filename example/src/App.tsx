@@ -77,6 +77,18 @@ const errorText = {
     color: "red",
 }
 
+const newForm = createForm({
+    fields: {
+        email: {
+            init: ""
+        }
+    }
+})
+
+console.log(registerForm)
+console.log(newForm)
+
+
 export const App = () => {
     const form = useForm(registerForm)
 

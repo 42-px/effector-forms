@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "effector": "^22.8.3",
+    "effector": "^22.8.5",
     "effector-forms": "^1.1.0",
     "effector-react": "^22.5.1",
     "react": "^17.0.2",

@@ -20,9 +20,7 @@
       "effector/babel-plugin",
       {
         "factories": [
-          "src/create-form-unit",
-          "src/factory",
-          "src/field"
+          "src/factory"
         ]
       }
     ]

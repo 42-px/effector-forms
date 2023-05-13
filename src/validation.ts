@@ -49,14 +49,14 @@ export function createCombineValidator<Value = any, Form = any>(
 
 export function eachValid(fields: AnyFields) {
     const firstErrors: Store<ValidationError | null>[] = []
-  
+
     for (const fieldName in fields) {
         if (!fields.hasOwnProperty(fieldName)) continue
         const { $firstError } = fields[fieldName]
         firstErrors.push($firstError)
     }
-  
+
     const $firstErrors = combine(firstErrors)
-  
+
     return $firstErrors.map((errors) => errors.every(error => error === null))
 }
