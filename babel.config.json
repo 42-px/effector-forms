@@ -20,7 +20,8 @@
       "effector/babel-plugin",
       {
         "factories": [
-          "src/factory"
+          "src/factory",
+          "src/field"
         ]
       }
     ]
