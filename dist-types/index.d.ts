@@ -30,6 +30,7 @@ export declare type FieldData<Value> = {
 };
 export declare type Field<Value> = {
 	name: string;
+	$initValue: Store<Value>;
 	$value: Store<Value>;
 	$errors: Store<ValidationError<Value>[]>;
 	$firstError: Store<ValidationError<Value> | null>;
@@ -63,6 +64,7 @@ export declare type FieldConfig<Value> = {
 		$value?: Store<Value>;
 		$errors?: Store<ValidationError<Value>[]>;
 		$isTouched?: Store<boolean>;
+		$initValue?: Store<Value>;
 		onChange?: Event<Value>;
 		changed?: Event<Value>;
 		onBlur?: Event<void>;
@@ -91,6 +93,11 @@ export declare type FormFieldConfigs<Values extends AnyFormValues> = {
 export declare type FormFields<Values extends AnyFormValues> = {
 	[K in keyof Values]: Field<Values[K]>;
 };
+export declare type AddErrorPayload = {
+	field: string;
+	rule: string;
+	errorText?: string;
+};
 export declare type FormConfig<Values extends AnyFormValues> = {
 	fields: FormFieldConfigs<Values>;
 	domain?: Domain;
@@ -99,11 +106,13 @@ export declare type FormConfig<Values extends AnyFormValues> = {
 	units?: {
 		submit?: Event<void>;
 		validate?: Event<void>;
+		addErrors?: Event<AddErrorPayload[]>;
 		reset?: Event<void>;
 		resetValues?: Event<void>;
 		resetTouched?: Event<void>;
 		resetErrors?: Event<void>;
 		formValidated?: Event<Values>;
+		setInitialForm?: Event<Partial<AnyFormValues>>;
 		setForm?: Event<Partial<AnyFormValues>>;
 	};
 };
@@ -122,8 +131,10 @@ export declare type Form<Values extends AnyFormValues> = {
 	submit: Event<void>;
 	validate: Event<void>;
 	reset: Event<void>;
+	addErrors: Event<AddErrorPayload[]>;
 	set: Event<Partial<Values>>;
 	setForm: Event<Partial<Values>>;
+	setInitialForm: Event<Partial<Values>>;
 	resetTouched: Event<void>;
 	resetValues: Event<void>;
 	resetErrors: Event<void>;
