@@ -38,11 +38,21 @@ test("bind change event", () => {
     })
 
     const setForm = createEvent<Partial<{ email: string }>>()
+    const setInitialForm = createEvent<Partial<{ email: string }>>()
     const resetForm = createEvent<void>()
     const resetTouched = createEvent<void>()
     const resetValues = createEvent<void>()
 
-    bindChangeEvent(field, setForm, resetForm, resetTouched, resetValues)
+    bindChangeEvent({
+        field,
+        form: {
+            setForm,
+            setInitialForm,
+            resetForm,
+            resetTouched,
+            resetValues
+        },
+    })
 
     field.onChange("123")
     expect(field.$value.getState()).toEqual("123")
@@ -77,6 +87,8 @@ test("bind validation: validate on change", () => {
     const field = createField("email", fieldConfig)
     const $form = createStore<any>({ email: "" })
     const setForm = createEvent<any>()
+    const setInitialForm = createEvent<Partial<any>>()
+
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
     const resetTouched = createEvent<void>()
@@ -84,7 +96,17 @@ test("bind validation: validate on change", () => {
     const resetValues = createEvent<void>()
     const validateForm = createEvent<void>()
 
-    bindChangeEvent(field, setForm, resetForm, resetTouched, resetValues)
+    bindChangeEvent({
+        field,
+        form: {
+            setForm,
+            setInitialForm,
+            resetForm,
+            resetTouched,
+            resetValues
+        },
+    })
+
     bindValidation({
         form: {
             $values: $form,
@@ -132,6 +154,7 @@ test("bind validation: validate on blur", () => {
     const field = createField("email", fieldConfig)
     const $form = createStore<any>({ email: "" })
     const setForm = createEvent<any>()
+    const setInitialForm = createEvent<any>()
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
     const resetFormErrors = createEvent<void>()
@@ -139,7 +162,17 @@ test("bind validation: validate on blur", () => {
     const validateForm = createEvent<void>()
     const resetValues = createEvent<void>()
 
-    bindChangeEvent(field, setForm, resetForm, resetTouched, resetValues)
+    bindChangeEvent({
+        field,
+        form: {
+            setForm,
+            setInitialForm,
+            resetForm,
+            resetTouched,
+            resetValues
+        },
+    })
+
     bindValidation({
         form: {
             $values: $form,
@@ -191,6 +224,7 @@ test("filter input by store", () => {
     const field = createField("email", fieldConfig)
     const $form = createStore<any>({ email: "" })
     const setForm = createEvent<any>()
+    const setInitialForm = createEvent<any>()
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
     const resetTouched = createEvent<void>()
@@ -198,7 +232,17 @@ test("filter input by store", () => {
     const resetValues = createEvent<void>()
     const resetFormErrors = createEvent<void>()
 
-    bindChangeEvent(field, setForm, resetForm, resetTouched, resetValues)
+    bindChangeEvent({
+        field,
+        form: {
+            setForm,
+            setInitialForm,
+            resetForm,
+            resetTouched,
+            resetValues
+        },
+    })
+
     bindValidation({
         form: {
             $values: $form,
@@ -230,6 +274,7 @@ test("filter input by func", () => {
     const field = createField("numeric", fieldConfig)
     const $form = createStore<any>({ numeric: "" })
     const setForm = createEvent<any>()
+    const setInitialForm = createEvent<any>()
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
     const resetTouched = createEvent<void>()
@@ -237,7 +282,17 @@ test("filter input by func", () => {
     const resetValues = createEvent<void>()
     const resetFormErrors = createEvent<void>()
 
-    bindChangeEvent(field, setForm, resetForm, resetTouched, resetValues)
+    bindChangeEvent({
+        field,
+        form: {
+            setForm,
+            setInitialForm,
+            resetForm,
+            resetTouched,
+            resetValues
+        },
+    })
+
     bindValidation({
         form: {
             $values: $form,
@@ -271,6 +326,7 @@ test("add error manually", () => {
     const field = createField("email", fieldConfig)
     const $form = createStore<any>({ email: "" })
     const setForm = createEvent<any>()
+    const setInitialForm = createEvent<any>()
     const submit = createEvent<void>()
     const reset = createEvent<void>()
     const validateForm = createEvent<void>()
@@ -279,7 +335,17 @@ test("add error manually", () => {
 
     const resetTouched = createEvent<void>()
 
-    bindChangeEvent(field, setForm, reset, resetTouched, resetValues)
+    bindChangeEvent({
+        field,
+        form: {
+            resetForm: reset,
+            setForm,
+            setInitialForm,
+            resetTouched,
+            resetValues
+        },
+    })
+
     bindValidation({
         form: {
             $values: $form,
@@ -328,6 +394,7 @@ test("validate manually", () => {
     const field = createField("email", fieldConfig)
     const $form = createStore<any>({ email: "" })
     const setForm = createEvent<any>()
+    const setInitialForm = createEvent<any>()
     const submit = createEvent<void>()
     const reset = createEvent<void>()
     const resetTouched = createEvent<void>()
@@ -335,8 +402,17 @@ test("validate manually", () => {
     const resetValues = createEvent<void>()
     const resetFormErrors = createEvent<void>()
 
+    bindChangeEvent({
+        field,
+        form: {
+            resetForm: reset,
+            setForm,
+            setInitialForm,
+            resetTouched,
+            resetValues
+        },
+    })
 
-    bindChangeEvent(field, setForm, reset, resetTouched, resetValues)
     bindValidation({
         form: {
             $values: $form,
@@ -382,6 +458,7 @@ test("reset errors", () => {
     const field = createField("email", fieldConfig)
     const $form = createStore<any>({ email: "" })
     const setForm = createEvent<any>()
+    const setInitialForm = createEvent<any>()
     const submit = createEvent<void>()
     const reset = createEvent<void>()
     const resetTouched = createEvent<void>()
@@ -390,7 +467,17 @@ test("reset errors", () => {
     const resetFormErrors = createEvent<void>()
 
 
-    bindChangeEvent(field, setForm, reset, resetTouched, resetValues)
+    bindChangeEvent({
+        field,
+        form: {
+            resetForm: reset,
+            setForm,
+            setInitialForm,
+            resetTouched,
+            resetValues
+        },
+    })
+
     bindValidation({
         form: {
             $values: $form,
@@ -426,6 +513,7 @@ test("isDirty & touched", () => {
     const field = createField("field", fieldConfig)
     const $form = createStore<any>({ field: "" })
     const setForm = createEvent<any>()
+    const setInitialForm = createEvent<any>()
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
     const resetTouched = createEvent<void>()
@@ -434,7 +522,17 @@ test("isDirty & touched", () => {
     const resetFormErrors = createEvent<void>()
 
 
-    bindChangeEvent(field, setForm, resetForm, resetTouched, resetValues)
+    bindChangeEvent({
+        field,
+        form: {
+            resetForm,
+            setForm,
+            setInitialForm,
+            resetTouched,
+            resetValues
+        },
+    })
+
     bindValidation({
         form: {
             $values: $form,
@@ -532,6 +630,7 @@ test("validate with source", () => {
     const field = createField("email", fieldConfig)
     const $form = createStore<any>({ email: "" })
     const setForm = createEvent<any>()
+    const setInitialForm = createEvent<any>()
     const submit = createEvent<void>()
     const resetForm = createEvent<void>()
     const resetTouched = createEvent<void>()
@@ -539,7 +638,17 @@ test("validate with source", () => {
     const resetValues = createEvent<void>()
     const resetFormErrors = createEvent<void>()
 
-    bindChangeEvent(field, setForm, resetForm, resetTouched, resetValues)
+    bindChangeEvent({
+        field,
+        form: {
+            resetForm,
+            setForm,
+            setInitialForm,
+            resetTouched,
+            resetValues
+        },
+    })
+
     bindValidation({
         form: {
             $values: $form,
@@ -589,6 +698,7 @@ test("reset value", () => {
     const field = createField("email", fieldConfig)
     const $form = createStore<any>({ email: "" })
     const setForm = createEvent<any>()
+    const setInitialForm = createEvent<any>()
     const submit = createEvent<void>()
     const reset = createEvent<void>()
     const resetTouched = createEvent<void>()
@@ -596,7 +706,17 @@ test("reset value", () => {
     const resetValues = createEvent<void>()
     const resetFormErrors = createEvent<void>()
 
-    bindChangeEvent(field, setForm, reset, resetTouched, resetValues)
+    bindChangeEvent({
+        field,
+        form: {
+            resetForm: reset,
+            setForm,
+            setInitialForm,
+            resetTouched,
+            resetValues
+        },
+    })
+
     bindValidation({
         form: {
             $values: $form,
@@ -636,6 +756,7 @@ test("reset errors by form event", () => {
     const field = createField("email", fieldConfig)
     const $form = createStore<any>({ email: "" })
     const setForm = createEvent<any>()
+    const setInitialForm = createEvent<any>()
     const submit = createEvent<void>()
     const reset = createEvent<void>()
     const resetTouched = createEvent<void>()
@@ -644,7 +765,17 @@ test("reset errors by form event", () => {
     const resetFormErrors = createEvent<void>()
 
 
-    bindChangeEvent(field, setForm, reset, resetTouched, resetValues)
+    bindChangeEvent({
+        field,
+        form: {
+            resetForm: reset,
+            setForm,
+            setInitialForm,
+            resetTouched,
+            resetValues
+        },
+    })
+
     bindValidation({
         form: {
             $values: $form,
@@ -692,6 +823,7 @@ test("pass rules factory", () => {
     const field = createField("email", fieldConfig)
     const $form = createStore<any>({ email: "" })
     const setForm = createEvent<any>()
+    const setInitialForm = createEvent<any>()
     const submit = createEvent<void>()
     const reset = createEvent<void>()
     const resetTouched = createEvent<void>()
@@ -699,7 +831,17 @@ test("pass rules factory", () => {
     const resetValues = createEvent<void>()
     const resetFormErrors = createEvent<void>()
 
-    bindChangeEvent(field, setForm, reset, resetTouched, resetValues)
+    bindChangeEvent({
+        field,
+        form: {
+            resetForm: reset,
+            setForm,
+            setInitialForm,
+            resetTouched,
+            resetValues
+        },
+    })
+
     bindValidation({
         form: {
             $values: $form,

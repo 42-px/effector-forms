@@ -46,13 +46,21 @@ export function createField(
         (errors) => errors[0] ? errors[0] : null
     )
 
-    const $isDirty = $value.map((value) => value !== initValue)
+    const $initValue = createFormUnit.store({
+        domain,
+        existing: fieldConfig.units?.$initValue,
+        init: initValue,
+    })
 
     const $touched = createFormUnit.store({
         domain,
         existing: fieldConfig.units?.$isTouched,
         init: false,
     }, effectorData)
+
+    const $isDirty = combine($value, $initValue,
+        (value, initValue) => value !== initValue,
+    )
 
     const onChange = createFormUnit.event({
         domain,
@@ -104,6 +112,7 @@ export function createField(
     return {
         changed,
         name: fieldName,
+        $initValue,
         $value,
         $errors,
         $firstError,
@@ -254,21 +263,40 @@ export function bindValidation(
     }
 }
 
-export function bindChangeEvent(
-    {
+type BindChangeEventParams = {
+    field: Field<any>
+    form: {
+        setForm: Event<Partial<AnyFormValues>>
+        setInitialForm: Event<Partial<AnyFormValues>>
+        resetForm: Event<void>
+        resetTouched: Event<void>
+        resetValues: Event<void>
+    }
+}
+
+export function bindChangeEvent({
+    field,
+    form,
+}: BindChangeEventParams): void {
+    const {
         $value,
+        $initValue,
         $touched,
         onChange,
         changed,
         name,
         reset,
         resetValue,
-        filter }: Field<any>,
-    setForm: Event<Partial<AnyFormValues>>,
-    resetForm: Event<void>,
-    resetTouched: Event<void>,
-    resetValues: Event<void>,
-): void {
+        filter
+    } = field
+
+    const {
+        setForm,
+        setInitialForm,
+        resetForm,
+        resetTouched,
+        resetValues
+    } = form
 
     $touched
         .on(changed, () => true)
@@ -280,14 +308,19 @@ export function bindChangeEvent(
         target: changed,
     })
 
+    $initValue
+        .on(setInitialForm, (curr, updateSet) => updateSet.hasOwnProperty(name)
+            ? updateSet[name]
+            : curr
+        )
+
     $value
         .on(changed, (_, value) => value)
         .on(
-            setForm,
+            [setForm, setInitialForm],
             (curr, updateSet) => updateSet.hasOwnProperty(name)
                 ? updateSet[name]
                 : curr
         )
         .reset(reset, resetValue, resetValues, resetForm)
-
 }

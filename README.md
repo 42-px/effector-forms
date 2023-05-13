@@ -311,6 +311,11 @@ forward({
 })
 ```
 
+## setInitialForm
+
+In case you get values from the backend, use the `form.setInitialForm` event instead of `form.setForm`. This event changes both the value and the initial values. The `$isDirty` flag will be false.
+
+
 ## Validation triggers
 
 You can validate different form fields against different triggers:

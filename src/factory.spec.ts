@@ -548,6 +548,69 @@ test("isDirty & touched", () => {
     })
 })
 
+test("setInitialForm", () => {
+    const form = createForm({
+        fields: {
+            email: {
+                init: "",
+                rules: [
+                    rules.email(),
+                ],
+            },
+            password: {
+                init: "",
+                rules: [
+                    rules.required()
+                ],
+            },
+        },
+        validateOn: ["submit"],
+    })
+
+    expect(form.fields.email.$isDirty.getState()).toBe(false)
+    expect(form.fields.password.$isDirty.getState()).toBe(false)
+    expect(form.$isDirty.getState()).toBe(false)
+    expect(form.fields.email.$touched.getState()).toBe(false)
+    expect(form.fields.password.$touched.getState()).toBe(false)
+    expect(form.$touched.getState()).toBe(false)
+    expect(form.$meta.getState()).toEqual({
+        isValid: true,
+        isDirty: false,
+        touched: false,
+    })
+
+    form.setInitialForm({
+        email: "default@example.com",
+    })
+
+    expect(form.fields.email.$isDirty.getState()).toBe(false)
+    expect(form.fields.password.$isDirty.getState()).toBe(false)
+    expect(form.$isDirty.getState()).toBe(false)
+    expect(form.fields.email.$touched.getState()).toBe(false)
+    expect(form.fields.password.$touched.getState()).toBe(false)
+    expect(form.$touched.getState()).toBe(false)
+    expect(form.$meta.getState()).toEqual({
+        isValid: true,
+        isDirty: false,
+        touched: false,
+    })
+
+    form.fields.email.onChange("")
+
+    expect(form.fields.email.$isDirty.getState()).toBe(true)
+    expect(form.fields.password.$isDirty.getState()).toBe(false)
+    expect(form.$isDirty.getState()).toBe(true)
+    expect(form.fields.email.$touched.getState()).toBe(true)
+    expect(form.fields.password.$touched.getState()).toBe(false)
+    expect(form.$touched.getState()).toBe(true)
+    expect(form.$meta.getState()).toEqual({
+        isValid: true,
+        isDirty: true,
+        touched: true,
+    })
+
+})
+
 test("external units", () => {
     const units = {
         submit: createEvent(),
