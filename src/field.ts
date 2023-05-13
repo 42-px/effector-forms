@@ -15,8 +15,6 @@ import {
     FieldConfig,
     AnyFormValues,
     ValidationEvent,
-    Rule,
-    RuleResolver,
 } from "./types"
 import { createCombineValidator } from "./validation"
 import { createFormUnit } from "./create-form-unit"
@@ -127,31 +125,27 @@ export function createField(
 }
 
 type BindValidationParams = {
-    $form: Store<AnyFormValues>
-    validateFormEvent: Event<void>
-    submitEvent: Event<void>
-    resetFormEvent: Event<void>
-    resetValues: Event<void>
-    resetErrors: Event<void>
+    form: {
+        $values: Store<AnyFormValues>
+        submit: Event<void>
+        reset: Event<void>
+        resetValues: Event<void>
+        resetErrors: Event<void>
+        validate: Event<void>
+        validateOn?: ValidationEvent[]
+    }
     field: Field<any>
-    rules: Rule<any, any>[] | RuleResolver<any, any>
-    formValidationEvents: ValidationEvent[]
-    fieldValidationEvents: ValidationEvent[]
+    fieldConfig: FieldConfig<any>
 }
 
-export function bindValidation({
-    $form,
-    validateFormEvent,
-    submitEvent,
-    resetFormEvent,
-    resetValues,
-    field,
-    rules,
-    resetErrors: resetErrorsFormEvent,
-    formValidationEvents,
-    fieldValidationEvents,
-}: BindValidationParams,
-effectorData?: any): void {
+export function bindValidation(
+    params: BindValidationParams, effectorData?: any
+): void {
+    const { form, field, fieldConfig } = params
+    const rules = fieldConfig.rules || []
+    const formValidationEvents = form.validateOn || ["submit"]
+    const fieldValidationEvents = fieldConfig.validateOn || []
+
     const {
         $value,
         $errors,
@@ -182,10 +176,10 @@ effectorData?: any): void {
         const validationTrigger = sample({
             source: combine({
                 fieldValue: $value,
-                form: $form,
+                form: form.$values,
                 rulesSources,
             }),
-            clock: submitEvent,
+            clock: form.submit,
         })
 
         validationEvents.push(validationTrigger)
@@ -195,7 +189,7 @@ effectorData?: any): void {
         validationEvents.push(sample({
             source: combine({
                 fieldValue: $value,
-                form: $form,
+                form: form.$values,
                 rulesSources,
             }),
             clock: onBlur,
@@ -206,11 +200,11 @@ effectorData?: any): void {
         validationEvents.push(sample({
             source: combine({
                 fieldValue: $value,
-                form: $form,
+                form: form.$values,
                 rulesSources,
             }),
             clock: merge(
-                [changed, resetValue, resetValues]
+                [changed, resetValue, form.resetValues]
             ),
         }))
     }
@@ -218,7 +212,7 @@ effectorData?: any): void {
     validationEvents.push(sample({
         source: combine({
             fieldValue: $value,
-            form: $form,
+            form: form.$values,
             rulesSources,
         }),
         clock: validate,
@@ -227,10 +221,10 @@ effectorData?: any): void {
     validationEvents.push(sample({
         source: combine({
             fieldValue: $value,
-            form: $form,
+            form: form.$values,
             rulesSources,
         }),
-        clock: validateFormEvent,
+        clock: form.validate,
     }))
 
     const addErrorWithValue = sample({
@@ -253,7 +247,7 @@ effectorData?: any): void {
             )
         )
         .on(addErrorWithValue, (errors, newError) => [newError, ...errors])
-        .reset(resetErrors, resetFormEvent, reset, resetErrorsFormEvent)
+        .reset(resetErrors, form.reset, reset, form.resetErrors)
 
     if (!eventsNames.includes("change")) {
         $errors.reset(changed)

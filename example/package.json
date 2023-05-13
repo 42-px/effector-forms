@@ -10,9 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "effector": "^22.3.0",
-    "effector-forms": "^0.0.23-beta.4",
-    "effector-react": "^22.0.6",
+    "effector": "^22.8.3",
+    "effector-forms": "^0.0.25-beta.1",
+    "effector-react": "^22.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },

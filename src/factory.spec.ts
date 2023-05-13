@@ -703,3 +703,31 @@ test("pass rule factory", () => {
     expect(form.fields.email.$value.getState()).toBe(correctEmail)
     expect(form.$eachValid.getState()).toBe(true)
 })
+
+test("field without rules", () => {
+    const form = createForm({
+        fields: {
+            name: {
+                init: ""
+            },
+            email: {
+                init: "",
+                rules: []
+            }
+        }
+    })
+
+    form.fields.name.addError({ rule: "my-rule", errorText: "Test" })
+    form.fields.email.addError({ rule: "my-rule", errorText: "Test" })
+
+    expect(form.fields.name.$errors.getState()).toEqual([{
+        rule: "my-rule",
+        errorText: "Test",
+        value: ""
+    }])
+    expect(form.fields.email.$errors.getState()).toEqual([{
+        rule: "my-rule",
+        errorText: "Test",
+        value: ""
+    }])
+})

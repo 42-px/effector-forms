@@ -139,22 +139,18 @@ export function createForm<Values extends AnyFormValues>(
         const field = fields[fieldName]
 
         bindChangeEvent(field, setForm, resetForm, resetTouched, resetValues)
-
-        if (!fieldConfig.rules) continue
-
         bindValidation({
-            $form,
-            rules: fieldConfig.rules,
-            submitEvent: submitForm,
-            resetFormEvent: resetForm,
-            resetValues,
-            resetErrors,
-            validateFormEvent: validate,
+            form: {
+                $values: $form,
+                submit: submitForm,
+                reset: resetForm,
+                resetValues,
+                resetErrors,
+                validate,
+                validateOn,
+            },
+            fieldConfig,
             field,
-            formValidationEvents: validateOn ? validateOn : ["submit"],
-            fieldValidationEvents: fieldConfig.validateOn
-                ? fieldConfig.validateOn
-                : [],
         }, { sid: fieldName })
     }
 
