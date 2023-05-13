@@ -1,6 +1,5 @@
 # Effector forms
 
-- [Effector 21](#effector-21)
 - [SSR](#ssr)
 - [Motivation](#motivation)
 - [Usage](#usage)
@@ -8,6 +7,7 @@
 - [Form state](#form-state)
 - [Submit Filter](#submit-filter)
 - [Set form](#set-form)
+- [Set initial form](#setInitialForm)
 - [Validation triggers](#validation-triggers)
 - [Interdependent validations](#interdependent-validations)
 - [Usage with domain](#usage-with-domain)
@@ -18,6 +18,7 @@
 - [Use external validators lib](#use-external-validators-lib)
   * [Usage with Yup](#usage-with-yup)
 - [Add custom error manually](#add-custom-error-manually)
+- [Bulk errors](#bulk-errors)
 - [Validate by external source](#validate-by-external-source)
 - [Validate manually](#validate-manually)
 - [Reset form](#reset-form)
@@ -27,13 +28,7 @@
 - [Typescipt users tips](#typescipt-users-tips)
 - [Advanced](#advanced)
   * [Use external units](#use-external-units)
-
-## Effector 21
-
-For effector 21 use alias:
-```ts
-import { createForm } from "effector-forms/legacy"
-```
+- [Effector 21](#effector-21)
 
 # SSR
 
@@ -42,9 +37,6 @@ If used with server side rendering, import factories from *effector-forms/scope*
 ```ts
 import { createForm } from 'effector-forms/scope' 
 ```
-
-For effector 21 (with SSR), use the alias "effector-forms/ssr" instead
-
 
 ## Motivation
 
@@ -320,6 +312,11 @@ forward({
   to: form.setForm,
 })
 ```
+
+## setInitialForm
+
+In case you get values from the backend, use the `form.setInitialForm` event instead of `form.setForm`. This event changes both the value and the initial values. The `$isDirty` flag will be false.
+
 
 ## Validation triggers
 
@@ -793,6 +790,24 @@ guard({
 })
 ```
 
+## Bulk errors
+
+You can add multiple errors for many fields at once with the form.addErrors event:
+
+```ts
+guard({
+  clock: loginFx.failData.map(
+    (errors) => errors.map((err) => ({
+      field: err.field,
+      rule: "backend",
+      errorText: err.msg,
+    }))
+  ),
+  filter: (errors) => errors.length > 0,
+  target: loginForm.fields.email.addError,
+})
+```
+
 ## Validate by external source
 
 You can pass external store to the validation rule. This storage will be available in the validator function:
@@ -1129,6 +1144,16 @@ const form = createForm({
   validateOn: ["submit"],
 })
 ```
+
+## Effector 21
+
+Effector 21 is no longer supported. For effector 21, use version effector-forms@0.0.24 and earlier
+
+```ts
+import { createForm } from "effector-forms/legacy"
+```
+
+For effector 21 with SSR, use the alias "effector-forms/ssr" instead
 
 
 

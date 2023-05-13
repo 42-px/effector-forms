@@ -10,6 +10,7 @@ import {
     AnyFormValues,
     FormConfig,
     Form,
+    AddErrorPayload,
 } from "./types"
 import { eachValid } from "./validation"
 import {
@@ -18,7 +19,6 @@ import {
     bindChangeEvent,
 } from "./field"
 import { createFormUnit } from "./create-form-unit"
-import { isScope, isLegacySSRBuild } from "./scope"
 
 function createFormValuesStore(
     fields: AnyFields
@@ -43,10 +43,6 @@ export function createForm<Values extends AnyFormValues>(
         validateOn,
         units,
     } = config
-
-    if (isScope() && isLegacySSRBuild() && !domain) {
-        throw new Error("domain option is required in ssr mode!")
-    }
 
     const fields: AnyFields = {}
 
@@ -101,10 +97,19 @@ export function createForm<Values extends AnyFormValues>(
         existing: units?.formValidated,
     })
 
+    const setInitialForm = createFormUnit.event<Partial<AnyFormValues>>({
+        domain,
+        existing: units?.setInitialForm as Event<Partial<AnyFormValues>>,
+    })
 
     const setForm = createFormUnit.event<Partial<AnyFormValues>>({
         domain,
         existing: units?.setForm as Event<Partial<AnyFormValues>>,
+    })
+
+    const addErrors = createFormUnit.event<AddErrorPayload[]>({
+        domain,
+        existing: units?.addErrors,
     })
 
     const resetForm = createFormUnit.event({
@@ -143,23 +148,29 @@ export function createForm<Values extends AnyFormValues>(
         const fieldConfig = fieldsConfigs[fieldName]
         const field = fields[fieldName]
 
-        bindChangeEvent(field, setForm, resetForm, resetTouched, resetValues)
-
-        if (!fieldConfig.rules) continue
-
-        bindValidation({
-            $form,
-            rules: fieldConfig.rules,
-            submitEvent: submitForm,
-            resetFormEvent: resetForm,
-            resetValues,
-            resetErrors,
-            validateFormEvent: validate,
+        bindChangeEvent({
+            form: {
+                setForm,
+                setInitialForm,
+                resetForm,
+                resetTouched,
+                resetValues
+            },
             field,
-            formValidationEvents: validateOn ? validateOn : ["submit"],
-            fieldValidationEvents: fieldConfig.validateOn
-                ? fieldConfig.validateOn
-                : [],
+        })
+        bindValidation({
+            form: {
+                $values: $form,
+                submit: submitForm,
+                reset: resetForm,
+                addErrors,
+                resetValues,
+                resetErrors,
+                validate,
+                validateOn,
+            },
+            fieldConfig,
+            field,
         }, { sid: fieldName })
     }
 
@@ -187,10 +198,12 @@ export function createForm<Values extends AnyFormValues>(
         submit: submitForm,
         validate,
         resetTouched,
+        addErrors,
         reset: resetForm,
         resetValues,
         resetErrors,
         setForm,
+        setInitialForm,
         set: setForm,
         formValidated,
     } as unknown as Form<Values>

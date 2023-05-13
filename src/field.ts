@@ -15,8 +15,7 @@ import {
     FieldConfig,
     AnyFormValues,
     ValidationEvent,
-    Rule,
-    RuleResolver,
+    AddErrorPayload,
 } from "./types"
 import { createCombineValidator } from "./validation"
 import { createFormUnit } from "./create-form-unit"
@@ -48,13 +47,21 @@ export function createField(
         (errors) => errors[0] ? errors[0] : null
     )
 
-    const $isDirty = $value.map((value) => value !== initValue)
+    const $initValue = createFormUnit.store({
+        domain,
+        existing: fieldConfig.units?.$initValue,
+        init: initValue,
+    })
 
     const $touched = createFormUnit.store({
         domain,
         existing: fieldConfig.units?.$isTouched,
         init: false,
     }, effectorData)
+
+    const $isDirty = combine($value, $initValue,
+        (value, initValue) => value !== initValue,
+    )
 
     const onChange = createFormUnit.event({
         domain,
@@ -106,6 +113,7 @@ export function createField(
     return {
         changed,
         name: fieldName,
+        $initValue,
         $value,
         $errors,
         $firstError,
@@ -127,31 +135,28 @@ export function createField(
 }
 
 type BindValidationParams = {
-    $form: Store<AnyFormValues>
-    validateFormEvent: Event<void>
-    submitEvent: Event<void>
-    resetFormEvent: Event<void>
-    resetValues: Event<void>
-    resetErrors: Event<void>
+    form: {
+        $values: Store<AnyFormValues>
+        submit: Event<void>
+        reset: Event<void>
+        resetValues: Event<void>
+        resetErrors: Event<void>
+        addErrors: Event<AddErrorPayload[]>
+        validate: Event<void>
+        validateOn?: ValidationEvent[]
+    }
     field: Field<any>
-    rules: Rule<any, any>[] | RuleResolver<any, any>
-    formValidationEvents: ValidationEvent[]
-    fieldValidationEvents: ValidationEvent[]
+    fieldConfig: FieldConfig<any>
 }
 
-export function bindValidation({
-    $form,
-    validateFormEvent,
-    submitEvent,
-    resetFormEvent,
-    resetValues,
-    field,
-    rules,
-    resetErrors: resetErrorsFormEvent,
-    formValidationEvents,
-    fieldValidationEvents,
-}: BindValidationParams,
-effectorData?: any): void {
+export function bindValidation(
+    params: BindValidationParams, effectorData?: any
+): void {
+    const { form, field, fieldConfig } = params
+    const rules = fieldConfig.rules || []
+    const formValidationEvents = form.validateOn || ["submit"]
+    const fieldValidationEvents = fieldConfig.validateOn || []
+
     const {
         $value,
         $errors,
@@ -182,10 +187,10 @@ effectorData?: any): void {
         const validationTrigger = sample({
             source: combine({
                 fieldValue: $value,
-                form: $form,
+                form: form.$values,
                 rulesSources,
             }),
-            clock: submitEvent,
+            clock: form.submit,
         })
 
         validationEvents.push(validationTrigger)
@@ -195,7 +200,7 @@ effectorData?: any): void {
         validationEvents.push(sample({
             source: combine({
                 fieldValue: $value,
-                form: $form,
+                form: form.$values,
                 rulesSources,
             }),
             clock: onBlur,
@@ -206,11 +211,11 @@ effectorData?: any): void {
         validationEvents.push(sample({
             source: combine({
                 fieldValue: $value,
-                form: $form,
+                form: form.$values,
                 rulesSources,
             }),
             clock: merge(
-                [changed, resetValue, resetValues]
+                [changed, resetValue, form.resetValues]
             ),
         }))
     }
@@ -218,7 +223,7 @@ effectorData?: any): void {
     validationEvents.push(sample({
         source: combine({
             fieldValue: $value,
-            form: $form,
+            form: form.$values,
             rulesSources,
         }),
         clock: validate,
@@ -227,10 +232,10 @@ effectorData?: any): void {
     validationEvents.push(sample({
         source: combine({
             fieldValue: $value,
-            form: $form,
+            form: form.$values,
             rulesSources,
         }),
-        clock: validateFormEvent,
+        clock: form.validate,
     }))
 
     const addErrorWithValue = sample({
@@ -243,6 +248,15 @@ effectorData?: any): void {
         }),
     })
 
+    const addErrorsWithValue = sample({
+        source: $value,
+        clock: form.addErrors,
+        fn: (value, errors) => ({
+            value,
+            newErrors: errors,
+        })
+    })
+
     $errors
         .on(
             validationEvents,
@@ -253,28 +267,61 @@ effectorData?: any): void {
             )
         )
         .on(addErrorWithValue, (errors, newError) => [newError, ...errors])
-        .reset(resetErrors, resetFormEvent, reset, resetErrorsFormEvent)
+        .on(addErrorsWithValue, (currErrors, { value, newErrors }) => {
+            const matchedErrors: ValidationError[] = []
+
+            for (const newError of newErrors) {
+                if (newError.field !== field.name) continue
+                matchedErrors.push({
+                    value,
+                    rule: newError.rule,
+                    errorText: newError.errorText,
+                })
+            }
+
+            return [...matchedErrors, ...currErrors]
+        })
+        .reset(resetErrors, form.reset, reset, form.resetErrors)
 
     if (!eventsNames.includes("change")) {
         $errors.reset(changed)
     }
 }
 
-export function bindChangeEvent(
-    {
+type BindChangeEventParams = {
+    field: Field<any>
+    form: {
+        setForm: Event<Partial<AnyFormValues>>
+        setInitialForm: Event<Partial<AnyFormValues>>
+        resetForm: Event<void>
+        resetTouched: Event<void>
+        resetValues: Event<void>
+    }
+}
+
+export function bindChangeEvent({
+    field,
+    form,
+}: BindChangeEventParams): void {
+    const {
         $value,
+        $initValue,
         $touched,
         onChange,
         changed,
         name,
         reset,
         resetValue,
-        filter }: Field<any>,
-    setForm: Event<Partial<AnyFormValues>>,
-    resetForm: Event<void>,
-    resetTouched: Event<void>,
-    resetValues: Event<void>,
-): void {
+        filter
+    } = field
+
+    const {
+        setForm,
+        setInitialForm,
+        resetForm,
+        resetTouched,
+        resetValues
+    } = form
 
     $touched
         .on(changed, () => true)
@@ -286,14 +333,19 @@ export function bindChangeEvent(
         target: changed,
     })
 
+    $initValue
+        .on(setInitialForm, (curr, updateSet) => updateSet.hasOwnProperty(name)
+            ? updateSet[name]
+            : curr
+        )
+
     $value
         .on(changed, (_, value) => value)
         .on(
-            setForm,
+            [setForm, setInitialForm],
             (curr, updateSet) => updateSet.hasOwnProperty(name)
                 ? updateSet[name]
                 : curr
         )
         .reset(reset, resetValue, resetValues, resetForm)
-
 }
