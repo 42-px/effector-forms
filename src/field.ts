@@ -24,7 +24,6 @@ export function createField(
     fieldName: string,
     fieldConfig: FieldConfig<any>,
     domain?: Domain,
-    effectorData?: any,
 ): Field<any> {
     const initValue = typeof fieldConfig.init === "function"
         ? fieldConfig.init()

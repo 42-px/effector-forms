@@ -5,7 +5,12 @@
   ],
   "plugins": [
     [
-      "effector/babel-plugin"
+      "effector/babel-plugin",
+      {
+        "factories": [
+          "effector-forms"
+        ]
+      }
     ]
   ],
   "env": {
