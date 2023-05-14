@@ -1,8 +1,9 @@
 /* eslint-disable max-len */
 // eslint-disable-next-line no-unused-vars
 import * as React from "react"
-import { createForm, Rule, useForm } from "effector-forms/legacy"
+import { createForm, Rule, useForm } from "effector-forms"
 import { createDomain, createEvent, forward, sample } from "effector"
+import { useUnit } from "effector-react"
 
 const rules = {
     required: (): Rule<string> => ({
@@ -21,7 +22,10 @@ const rules = {
     }),
     minLength: (min: number): Rule<string> => ({
         name: "minLength",
-        validator: (value) => value.length >= min
+        validator: (value) => ({
+            isValid: value.length >= min,
+            errorText: `minLength is ${min}`,
+        })
     }),
 }
 
@@ -93,6 +97,7 @@ console.log(newForm.fields)
 
 export const App = () => {
     const form = useForm(registerForm)
+    const password = useUnit(registerForm.fields.password)
 
     const onSubmit = (e: any) => {
         e.preventDefault()
@@ -120,14 +125,12 @@ export const App = () => {
                 <label>Password</label>
                 <input
                     type="password"
-                    value={form.fields.password.value}
-                    onChange={(e) => form.fields.password.onChange(e.target.value)}
+                    value={password.value}
+                    onChange={(e) => password.onChange(e.target.value)}
                 />
-                {form.fields.password.hasError() && (
+                {!password.isValid && (
                     <div style={errorText}>
-                        {form.fields.password.errorText({
-                            minLength: "min length error!",
-                        })}
+                        {password.errorText}
                     </div>
                 )}
             </div>
