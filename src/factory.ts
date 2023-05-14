@@ -4,6 +4,7 @@ import {
     combine,
     sample,
     guard,
+    createStore,
 } from "effector"
 import {
     AnyFields,
@@ -34,8 +35,7 @@ function createFormValuesStore(
 }
 
 export function createForm<Values extends AnyFormValues>(
-    config: FormConfig<Values>,
-    effectorData?: any,
+    config: FormConfig<Values>
 ) {
     const {
         filter: $filter,
@@ -55,8 +55,7 @@ export function createForm<Values extends AnyFormValues>(
         if (!fieldsConfigs.hasOwnProperty(fieldName)) continue
 
         const fieldConfig = fieldsConfigs[fieldName]
-
-        const field = createField(fieldName, fieldConfig, domain, effectorData)
+        const field = createField(fieldName, fieldConfig, domain)
 
         fields[fieldName] = field
         dirtyFlagsArr.push(field.$isDirty)

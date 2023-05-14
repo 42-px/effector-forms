@@ -35,9 +35,6 @@ export function createField(
         existing: fieldConfig.units?.$value,
         init: initValue,
     }, {
-        and: effectorData && {
-            sid: effectorData?.sid,
-        },
         sid: `${fieldName}-$value`
     })
 

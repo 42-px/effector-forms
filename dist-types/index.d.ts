@@ -140,7 +140,7 @@ export declare type Form<Values extends AnyFormValues> = {
 	resetErrors: Event<void>;
 	formValidated: Event<Values>;
 };
-export declare function createForm<Values extends AnyFormValues>(config: FormConfig<Values>, effectorData?: any): Form<Values>;
+export declare function createForm<Values extends AnyFormValues>(config: FormConfig<Values>): Form<Values>;
 export declare type ErrorTextMap = {
 	[key: string]: string;
 };

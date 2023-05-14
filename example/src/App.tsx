@@ -69,6 +69,7 @@ sample({
     target: registerForm.setInitialForm,
 })
 
+
 registerForm.formValidated.watch(() => {
     alert("form valid!")
 })
