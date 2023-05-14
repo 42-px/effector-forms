@@ -16,14 +16,7 @@
     ]
   ],
   "plugins": [
-    [
-      "effector/babel-plugin",
-      {
-        "factories": [
-          "src/factory"
-        ]
-      }
-    ]
+    "effector/babel-plugin"
   ],
   "env": {
     "test": {
