@@ -1,8 +1,9 @@
 # Effector forms
 
-- [SSR](#ssr)
 - [Motivation](#motivation)
+- [Setup](#setup)
 - [Usage](#usage)
+- [Connect to view via useUnit](#connect-to-view-via-useunit)
 - [useField](#usefield)
 - [Form state](#form-state)
 - [Submit Filter](#submit-filter)
@@ -30,13 +31,6 @@
   * [Use external units](#use-external-units)
 - [Effector 21](#effector-21)
 
-# SSR
-
-If used with server side rendering, import factories from *effector-forms/scope* (effector 22):
-
-```ts
-import { createForm } from 'effector-forms/scope' 
-```
 
 ## Motivation
 
@@ -65,6 +59,25 @@ If you also need validation, it really hurts. This library was created to improv
 The library comes with hooks for react/react-native, however you can use it with VueJS or Forest as well (in the case of VueJS, you have to connect it to the view layer yourself). 
 
 **Good typescript support!** :heart: :v: :+1:
+
+## Setup
+
+If you are using **SSR**, add effector-forms to the babel plugin config
+
+```json
+{
+  "plugins": [
+    [
+      "effector/babel-plugin",
+      {
+        "factories": [
+          "effector-forms"
+        ]
+      }
+    ]
+  ],
+}
+```
 
 ## Usage
 
@@ -158,6 +171,57 @@ export const LoginForm = () => {
 }
 ```
 
+## Connect to view via useUnit
+
+The effector-forms entities implement the **@@unitShape** protocol! This means that instead of **useForm** and **useField** hooks, you can connect the form to the view via "useUnit".
+
+React's example:
+```tsx
+import { useUnit } from "effector-react"
+import { createForm } from 'effector-forms'
+
+
+const loginForm = createForm({
+    fields: {
+        email: {
+            init: "",
+            rules: [],
+        },
+        password: {
+            init: "",
+            rules: [],
+        },
+    },
+    validateOn: ["submit"],
+})
+
+
+const LoginForm = () => {
+  const email = useUnit(loginForm.fields.email)
+  const password = useUnit(loginForm.fields.password)
+  const form = useUnit(loginForm)
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+    form.submit()
+  }
+
+  return (
+    <form onSubmit={submitHandler}>
+      <input
+          type="text"
+          value={email.value}
+          onChange={(e) => email.onChange(e.target.value)}
+      />
+      <input
+          type="password"
+          value={password.value}
+          onChange={(e) => password.onChange(e.target.value)}
+      />
+    </form>
+  )
+}
+```
 
 ## useField
 
@@ -1147,13 +1211,24 @@ const form = createForm({
 
 ## Effector 21
 
-Effector 21 is no longer supported. For effector 21, use version effector-forms@0.0.24 and earlier
+Effector 21 is no longer supported. For Effector 21 we recommend using version **0.0.24**.
 
+```
+npm i effector-forms@0.0.24
+```
+
+For effector-forms v0.0.24 together with effector 21 use import
 ```ts
 import { createForm } from "effector-forms/legacy"
 ```
 
-For effector 21 with SSR, use the alias "effector-forms/ssr" instead
+
+For effector-forms < 0.0.24 with effector 21, use the normal import:
+```ts
+import { createForm } from "effector-forms"
+```
+
+SSR support with effector 21 is not available. 
 
 
 

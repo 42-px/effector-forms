@@ -16,6 +16,7 @@ import {
     AnyFormValues,
     ValidationEvent,
     AddErrorPayload,
+    FieldUnitShape,
 } from "./types"
 import { createCombineValidator } from "./validation"
 import { createFormUnit } from "./create-form-unit"
@@ -107,6 +108,9 @@ export function createField(
     })
 
     const $isValid = $firstError.map((firstError) => firstError === null)
+    const $errorText = $firstError.map(
+        (firstError) => firstError?.errorText || ""
+    )
 
     const $field = combine({
         value: $value,
@@ -117,27 +121,47 @@ export function createField(
         isTouched: $touched,
     })
 
-    return {
-        changed,
-        name: fieldName,
-        $initValue,
-        $value,
-        $errors,
-        $firstError,
-        $isValid,
-        $isDirty,
-        $isTouched: $touched,
-        $touched,
-        $field: $field as Store<FieldData<any>>,
+    const unitShape: FieldUnitShape<any> = {
+        value: $value,
+        initValue: $initValue,
+        isValid: $isValid,
+        isDirty: $isDirty,
+        touched: $touched,
+        errors: $errors,
+        firstError: $firstError,
+        errorText: $errorText,
         onChange,
         onBlur,
         addError,
         validate,
-        set: onChange,
         reset,
         resetErrors,
         resetValue,
-        filter: fieldConfig.filter,
+    }
+
+    return {
+        changed,
+        "name": fieldName,
+        $initValue,
+        $value,
+        $errors,
+        $firstError,
+        $errorText,
+        $isValid,
+        $isDirty,
+        "$isTouched": $touched,
+        $touched,
+        "$field": $field as Store<FieldData<any>>,
+        onChange,
+        onBlur,
+        addError,
+        validate,
+        "set": onChange,
+        reset,
+        resetErrors,
+        resetValue,
+        "filter": fieldConfig.filter,
+        "@@unitShape": () => unitShape,
     }
 }
 

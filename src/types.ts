@@ -37,12 +37,31 @@ export type FieldData<Value> = {
   isTouched: boolean
 }
 
+export type FieldUnitShape<Value> = {
+  value: Store<Value>
+  initValue: Store<Value>
+  isValid: Store<boolean>
+  isDirty: Store<boolean>
+  touched: Store<boolean>
+  errors: Store<ValidationError<Value>[]>
+  firstError: Store<ValidationError<Value> | null>
+  errorText: Store<string>
+  onChange: Event<Value>
+  onBlur: Event<void>
+  addError: Event<{ rule: string; errorText?: string }>
+  validate: Event<void>
+  reset: Event<void>
+  resetErrors: Event<void>
+  resetValue: Event<void>
+}
+
 export type Field<Value> = {
   name: string
   $initValue: Store<Value>
   $value: Store<Value>
   $errors: Store<ValidationError<Value>[]>
   $firstError: Store<ValidationError<Value> | null>
+  $errorText: Store<string>
   $isValid: Store<boolean>
   $isDirty: Store<boolean>
   $isTouched: Store<boolean>
@@ -58,6 +77,7 @@ export type Field<Value> = {
   resetErrors: Event<void>
   resetValue: Event<void>
   filter?: Store<boolean> | FilterFunc<Value>
+  "@@unitShape": () => FieldUnitShape<Value>
 }
 
 type FilterFunc<Value> = (value: Value) => boolean
@@ -139,6 +159,21 @@ export type FormConfig<Values extends AnyFormValues> = {
   }
 }
 
+export type FormUnitShape<Values extends AnyFormValues> = {
+  isValid: Store<boolean>
+  isDirty: Store<boolean>
+  touched: Store<boolean>
+  submit: Event<void>
+  validate: Event<void>
+  reset: Event<void>
+  addErrors: Event<AddErrorPayload[]>
+  setForm: Event<Partial<Values>>
+  setInitialForm: Event<Partial<Values>>
+  resetTouched: Event<void>
+  resetValues: Event<void>
+  resetErrors: Event<void>
+  formValidated: Event<Values>
+}
 
 export type Form<Values extends AnyFormValues> = {
   fields: FormFields<Values>
@@ -163,5 +198,6 @@ export type Form<Values extends AnyFormValues> = {
   resetValues: Event<void>
   resetErrors: Event<void>
   formValidated: Event<Values>
+  "@@unitShape": () => FormUnitShape<Values>
 }
 

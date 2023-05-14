@@ -13,21 +13,13 @@
       "require": "./dist/effector-forms.cjs.js",
       "node": "./dist/effector-forms.cjs.js",
       "default": "./dist/index.js"
-    },
-    "./scope": {
-      "import": "./dist-scope/index.js",
-      "require": "./dist-scope/index.cjs.js",
-      "node": "./dist-scope/index.cjs.js",
-      "default": "./dist-scope/index.js"
     }
   },
   "scripts": {
     "emit-dts": "dts-bundle-generator --no-check --project tsconfig.json --out-file ./dist-types/index.d.ts ./src/index.ts",
-    "build:noscope": "cross-env SCOPE=false NODE_ENV=production rollup -c rollup.config.js",
-    "build:scope": "cross-env SCOPE=true NODE_ENV=production rollup -c rollup.config.js",
-    "build": "npm run build:noscope && npm run build:scope && npm run emit-dts",
+    "build": "cross-env NODE_ENV=production rollup -c rollup.config.js && npm run emit-dts",
     "check-types": "tsc --noEmit",
-    "test": "cross-env IS_SCOPE_BUILD=false jest",
+    "test": "jest",
     "lint": "eslint \"./**/*.{js,ts,tsx}\"",
     "lint:fix": "eslint \"./**/*.{js,ts,tsx}\" --fix",
     "peers": "npm-install-peers"
@@ -48,8 +40,8 @@
   },
   "homepage": "https://github.com/aanation/effector-forms#readme",
   "peerDependencies": {
-    "effector": ">=21.0.0 <23.0.0",
-    "effector-react": ">=21.0.0 <23.0.0"
+    "effector": ">=22.0.0 <23.0.0",
+    "effector-react": ">=22.2.0 <23.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
@@ -87,9 +79,7 @@
   },
   "files": [
     "dist",
-    "dist-scope",
-    "dist-types",
-    "scope.ts"
+    "dist-types"
   ],
   "types": "./dist-types"
 }

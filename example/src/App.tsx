@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 // eslint-disable-next-line no-unused-vars
 import * as React from "react"
-import { createForm, Rule, useForm } from "effector-forms"
+import { createForm, Rule, useForm } from "effector-forms/legacy"
 import { createDomain, createEvent, forward, sample } from "effector"
 
 const rules = {
@@ -60,7 +60,7 @@ const registerForm = createForm({
     validateOn: ["submit"],
 })
 
-
+/*
 sample({
     clock: initForm,
     fn: () => ({
@@ -68,7 +68,7 @@ sample({
     }),
     target: registerForm.setInitialForm,
 })
-
+*/
 
 registerForm.formValidated.watch(() => {
     alert("form valid!")

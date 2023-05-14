@@ -1,44 +1,43 @@
-import { useStore } from "effector-react"
+import { useUnit } from "effector-react"
 import {
     Field,
     ValidationError,
     AnyFormValues,
     Form
 } from "./types"
-import { wrapEvent } from "./scope"
 
 type ErrorTextMap = {
-  [key: string]: string
+    [key: string]: string
 }
 
 type AddErrorPayload = { rule: string; errorText?: string }
 
 type ConnectedField<Value> = {
-  name: string
-  value: Value
-  errors: ValidationError<Value>[]
-  firstError: ValidationError<Value> | null
-  hasError: () => boolean
-  onChange: (v: Value) => Value
-  onBlur: (v: void) => void
-  errorText: (map?: ErrorTextMap) => string
-  addError: (p: AddErrorPayload) => AddErrorPayload
-  validate: (v: void) => void
-  isValid: boolean
-  isDirty: boolean
-  isTouched: boolean
-  touched: boolean
-  reset: (v: void) => void
-  set: (v: Value) => Value
-  resetErrors: (v: void) => void
+    name: string
+    value: Value
+    errors: ValidationError<Value>[]
+    firstError: ValidationError<Value> | null
+    hasError: () => boolean
+    onChange: (v: Value) => Value
+    onBlur: (v: void) => void
+    errorText: (map?: ErrorTextMap) => string
+    addError: (p: AddErrorPayload) => AddErrorPayload
+    validate: (v: void) => void
+    isValid: boolean
+    isDirty: boolean
+    isTouched: boolean
+    touched: boolean
+    reset: (v: void) => void
+    set: (v: Value) => Value
+    resetErrors: (v: void) => void
 }
 
 type ConnectedFields<Values extends AnyFormValues> = {
-  [K in keyof Values]: ConnectedField<Values[K]>
+    [K in keyof Values]: ConnectedField<Values[K]>
 }
 
 type AnyConnectedFields = {
-  [key: string]: ConnectedField<any>
+    [key: string]: ConnectedField<any>
 }
 
 export function useField<Value>(field: Field<Value>): ConnectedField<Value> {
@@ -49,7 +48,7 @@ export function useField<Value>(field: Field<Value>): ConnectedField<Value> {
         isValid,
         isDirty,
         isTouched: touched,
-    } = useStore(field.$field)
+    } = useUnit(field.$field)
 
     return {
         name: field.name,
@@ -60,13 +59,13 @@ export function useField<Value>(field: Field<Value>): ConnectedField<Value> {
         isDirty,
         touched,
         isTouched: touched,
-        onChange: wrapEvent(field.onChange),
-        onBlur: wrapEvent(field.onBlur),
-        addError: wrapEvent(field.addError),
-        validate: wrapEvent(field.validate),
-        reset: wrapEvent(field.reset),
-        set: wrapEvent(field.onChange),
-        resetErrors: wrapEvent(field.resetErrors),
+        onChange: useUnit(field.onChange),
+        onBlur: useUnit(field.onBlur),
+        addError: useUnit(field.addError),
+        validate: useUnit(field.validate),
+        reset: useUnit(field.reset),
+        set: useUnit(field.onChange),
+        resetErrors: useUnit(field.resetErrors),
         hasError: () => {
             return firstError !== null
         },
@@ -87,26 +86,26 @@ export function useField<Value>(field: Field<Value>): ConnectedField<Value> {
 }
 
 type Result<Values extends AnyFormValues> = {
-  fields: ConnectedFields<Values>
-  values: Values
-  hasError: (fieldName?: keyof Values) => boolean
-  eachValid: boolean
-  isValid: boolean
-  isDirty: boolean
-  isTouched: boolean
-  touched: boolean
-  errors: (fieldName: keyof Values) => (
-    ValidationError<Values[typeof fieldName]>[]
-  )
-  error: (fieldName: keyof Values) => (
-    ValidationError<Values[typeof fieldName]>
-  ) | null
-  errorText: (fieldName: keyof Values, map?: ErrorTextMap) => string
-  submit: (p: void) => void
-  reset: (p: void) => void
-  setForm: (p: Partial<Values>) => Partial<Values>
-  set: (p: Partial<Values>) => Partial<Values>
-  formValidated: (p: Values) => Values
+    fields: ConnectedFields<Values>
+    values: Values
+    hasError: (fieldName?: keyof Values) => boolean
+    eachValid: boolean
+    isValid: boolean
+    isDirty: boolean
+    isTouched: boolean
+    touched: boolean
+    errors: (fieldName: keyof Values) => (
+        ValidationError<Values[typeof fieldName]>[]
+    )
+    error: (fieldName: keyof Values) => (
+        ValidationError<Values[typeof fieldName]>
+    ) | null
+    errorText: (fieldName: keyof Values, map?: ErrorTextMap) => string
+    submit: (p: void) => void
+    reset: (p: void) => void
+    setForm: (p: Partial<Values>) => Partial<Values>
+    set: (p: Partial<Values>) => Partial<Values>
+    formValidated: (p: Values) => Values
 }
 
 export function useForm<Values extends AnyFormValues>(
@@ -127,7 +126,7 @@ export function useForm<Values extends AnyFormValues>(
         isValid: eachValid,
         isDirty,
         touched,
-    } = useStore(form.$meta)
+    } = useUnit(form.$meta)
 
 
     const hasError = (fieldName?: string): boolean => {
@@ -183,10 +182,10 @@ export function useForm<Values extends AnyFormValues>(
         errors,
         error,
         errorText,
-        reset: wrapEvent(form.reset),
-        submit: wrapEvent(form.submit),
-        setForm: wrapEvent(form.setForm),
-        set: wrapEvent(form.setForm), // set form alias
-        formValidated: wrapEvent(form.formValidated),
+        reset: useUnit(form.reset),
+        submit: useUnit(form.submit),
+        setForm: useUnit(form.setForm),
+        set: useUnit(form.setForm), // set form alias
+        formValidated: useUnit(form.formValidated),
     } as Result<Values>
 }

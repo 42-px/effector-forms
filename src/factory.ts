@@ -12,6 +12,7 @@ import {
     FormConfig,
     Form,
     AddErrorPayload,
+    FormUnitShape,
 } from "./types"
 import { eachValid } from "./validation"
 import {
@@ -185,24 +186,41 @@ export function createForm<Values extends AnyFormValues>(
         target: formValidated,
     })
 
+    const unitShape: FormUnitShape<any> = {
+        isValid: $eachValid,
+        isDirty: $isDirty,
+        touched: $touched,
+        submit: submitForm,
+        reset: resetForm,
+        addErrors: addErrors,
+        validate,
+        setForm,
+        setInitialForm,
+        resetTouched,
+        resetValues,
+        resetErrors,
+        formValidated,
+    }
+
     return {
         fields,
-        $values: $form,
+        "$values": $form,
         $eachValid,
-        $isValid: $eachValid,
-        $isDirty: $isDirty,
-        $touched: $touched,
+        "$isValid": $eachValid,
+        "$isDirty": $isDirty,
+        "$touched": $touched,
         $meta,
-        submit: submitForm,
+        "submit": submitForm,
         validate,
         resetTouched,
         addErrors,
-        reset: resetForm,
+        "reset": resetForm,
         resetValues,
         resetErrors,
         setForm,
         setInitialForm,
-        set: setForm,
+        "set": setForm,
         formValidated,
+        "@@unitShape": () => unitShape,
     } as unknown as Form<Values>
 }

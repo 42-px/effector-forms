@@ -28,12 +28,33 @@ export declare type FieldData<Value> = {
 	isDirty: boolean;
 	isTouched: boolean;
 };
+export declare type FieldUnitShape<Value> = {
+	value: Store<Value>;
+	initValue: Store<Value>;
+	isValid: Store<boolean>;
+	isDirty: Store<boolean>;
+	touched: Store<boolean>;
+	errors: Store<ValidationError<Value>[]>;
+	firstError: Store<ValidationError<Value> | null>;
+	errorText: Store<string>;
+	onChange: Event<Value>;
+	onBlur: Event<void>;
+	addError: Event<{
+		rule: string;
+		errorText?: string;
+	}>;
+	validate: Event<void>;
+	reset: Event<void>;
+	resetErrors: Event<void>;
+	resetValue: Event<void>;
+};
 export declare type Field<Value> = {
 	name: string;
 	$initValue: Store<Value>;
 	$value: Store<Value>;
 	$errors: Store<ValidationError<Value>[]>;
 	$firstError: Store<ValidationError<Value> | null>;
+	$errorText: Store<string>;
 	$isValid: Store<boolean>;
 	$isDirty: Store<boolean>;
 	$isTouched: Store<boolean>;
@@ -52,6 +73,7 @@ export declare type Field<Value> = {
 	resetErrors: Event<void>;
 	resetValue: Event<void>;
 	filter?: Store<boolean> | FilterFunc<Value>;
+	"@@unitShape": () => FieldUnitShape<Value>;
 };
 export declare type FilterFunc<Value> = (value: Value) => boolean;
 export declare type RuleResolver<Value = any, Form = any> = (value: Value, form: Form) => Rule<Value, Form, void>[];
@@ -116,6 +138,21 @@ export declare type FormConfig<Values extends AnyFormValues> = {
 		setForm?: Event<Partial<AnyFormValues>>;
 	};
 };
+export declare type FormUnitShape<Values extends AnyFormValues> = {
+	isValid: Store<boolean>;
+	isDirty: Store<boolean>;
+	touched: Store<boolean>;
+	submit: Event<void>;
+	validate: Event<void>;
+	reset: Event<void>;
+	addErrors: Event<AddErrorPayload[]>;
+	setForm: Event<Partial<Values>>;
+	setInitialForm: Event<Partial<Values>>;
+	resetTouched: Event<void>;
+	resetValues: Event<void>;
+	resetErrors: Event<void>;
+	formValidated: Event<Values>;
+};
 export declare type Form<Values extends AnyFormValues> = {
 	fields: FormFields<Values>;
 	$values: Store<Values>;
@@ -139,6 +176,7 @@ export declare type Form<Values extends AnyFormValues> = {
 	resetValues: Event<void>;
 	resetErrors: Event<void>;
 	formValidated: Event<Values>;
+	"@@unitShape": () => FormUnitShape<Values>;
 };
 export declare function createForm<Values extends AnyFormValues>(config: FormConfig<Values>): Form<Values>;
 export declare type ErrorTextMap = {
