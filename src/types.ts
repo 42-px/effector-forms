@@ -9,9 +9,9 @@ export type ValidationResult = {
   errorText?: string
 }
 
-export type Validator<Value, Form = any, Source = any> = (
+export type Validator<Value, Form, Source> = (
   value: Value,
-  form?: Form,
+  form: Form,
   source?: Source,
 ) => boolean | ValidationResult
 
@@ -21,7 +21,7 @@ export type ValidationError<Value = any> = {
   errorText?: string
 }
 
-export type Rule<Value, Form = any, Source = any> = {
+export type Rule<Value, Form, Source = any> = {
   name: string
   errorText?: string
   source?: Store<Source>
@@ -87,9 +87,9 @@ export type RuleResolver<
   Form = any
 > = (value: Value, form: Form) => Rule<Value, Form, void>[]
 
-export type FieldConfig<Value> = {
+export type FieldConfig<Value, FormValues> = {
   init: Value | InitFieldValue<Value>
-  rules?: Rule<Value>[] | RuleResolver<Value, any>
+  rules?: Rule<Value, FormValues, any>[] | RuleResolver<Value, FormValues>
   filter?: Store<boolean> | FilterFunc<Value>
   validateOn?: ValidationEvent[]
   units?: {
@@ -113,7 +113,7 @@ export type AnyFields = {
 }
 
 export type AnyFieldsConfigs = {
-  [key: string]: FieldConfig<any>
+  [key: string]: FieldConfig<any, any>
 }
 
 export type AnyFormValues = {
@@ -127,7 +127,7 @@ export type FormValues<Fields extends AnyFields> = {
 }
 
 export type FormFieldConfigs<Values extends AnyFormValues> = {
-  [K in keyof Values]: FieldConfig<Values[K]>
+  [K in keyof Values]: FieldConfig<Values[K], Values>
 }
 
 export type FormFields<Values extends AnyFormValues> = {
