@@ -804,7 +804,7 @@ guard({
     }))
   ),
   filter: (errors) => errors.length > 0,
-  target: loginForm.fields.email.addError,
+  target: loginForm.addErrors,
 })
 ```
 
