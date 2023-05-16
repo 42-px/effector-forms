@@ -40,6 +40,9 @@ type AnyConnectedFields = {
     [key: string]: ConnectedField<any>
 }
 
+/**
+ * @group Hooks
+ */
 export function useField<Value>(field: Field<Value>): ConnectedField<Value> {
     const {
         value,
@@ -108,6 +111,9 @@ type Result<Values extends AnyFormValues> = {
     formValidated: (p: Values) => Values
 }
 
+/**
+ * @group Hooks
+ */
 export function useForm<Values extends AnyFormValues>(
     form: Form<Values>
 ): Result<Values> {

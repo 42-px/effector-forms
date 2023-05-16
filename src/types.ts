@@ -116,6 +116,9 @@ export type AnyFieldsConfigs = {
   [key: string]: FieldConfig<any>
 }
 
+/**
+ * KV from form fields
+ */
 export type AnyFormValues = {
   [key: string]: any
 }
@@ -140,7 +143,13 @@ export type AddErrorPayload = {
   errorText?: string
 }
 
+/**
+ * Test interface annotaion 
+ */
 export type FormConfig<Values extends AnyFormValues> = {
+  /**
+   * Property annotation
+   */
   fields: FormFieldConfigs<Values>
   domain?: Domain
   filter?: Store<boolean>

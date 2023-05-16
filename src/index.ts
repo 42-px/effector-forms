@@ -1,6 +1,7 @@
 export { createForm } from "./factory"
 export { useForm, useField } from "./react-hooks"
 export {
+    AnyFormValues,
     FormConfig,
     Rule,
     ValidationError,

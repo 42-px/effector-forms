@@ -3,6 +3,9 @@
     "browser": true,
     "es6": true
   },
+  "plugins": [
+    "eslint-plugin-tsdoc"
+  ],
   "extends": [
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended"
@@ -13,6 +16,7 @@
     "sourceType": "module"
   },
   "rules": {
+    "tsdoc/syntax": "warn",
     "import/first": "off",
     "semi": [
       "error",

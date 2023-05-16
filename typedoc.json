@@ -1,0 +1,14 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": [
+    "./src/index.ts"
+  ],
+  "out": "docs/tsdoc",
+  "githubPages": false,
+  "readme": "none",
+  "groupOrder": [
+    "Factories",
+    "Hooks",
+    "*"
+  ]
+}

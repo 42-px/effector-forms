@@ -35,6 +35,36 @@ function createFormValuesStore(
     return combine(shape)
 }
 
+/**
+ * This is the main factory in the library that creates
+ * the forms shape according to the given configuration.
+ * 
+ * Do not try to pass a type in the Values generic! Form types are inferred automatically from the passed "fields" object
+ * 
+ * @example
+ * 
+ * ```ts
+ * const form = createForm({
+ *      fields: {
+ *          username: {
+ *              init: "",
+ *              rules: [
+ *                  {
+ *                      name: "required",
+ *                      validator: (value: string) => Boolean(value)
+ *                  }
+ *              ]
+ *          },
+ *          bio: {
+ *              init: "",
+ *              rules: []
+ *          }
+ *      },
+ *      validateOn: ["change"],
+ * })
+ * ```
+ * @group Factories
+ */
 export function createForm<Values extends AnyFormValues>(
     config: FormConfig<Values>
 ) {

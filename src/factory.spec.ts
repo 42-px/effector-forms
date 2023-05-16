@@ -3,6 +3,7 @@ import * as yup from "yup"
 import { createForm } from "./factory"
 import { Rule } from "./types"
 
+
 function email() {
     return {
         name: "email",

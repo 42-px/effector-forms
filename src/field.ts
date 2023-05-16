@@ -21,6 +21,9 @@ import {
 import { createCombineValidator } from "./validation"
 import { createFormUnit } from "./create-form-unit"
 
+/**
+ * @group Factories
+ */
 export function createField(
     fieldName: string,
     fieldConfig: FieldConfig<any>,
