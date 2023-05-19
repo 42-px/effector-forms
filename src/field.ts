@@ -360,6 +360,16 @@ export function bindChangeEvent({
         resetValues
     } = form
 
+    const resetValueWithInit = sample({
+        source: $initValue,
+        clock: merge([
+            reset,
+            resetValue,
+            resetValues,
+            resetForm
+        ]),
+    })
+
     $touched
         .on(changed, () => true)
         .reset(reset, resetForm, resetTouched)
@@ -384,5 +394,5 @@ export function bindChangeEvent({
                 ? updateSet[name]
                 : curr
         )
-        .reset(reset, resetValue, resetValues, resetForm)
+        .on(resetValueWithInit, (_, initValue) => initValue)
 }

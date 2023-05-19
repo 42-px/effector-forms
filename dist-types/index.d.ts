@@ -103,6 +103,9 @@ export declare type FieldConfig<Value> = {
 export declare type AnyFields = {
 	[key: string]: Field<any>;
 };
+/**
+ * KV from form fields
+ */
 export declare type AnyFormValues = {
 	[key: string]: any;
 };
@@ -120,7 +123,13 @@ export declare type AddErrorPayload = {
 	rule: string;
 	errorText?: string;
 };
+/**
+ * Test interface annotaion
+ */
 export declare type FormConfig<Values extends AnyFormValues> = {
+	/**
+	 * Property annotation
+	 */
 	fields: FormFieldConfigs<Values>;
 	domain?: Domain;
 	filter?: Store<boolean>;
@@ -178,6 +187,38 @@ export declare type Form<Values extends AnyFormValues> = {
 	formValidated: Event<Values>;
 	"@@unitShape": () => FormUnitShape<Values>;
 };
+/**
+ * This is the main factory in the library that creates
+ * the forms shape according to the given configuration.
+ *
+ * Do not try to pass a type in the Values generic! Form types are inferred automatically from the passed "fields" object
+ *
+ * @param config - The form configuration object
+ * @returns The shape of effector units
+ * @example
+ *
+ * ```ts
+ * const form = createForm({
+ *      fields: {
+ *          username: {
+ *              init: "",
+ *              rules: [
+ *                  {
+ *                      name: "required",
+ *                      validator: (value: string) => Boolean(value)
+ *                  }
+ *              ]
+ *          },
+ *          bio: {
+ *              init: "",
+ *              rules: []
+ *          }
+ *      },
+ *      validateOn: ["change"],
+ * })
+ * ```
+ * @group Factories
+ */
 export declare function createForm<Values extends AnyFormValues>(config: FormConfig<Values>): Form<Values>;
 export declare type ErrorTextMap = {
 	[key: string]: string;
@@ -208,6 +249,9 @@ export declare type ConnectedField<Value> = {
 export declare type ConnectedFields<Values extends AnyFormValues> = {
 	[K in keyof Values]: ConnectedField<Values[K]>;
 };
+/**
+ * @group Hooks
+ */
 export declare function useField<Value>(field: Field<Value>): ConnectedField<Value>;
 export declare type Result<Values extends AnyFormValues> = {
 	fields: ConnectedFields<Values>;
@@ -227,6 +271,9 @@ export declare type Result<Values extends AnyFormValues> = {
 	set: (p: Partial<Values>) => Partial<Values>;
 	formValidated: (p: Values) => Values;
 };
+/**
+ * @group Hooks
+ */
 export declare function useForm<Values extends AnyFormValues>(form: Form<Values>): Result<Values>;
 
 export {};

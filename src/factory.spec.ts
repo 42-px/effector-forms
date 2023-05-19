@@ -610,6 +610,20 @@ test("setInitialForm", () => {
         touched: true,
     })
 
+    form.reset()
+
+    expect(form.fields.email.$value.getState()).toBe("default@example.com")
+    expect(form.fields.email.$isDirty.getState()).toBe(false)
+    expect(form.fields.password.$isDirty.getState()).toBe(false)
+    expect(form.$isDirty.getState()).toBe(false)
+    expect(form.fields.email.$touched.getState()).toBe(false)
+    expect(form.fields.password.$touched.getState()).toBe(false)
+    expect(form.$touched.getState()).toBe(false)
+    expect(form.$meta.getState()).toEqual({
+        isValid: true,
+        isDirty: false,
+        touched: false,
+    })
 })
 
 test("external units", () => {
