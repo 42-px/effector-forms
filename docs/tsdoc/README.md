@@ -65,17 +65,19 @@ const form = createForm({
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `config` | [`FormConfig`](README.md#formconfig)<`Values`\> |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `config` | [`FormConfig`](README.md#formconfig)<`Values`\> | The form configuration object |
 
 #### Returns
 
 [`Form`](README.md#form)<`Values`\>
 
+The shape of effector units
+
 #### Defined in
 
-[factory.ts:68](https://github.com/42-px/effector-forms/blob/5028150/src/factory.ts#L68)
+[factory.ts:70](https://github.com/42-px/effector-forms/blob/5028150/src/factory.ts#L70)
 
 ## Hooks
 

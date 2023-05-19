@@ -41,6 +41,8 @@ function createFormValuesStore(
  * 
  * Do not try to pass a type in the Values generic! Form types are inferred automatically from the passed "fields" object
  * 
+ * @param config - The form configuration object
+ * @returns The shape of effector units
  * @example
  * 
  * ```ts
