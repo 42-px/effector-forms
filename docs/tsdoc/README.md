@@ -16,11 +16,15 @@ effector-forms
 ### Type Aliases
 
 - [AnyFormValues](README.md#anyformvalues)
+- [ExternalFormUnits](README.md#externalformunits)
+- [FieldConfig](README.md#fieldconfig)
 - [Form](README.md#form)
 - [FormConfig](README.md#formconfig)
 - [FormValues](README.md#formvalues)
 - [Rule](README.md#rule)
+- [RuleResolver](README.md#ruleresolver)
 - [ValidationError](README.md#validationerror)
+- [ValidationEvent](README.md#validationevent)
 - [Validator](README.md#validator)
 
 ## Factories
@@ -137,7 +141,7 @@ ___
 
 Ƭ **AnyFormValues**: `Object`
 
-KV from form fields
+KV containing form values
 
 #### Index signature
 
@@ -145,7 +149,83 @@ KV from form fields
 
 #### Defined in
 
-[types.ts:122](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L122)
+[types.ts:135](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L135)
+
+___
+
+### ExternalFormUnits
+
+Ƭ **ExternalFormUnits**<`Values`\>: `Object`
+
+KV with external units. By default,
+each form unit is created when the [factory](README.md#createform) is
+called. If you pass a unit here, it will be used
+instead of creating a new unit
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `Values` | extends [`AnyFormValues`](README.md#anyformvalues) |
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `addErrors?` | `Event`<`AddErrorPayload`[]\> |
+| `formValidated?` | `Event`<`Values`\> |
+| `reset?` | `Event`<`void`\> |
+| `resetErrors?` | `Event`<`void`\> |
+| `resetTouched?` | `Event`<`void`\> |
+| `resetValues?` | `Event`<`void`\> |
+| `setForm?` | `Event`<`Partial`<[`AnyFormValues`](README.md#anyformvalues)\>\> |
+| `setInitialForm?` | `Event`<`Partial`<[`AnyFormValues`](README.md#anyformvalues)\>\> |
+| `submit?` | `Event`<`void`\> |
+| `validate?` | `Event`<`void`\> |
+
+#### Defined in
+
+[types.ts:165](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L165)
+
+___
+
+### FieldConfig
+
+Ƭ **FieldConfig**<`Value`\>: `Object`
+
+field configuration object
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `Value` |
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `filter?` | `Store`<`boolean`\> \| `FilterFunc`<`Value`\> | - |
+| `init` | `Value` \| `InitFieldValue`<`Value`\> | initial value. The type of this value is used to infer the type of the field. You can pass a function that returns an initial value. This function will be called once when the form is created |
+| `rules?` | [`Rule`](README.md#rule)<`Value`\>[] \| [`RuleResolver`](README.md#ruleresolver)<`Value`, `any`\> | - |
+| `units?` | { `$errors?`: `Store`<[`ValidationError`](README.md#validationerror)<`Value`\>[]\> ; `$initValue?`: `Store`<`Value`\> ; `$isTouched?`: `Store`<`boolean`\> ; `$value?`: `Store`<`Value`\> ; `addError?`: `Event`<{ `errorText?`: `string` ; `rule`: `string`  }\> ; `changed?`: `Event`<`Value`\> ; `onBlur?`: `Event`<`void`\> ; `onChange?`: `Event`<`Value`\> ; `reset?`: `Event`<`void`\> ; `resetErrors?`: `Event`<`void`\> ; `resetValue?`: `Event`<`void`\> ; `validate?`: `Event`<`void`\>  } | - |
+| `units.$errors?` | `Store`<[`ValidationError`](README.md#validationerror)<`Value`\>[]\> | - |
+| `units.$initValue?` | `Store`<`Value`\> | - |
+| `units.$isTouched?` | `Store`<`boolean`\> | - |
+| `units.$value?` | `Store`<`Value`\> | - |
+| `units.addError?` | `Event`<{ `errorText?`: `string` ; `rule`: `string`  }\> | - |
+| `units.changed?` | `Event`<`Value`\> | - |
+| `units.onBlur?` | `Event`<`void`\> | - |
+| `units.onChange?` | `Event`<`Value`\> | - |
+| `units.reset?` | `Event`<`void`\> | - |
+| `units.resetErrors?` | `Event`<`void`\> | - |
+| `units.resetValue?` | `Event`<`void`\> | - |
+| `units.validate?` | `Event`<`void`\> | - |
+| `validateOn?` | [`ValidationEvent`](README.md#validationevent)[] | - |
+
+#### Defined in
+
+[types.ts:97](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L97)
 
 ___
 
@@ -185,7 +265,7 @@ ___
 
 #### Defined in
 
-[types.ts:187](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L187)
+[types.ts:225](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L225)
 
 ___
 
@@ -193,7 +273,7 @@ ___
 
 Ƭ **FormConfig**<`Values`\>: `Object`
 
-Test interface annotaion
+The object with the form configuration that is passed to the [createForm](README.md#createform) factory
 
 #### Type parameters
 
@@ -205,25 +285,15 @@ Test interface annotaion
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `domain?` | `Domain` | - |
-| `fields` | `FormFieldConfigs`<`Values`\> | Property annotation |
-| `filter?` | `Store`<`boolean`\> | - |
-| `units?` | { `addErrors?`: `Event`<`AddErrorPayload`[]\> ; `formValidated?`: `Event`<`Values`\> ; `reset?`: `Event`<`void`\> ; `resetErrors?`: `Event`<`void`\> ; `resetTouched?`: `Event`<`void`\> ; `resetValues?`: `Event`<`void`\> ; `setForm?`: `Event`<`Partial`<[`AnyFormValues`](README.md#anyformvalues)\>\> ; `setInitialForm?`: `Event`<`Partial`<[`AnyFormValues`](README.md#anyformvalues)\>\> ; `submit?`: `Event`<`void`\> ; `validate?`: `Event`<`void`\>  } | - |
-| `units.addErrors?` | `Event`<`AddErrorPayload`[]\> | - |
-| `units.formValidated?` | `Event`<`Values`\> | - |
-| `units.reset?` | `Event`<`void`\> | - |
-| `units.resetErrors?` | `Event`<`void`\> | - |
-| `units.resetTouched?` | `Event`<`void`\> | - |
-| `units.resetValues?` | `Event`<`void`\> | - |
-| `units.setForm?` | `Event`<`Partial`<[`AnyFormValues`](README.md#anyformvalues)\>\> | - |
-| `units.setInitialForm?` | `Event`<`Partial`<[`AnyFormValues`](README.md#anyformvalues)\>\> | - |
-| `units.submit?` | `Event`<`void`\> | - |
-| `units.validate?` | `Event`<`void`\> | - |
-| `validateOn?` | `ValidationEvent`[] | - |
+| `domain?` | `Domain` | If you pass a domain into this field, all units of the form will be in this domain |
+| `fields` | `FormFieldConfigs`<`Values`\> | The object with the configuration of the form fields. The keys of the object are the names of the fields, and the values are the [FieldConfig](README.md#fieldconfig) |
+| `filter?` | `Store`<`boolean`\> | If store is passed the `formValidated` event will be called then the value of store will be true |
+| `units?` | [`ExternalFormUnits`](README.md#externalformunits)<`Values`\> | Object with external units. |
+| `validateOn?` | [`ValidationEvent`](README.md#validationevent)[] | Trigger that will be used to validate the form. |
 
 #### Defined in
 
-[types.ts:149](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L149)
+[types.ts:182](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L182)
 
 ___
 
@@ -239,7 +309,7 @@ ___
 
 #### Defined in
 
-[types.ts:126](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L126)
+[types.ts:139](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L139)
 
 ___
 
@@ -266,7 +336,39 @@ ___
 
 #### Defined in
 
-[types.ts:24](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L24)
+[types.ts:27](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L27)
+
+___
+
+### RuleResolver
+
+Ƭ **RuleResolver**<`Value`, `Form`\>: (`value`: `Value`, `form`: `Form`) => [`Rule`](README.md#rule)<`Value`, `Form`, `void`\>[]
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `Value` | `any` |
+| `Form` | `any` |
+
+#### Type declaration
+
+▸ (`value`, `form`): [`Rule`](README.md#rule)<`Value`, `Form`, `void`\>[]
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `Value` |
+| `form` | `Form` |
+
+##### Returns
+
+[`Rule`](README.md#rule)<`Value`, `Form`, `void`\>[]
+
+#### Defined in
+
+[types.ts:88](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L88)
 
 ___
 
@@ -290,7 +392,19 @@ ___
 
 #### Defined in
 
-[types.ts:18](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L18)
+[types.ts:21](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L21)
+
+___
+
+### ValidationEvent
+
+Ƭ **ValidationEvent**: ``"submit"`` \| ``"blur"`` \| ``"change"``
+
+Trigger that will be used to validate the form or field
+
+#### Defined in
+
+[types.ts:8](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L8)
 
 ___
 
@@ -324,4 +438,4 @@ ___
 
 #### Defined in
 
-[types.ts:12](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L12)
+[types.ts:15](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L15)

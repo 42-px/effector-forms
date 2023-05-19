@@ -2,6 +2,9 @@ import { Event, Store, Domain } from "effector"
 
 type InitFieldValue<Value> = () => Value
 
+/**
+ * Trigger that will be used to validate the form or field
+ */
 export type ValidationEvent = "submit" | "blur" | "change"
 
 export type ValidationResult = {
@@ -87,7 +90,17 @@ export type RuleResolver<
   Form = any
 > = (value: Value, form: Form) => Rule<Value, Form, void>[]
 
+
+/**
+ * field configuration object
+ */
 export type FieldConfig<Value> = {
+  /**
+   * initial value. The type of this value is used to
+   * infer the type of the field. You can pass a function
+   * that returns an initial value. This function will be called
+   * once when the form is created
+   */
   init: Value | InitFieldValue<Value>
   rules?: Rule<Value>[] | RuleResolver<Value, any>
   filter?: Store<boolean> | FilterFunc<Value>
@@ -117,7 +130,7 @@ export type AnyFieldsConfigs = {
 }
 
 /**
- * KV from form fields
+ * KV containing form values
  */
 export type AnyFormValues = {
   [key: string]: any
@@ -144,28 +157,53 @@ export type AddErrorPayload = {
 }
 
 /**
- * Test interface annotaion 
+ * KV with external units. By default,
+ * each form unit is created when the {@link createForm | factory} is
+ * called. If you pass a unit here, it will be used
+ * instead of creating a new unit
+ */
+export type ExternalFormUnits<Values extends AnyFormValues> = {
+  submit?: Event<void>
+  validate?: Event<void>
+  addErrors?: Event<AddErrorPayload[]>
+  reset?: Event<void>
+  resetValues?: Event<void>
+  resetTouched?: Event<void>
+  resetErrors?: Event<void>
+  formValidated?: Event<Values>
+  setInitialForm?: Event<Partial<AnyFormValues>>
+  setForm?: Event<Partial<AnyFormValues>>
+}
+
+
+/**
+ * The object with the form configuration that is passed to the {@link createForm | createForm} factory
  */
 export type FormConfig<Values extends AnyFormValues> = {
   /**
-   * Property annotation
+   * The object with the configuration of the form fields.
+   * The keys of the object are the names of the fields,
+   * and the values are the {@link FieldConfig | FieldConfig}
    */
   fields: FormFieldConfigs<Values>
+  /**
+   * If you pass a domain into this field,
+   * all units of the form will be in this domain
+   */
   domain?: Domain
+  /**
+   * If store is passed the `formValidated` event will be called
+   * then the value of store will be true
+   */
   filter?: Store<boolean>
+  /**
+   * Trigger that will be used to validate the form.
+   */
   validateOn?: ValidationEvent[]
-  units?: {
-    submit?: Event<void>
-    validate?: Event<void>
-    addErrors?: Event<AddErrorPayload[]>
-    reset?: Event<void>
-    resetValues?: Event<void>
-    resetTouched?: Event<void>
-    resetErrors?: Event<void>
-    formValidated?: Event<Values>
-    setInitialForm?: Event<Partial<AnyFormValues>>
-    setForm?: Event<Partial<AnyFormValues>>
-  }
+  /**
+   * Object with external units. 
+   */
+  units?: ExternalFormUnits<Values>
 }
 
 export type FormUnitShape<Values extends AnyFormValues> = {
