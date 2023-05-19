@@ -157,7 +157,7 @@ ___
 
 Ƭ **ExternalFormUnits**<`Values`\>: `Object`
 
-KV with external units. By default,
+External units KV. By default,
 each form unit is created when the [factory](README.md#createform) is
 called. If you pass a unit here, it will be used
 instead of creating a new unit
@@ -265,7 +265,7 @@ ___
 
 #### Defined in
 
-[types.ts:225](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L225)
+[types.ts:224](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L224)
 
 ___
 
@@ -273,7 +273,7 @@ ___
 
 Ƭ **FormConfig**<`Values`\>: `Object`
 
-The object with the form configuration that is passed to the [createForm](README.md#createform) factory
+The object that is passed to the [createForm](README.md#createform) factory
 
 #### Type parameters
 
@@ -286,9 +286,9 @@ The object with the form configuration that is passed to the [createForm](README
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `domain?` | `Domain` | If you pass a domain into this field, all units of the form will be in this domain |
-| `fields` | `FormFieldConfigs`<`Values`\> | The object with the configuration of the form fields. The keys of the object are the names of the fields, and the values are the [FieldConfig](README.md#fieldconfig) |
+| `fields` | `FormFieldConfigs`<`Values`\> | The keys of the object are the names of the fields, and the values are the [FieldConfig](README.md#fieldconfig) |
 | `filter?` | `Store`<`boolean`\> | If store is passed the `formValidated` event will be called then the value of store will be true |
-| `units?` | [`ExternalFormUnits`](README.md#externalformunits)<`Values`\> | Object with external units. |
+| `units?` | [`ExternalFormUnits`](README.md#externalformunits)<`Values`\> | External units KV. |
 | `validateOn?` | [`ValidationEvent`](README.md#validationevent)[] | Trigger that will be used to validate the form. |
 
 #### Defined in

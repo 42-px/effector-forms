@@ -157,7 +157,7 @@ export type AddErrorPayload = {
 }
 
 /**
- * KV with external units. By default,
+ * External units KV. By default,
  * each form unit is created when the {@link createForm | factory} is
  * called. If you pass a unit here, it will be used
  * instead of creating a new unit
@@ -177,11 +177,10 @@ export type ExternalFormUnits<Values extends AnyFormValues> = {
 
 
 /**
- * The object with the form configuration that is passed to the {@link createForm | createForm} factory
+ * The object that is passed to the {@link createForm | createForm} factory
  */
 export type FormConfig<Values extends AnyFormValues> = {
   /**
-   * The object with the configuration of the form fields.
    * The keys of the object are the names of the fields,
    * and the values are the {@link FieldConfig | FieldConfig}
    */
@@ -201,7 +200,7 @@ export type FormConfig<Values extends AnyFormValues> = {
    */
   validateOn?: ValidationEvent[]
   /**
-   * Object with external units. 
+   * External units KV. 
    */
   units?: ExternalFormUnits<Values>
 }
