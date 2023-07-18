@@ -9,11 +9,11 @@
   "browser": "./dist/index.js",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
+      "types": "./dist-types/index.d.ts",
+      "import": "./dist/index.mjs",
       "require": "./dist/effector-forms.cjs.js",
       "node": "./dist/effector-forms.cjs.js",
-      "default": "./dist/index.js",
-      "types": "./dist-types/index.d.ts"
+      "default": "./dist/index.js"
     }
   },
   "scripts": {
@@ -91,5 +91,5 @@
     "dist",
     "dist-types"
   ],
-  "types": "./dist-types"
+  "types": "./dist-types/index.d.ts"
 }
