@@ -7,11 +7,19 @@ type InitFieldValue<Value> = () => Value
  */
 export type ValidationEvent = "submit" | "blur" | "change"
 
+/**
+ * See {@link Rule}
+ */
 export type ValidationResult = {
   isValid: boolean
   errorText?: string
 }
 
+/**
+ * A function that takes a field value, a form value
+ * and an external store.
+ * Returns boolean or {@link ValidationResult | ValidationResult}
+ */
 export type Validator<Value, Form = any, Source = any> = (
   value: Value,
   form?: Form,
@@ -24,10 +32,34 @@ export type ValidationError<Value = any> = {
   errorText?: string
 }
 
+/**
+ * Validation rule that is passed to the
+ * {@link FieldConfig | field} configuration
+ */
 export type Rule<Value, Form = any, Source = any> = {
+  /**
+   * The name of the validation rule. Used to
+   * determine which rule exactly threw an error.
+   * For example required, email, etc.
+   */
   name: string
+  /**
+   * Optional field with the error text.
+   * This text will also be passed to the
+   * error {@link ValidationError object}
+   */
   errorText?: string
+  /**
+   * Optional field to which you can pass an external store
+   * if it is needed to validate the field. This store is passed to
+   * validator in the third argument
+   */
   source?: Store<Source>
+  /**
+   * A function that takes a field value, a form value
+   * and an external store.
+   * Returns boolean or {@link ValidationResult | ValidationResult}
+   */
   validator: Validator<Value, Form, Source>
 }
 
@@ -92,7 +124,29 @@ export type RuleResolver<
 
 
 /**
+ * External units KV. By default,
+ * each field unit is created when the {@link createForm | factory} is
+ * called. If you pass a unit here, it will be used
+ * instead of creating a new unit
+ */
+export type ExternalFieldUnits<Value> = {
+  $value?: Store<Value>
+  $errors?: Store<ValidationError<Value>[]>
+  $isTouched?: Store<boolean>
+  $initValue?: Store<Value>
+  onChange?: Event<Value>
+  changed?: Event<Value>
+  onBlur?: Event<void>
+  addError?: Event<{ rule: string; errorText?: string }>
+  validate?: Event<void>
+  resetValue?: Event<void>
+  reset?: Event<void>
+  resetErrors?: Event<void>
+}
+
+/**
  * field configuration object
+ * 
  */
 export type FieldConfig<Value> = {
   /**
@@ -102,23 +156,29 @@ export type FieldConfig<Value> = {
    * once when the form is created
    */
   init: Value | InitFieldValue<Value>
+  /**
+   * An array of validation rules.
+   * You can also pass a function instead of
+   * an array and define validation rules dynamically.
+   * This function will be called at the moment of validation
+   * and will take a field value and form value
+   */
   rules?: Rule<Value>[] | RuleResolver<Value, any>
+  /**
+   * A store or function that filters a field change
+   * when the onChange event is called.
+   * The value of the field changes only
+   * if the function returns true
+   */
   filter?: Store<boolean> | FilterFunc<Value>
+  /**
+   * Array of field-specific validation triggers
+   */
   validateOn?: ValidationEvent[]
-  units?: {
-    $value?: Store<Value>
-    $errors?: Store<ValidationError<Value>[]>
-    $isTouched?: Store<boolean>
-    $initValue?: Store<Value>
-    onChange?: Event<Value>
-    changed?: Event<Value>
-    onBlur?: Event<void>
-    addError?: Event<{ rule: string; errorText?: string }>
-    validate?: Event<void>
-    resetValue?: Event<void>
-    reset?: Event<void>
-    resetErrors?: Event<void>
-  }
+  /**
+   * External units KV. 
+   */
+  units?: ExternalFieldUnits<Value>
 }
 
 export type AnyFields = {
@@ -178,6 +238,62 @@ export type ExternalFormUnits<Values extends AnyFormValues> = {
 
 /**
  * The object that is passed to the {@link createForm | createForm} factory
+ * 
+ * @example
+ * 
+ * ```ts
+ * const $passwordMinLength = createStore(3)
+ * 
+ * form = createForm({
+ *    fields: {
+ *      username: {
+ *         init: "",
+ *         rules: [
+ *            {
+ *              name: "required",
+ *              validator: (value) => Boolean(value),
+ *            }
+ *         ],
+ *      },
+ *      password: {
+ *         init: "",
+ *         validateOn: ["change"],
+ *         rules: [
+ *            {
+ *               name: "required",
+ *               validator: (value) => Boolean(value),
+ *            },
+ *            {
+ *               name: "minLength",
+ *               source: $passwordMinLength,
+ *               validator: (password, form, minLength) => ({
+ *                  isValid: password.length > minLength,
+ *                  errorText: `The password field must be longer than ${minLength} characters`
+ *               })
+ *            }
+ *         ]
+ *      },
+ *      confirm: {
+ *         init: "",
+ *         validateOn: ["change"],
+ *         rules: [
+ *            {
+ *              name: "required",
+ *              validator: (value) => Boolean(value),
+ *            },
+ *            {
+ *              name: "matchPassword",
+ *              validator: (confirm, { password }) => ({
+ *                 isValid: confirm === password,
+ *                 errorText: "Doesn't match the password"
+ *              }),
+ *            }
+ *         ]
+ *      }
+ *    },
+ *    validateOn: ["submit"]
+ * })
+ * ```
  */
 export type FormConfig<Values extends AnyFormValues> = {
   /**

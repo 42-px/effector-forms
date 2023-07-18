@@ -3,6 +3,7 @@ export { useForm, useField } from "./react-hooks"
 export {
     AnyFormValues,
     ExternalFormUnits,
+    ExternalFieldUnits,
     FormConfig,
     FieldConfig,
     Rule,
@@ -10,6 +11,7 @@ export {
     ValidationError,
     Validator,
     ValidationEvent,
+    ValidationResult,
     FormValues,
     Form
 } from "./types"

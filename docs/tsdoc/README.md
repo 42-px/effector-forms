@@ -16,6 +16,7 @@ effector-forms
 ### Type Aliases
 
 - [AnyFormValues](README.md#anyformvalues)
+- [ExternalFieldUnits](README.md#externalfieldunits)
 - [ExternalFormUnits](README.md#externalformunits)
 - [FieldConfig](README.md#fieldconfig)
 - [Form](README.md#form)
@@ -25,6 +26,7 @@ effector-forms
 - [RuleResolver](README.md#ruleresolver)
 - [ValidationError](README.md#validationerror)
 - [ValidationEvent](README.md#validationevent)
+- [ValidationResult](README.md#validationresult)
 - [Validator](README.md#validator)
 
 ## Factories
@@ -149,7 +151,45 @@ KV containing form values
 
 #### Defined in
 
-[types.ts:135](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L135)
+[types.ts:195](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L195)
+
+___
+
+### ExternalFieldUnits
+
+Ƭ **ExternalFieldUnits**<`Value`\>: `Object`
+
+External units KV. By default,
+each field unit is created when the [factory](README.md#createform) is
+called. If you pass a unit here, it will be used
+instead of creating a new unit
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `Value` |
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `$errors?` | `Store`<[`ValidationError`](README.md#validationerror)<`Value`\>[]\> |
+| `$initValue?` | `Store`<`Value`\> |
+| `$isTouched?` | `Store`<`boolean`\> |
+| `$value?` | `Store`<`Value`\> |
+| `addError?` | `Event`<{ `errorText?`: `string` ; `rule`: `string`  }\> |
+| `changed?` | `Event`<`Value`\> |
+| `onBlur?` | `Event`<`void`\> |
+| `onChange?` | `Event`<`Value`\> |
+| `reset?` | `Event`<`void`\> |
+| `resetErrors?` | `Event`<`void`\> |
+| `resetValue?` | `Event`<`void`\> |
+| `validate?` | `Event`<`void`\> |
+
+#### Defined in
+
+[types.ts:132](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L132)
 
 ___
 
@@ -185,7 +225,7 @@ instead of creating a new unit
 
 #### Defined in
 
-[types.ts:165](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L165)
+[types.ts:225](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L225)
 
 ___
 
@@ -205,27 +245,15 @@ field configuration object
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `filter?` | `Store`<`boolean`\> \| `FilterFunc`<`Value`\> | - |
+| `filter?` | `Store`<`boolean`\> \| `FilterFunc`<`Value`\> | A store or function that filters a field change when the onChange event is called. The value of the field changes only if the function returns true |
 | `init` | `Value` \| `InitFieldValue`<`Value`\> | initial value. The type of this value is used to infer the type of the field. You can pass a function that returns an initial value. This function will be called once when the form is created |
-| `rules?` | [`Rule`](README.md#rule)<`Value`\>[] \| [`RuleResolver`](README.md#ruleresolver)<`Value`, `any`\> | - |
-| `units?` | { `$errors?`: `Store`<[`ValidationError`](README.md#validationerror)<`Value`\>[]\> ; `$initValue?`: `Store`<`Value`\> ; `$isTouched?`: `Store`<`boolean`\> ; `$value?`: `Store`<`Value`\> ; `addError?`: `Event`<{ `errorText?`: `string` ; `rule`: `string`  }\> ; `changed?`: `Event`<`Value`\> ; `onBlur?`: `Event`<`void`\> ; `onChange?`: `Event`<`Value`\> ; `reset?`: `Event`<`void`\> ; `resetErrors?`: `Event`<`void`\> ; `resetValue?`: `Event`<`void`\> ; `validate?`: `Event`<`void`\>  } | - |
-| `units.$errors?` | `Store`<[`ValidationError`](README.md#validationerror)<`Value`\>[]\> | - |
-| `units.$initValue?` | `Store`<`Value`\> | - |
-| `units.$isTouched?` | `Store`<`boolean`\> | - |
-| `units.$value?` | `Store`<`Value`\> | - |
-| `units.addError?` | `Event`<{ `errorText?`: `string` ; `rule`: `string`  }\> | - |
-| `units.changed?` | `Event`<`Value`\> | - |
-| `units.onBlur?` | `Event`<`void`\> | - |
-| `units.onChange?` | `Event`<`Value`\> | - |
-| `units.reset?` | `Event`<`void`\> | - |
-| `units.resetErrors?` | `Event`<`void`\> | - |
-| `units.resetValue?` | `Event`<`void`\> | - |
-| `units.validate?` | `Event`<`void`\> | - |
-| `validateOn?` | [`ValidationEvent`](README.md#validationevent)[] | - |
+| `rules?` | [`Rule`](README.md#rule)<`Value`\>[] \| [`RuleResolver`](README.md#ruleresolver)<`Value`, `any`\> | An array of validation rules. You can also pass a function instead of an array and define validation rules dynamically. This function will be called at the moment of validation and will take a field value and form value |
+| `units?` | [`ExternalFieldUnits`](README.md#externalfieldunits)<`Value`\> | External units KV. |
+| `validateOn?` | [`ValidationEvent`](README.md#validationevent)[] | Array of field-specific validation triggers |
 
 #### Defined in
 
-[types.ts:97](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L97)
+[types.ts:151](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L151)
 
 ___
 
@@ -265,7 +293,7 @@ ___
 
 #### Defined in
 
-[types.ts:224](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L224)
+[types.ts:340](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L340)
 
 ___
 
@@ -274,6 +302,62 @@ ___
 Ƭ **FormConfig**<`Values`\>: `Object`
 
 The object that is passed to the [createForm](README.md#createform) factory
+
+**`Example`**
+
+```ts
+const $passwordMinLength = createStore(3)
+
+form = createForm({
+   fields: {
+     username: {
+        init: "",
+        rules: [
+           {
+             name: "required",
+             validator: (value) => Boolean(value),
+           }
+        ],
+     },
+     password: {
+        init: "",
+        validateOn: ["change"],
+        rules: [
+           {
+              name: "required",
+              validator: (value) => Boolean(value),
+           },
+           {
+              name: "minLength",
+              source: $passwordMinLength,
+              validator: (password, form, minLength) => ({
+                 isValid: password.length > minLength,
+                 errorText: `The password field must be longer than ${minLength} characters`
+              })
+           }
+        ]
+     },
+     confirm: {
+        init: "",
+        validateOn: ["change"],
+        rules: [
+           {
+             name: "required",
+             validator: (value) => Boolean(value),
+           },
+           {
+             name: "matchPassword",
+             validator: (confirm, { password }) => ({
+                isValid: confirm === password,
+                errorText: "Doesn't match the password"
+             }),
+           }
+        ]
+     }
+   },
+   validateOn: ["submit"]
+})
+```
 
 #### Type parameters
 
@@ -293,7 +377,7 @@ The object that is passed to the [createForm](README.md#createform) factory
 
 #### Defined in
 
-[types.ts:182](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L182)
+[types.ts:298](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L298)
 
 ___
 
@@ -309,13 +393,16 @@ ___
 
 #### Defined in
 
-[types.ts:139](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L139)
+[types.ts:199](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L199)
 
 ___
 
 ### Rule
 
 Ƭ **Rule**<`Value`, `Form`, `Source`\>: `Object`
+
+Validation rule that is passed to the
+[field](README.md#fieldconfig) configuration
 
 #### Type parameters
 
@@ -327,16 +414,16 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `errorText?` | `string` |
-| `name` | `string` |
-| `source?` | `Store`<`Source`\> |
-| `validator` | [`Validator`](README.md#validator)<`Value`, `Form`, `Source`\> |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `errorText?` | `string` | Optional field with the error text. This text will also be passed to the error [object](README.md#validationerror) |
+| `name` | `string` | The name of the validation rule. Used to determine which rule exactly threw an error. For example required, email, etc. |
+| `source?` | `Store`<`Source`\> | Optional field to which you can pass an external store if it is needed to validate the field. This store is passed to validator in the third argument |
+| `validator` | [`Validator`](README.md#validator)<`Value`, `Form`, `Source`\> | A function that takes a field value, a form value and an external store. Returns boolean or [ValidationResult](README.md#validationresult) |
 
 #### Defined in
 
-[types.ts:27](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L27)
+[types.ts:39](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L39)
 
 ___
 
@@ -368,7 +455,7 @@ ___
 
 #### Defined in
 
-[types.ts:88](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L88)
+[types.ts:120](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L120)
 
 ___
 
@@ -392,7 +479,7 @@ ___
 
 #### Defined in
 
-[types.ts:21](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L21)
+[types.ts:29](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L29)
 
 ___
 
@@ -408,9 +495,28 @@ Trigger that will be used to validate the form or field
 
 ___
 
+### ValidationResult
+
+Ƭ **ValidationResult**: `Object`
+
+See [Rule](README.md#rule)
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `errorText?` | `string` |
+| `isValid` | `boolean` |
+
+#### Defined in
+
+[types.ts:13](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L13)
+
+___
+
 ### Validator
 
-Ƭ **Validator**<`Value`, `Form`, `Source`\>: (`value`: `Value`, `form?`: `Form`, `source?`: `Source`) => `boolean` \| `ValidationResult`
+Ƭ **Validator**<`Value`, `Form`, `Source`\>: (`value`: `Value`, `form?`: `Form`, `source?`: `Source`) => `boolean` \| [`ValidationResult`](README.md#validationresult)
 
 #### Type parameters
 
@@ -422,7 +528,11 @@ ___
 
 #### Type declaration
 
-▸ (`value`, `form?`, `source?`): `boolean` \| `ValidationResult`
+▸ (`value`, `form?`, `source?`): `boolean` \| [`ValidationResult`](README.md#validationresult)
+
+A function that takes a field value, a form value
+and an external store.
+Returns boolean or [ValidationResult](README.md#validationresult)
 
 ##### Parameters
 
@@ -434,8 +544,8 @@ ___
 
 ##### Returns
 
-`boolean` \| `ValidationResult`
+`boolean` \| [`ValidationResult`](README.md#validationresult)
 
 #### Defined in
 
-[types.ts:15](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L15)
+[types.ts:23](https://github.com/42-px/effector-forms/blob/5028150/src/types.ts#L23)
