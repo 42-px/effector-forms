@@ -12,7 +12,8 @@
       "import": "./dist/index.js",
       "require": "./dist/effector-forms.cjs.js",
       "node": "./dist/effector-forms.cjs.js",
-      "default": "./dist/index.js"
+      "default": "./dist/index.js",
+      "types": "./dist-types/index.d.ts"
     }
   },
   "scripts": {
