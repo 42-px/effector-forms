@@ -54,7 +54,7 @@ export type Rule<Value, Form = any, Source = any> = {
    * if it is needed to validate the field. This store is passed to
    * validator in the third argument
    */
-  source?: StoreWritable<Source>
+  source?: Store<Source>
   /**
    * A function that takes a field value, a form value
    * and an external store.
