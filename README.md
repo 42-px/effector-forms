@@ -845,7 +845,7 @@ const loginForm = createForm({
   },
 })
 
-guard({
+sample({
   source: loginFx.failData.map(
     (error) => error.name === "already-exists" ? { rule: "already-exists" } : null
   ),
@@ -859,7 +859,7 @@ guard({
 You can add multiple errors for many fields at once with the form.addErrors event:
 
 ```ts
-guard({
+sample({
   clock: loginFx.failData.map(
     (errors) => errors.map((err) => ({
       field: err.field,
