@@ -5,7 +5,6 @@ import {
     Store,
     combine,
     sample,
-    guard,
     merge,
 } from "effector"
 import {
@@ -374,9 +373,10 @@ export function bindChangeEvent({
         .on(changed, () => true)
         .reset(reset, resetForm, resetTouched)
 
-    guard({
+    // @ts-expect-error There is two possible overloads for sample, so TS can't decide
+    sample({
         source: onChange,
-        filter: filter || (() => true),
+        filter: filter ?? (() => true),
         target: changed,
     })
 

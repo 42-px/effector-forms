@@ -3,8 +3,6 @@ import {
     Store,
     combine,
     sample,
-    guard,
-    createStore,
 } from "effector"
 import {
     AnyFields,
@@ -205,14 +203,14 @@ export function createForm<Values extends AnyFormValues>(
         }, { sid: fieldName })
     }
 
-    guard({
+    sample({
         source: submitWithFormData as unknown as Event<Values>,
         filter: $isFormValid,
         // TODO: fix
         target: formValidated,
     })
 
-    guard({
+    sample({
         source: validateWithFormData as unknown as Event<Values>,
         filter: $isFormValid,
         target: formValidated,
