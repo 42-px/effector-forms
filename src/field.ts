@@ -1,12 +1,13 @@
 import {
     createStore,
     Domain,
-    Event,
+    EventCallable,
     Store,
     combine,
     sample,
     guard,
     merge,
+    Event,
 } from "effector"
 import {
     ValidationError,
@@ -171,12 +172,12 @@ export function createField(
 type BindValidationParams = {
     form: {
         $values: Store<AnyFormValues>
-        submit: Event<void>
-        reset: Event<void>
-        resetValues: Event<void>
-        resetErrors: Event<void>
-        addErrors: Event<AddErrorPayload[]>
-        validate: Event<void>
+        submit: EventCallable<void>
+        reset: EventCallable<void>
+        resetValues: EventCallable<void>
+        resetErrors: EventCallable<void>
+        addErrors: EventCallable<AddErrorPayload[]>
+        validate: EventCallable<void>
         validateOn?: ValidationEvent[]
     }
     field: Field<any>
@@ -328,11 +329,11 @@ export function bindValidation(
 type BindChangeEventParams = {
     field: Field<any>
     form: {
-        setForm: Event<Partial<AnyFormValues>>
-        setInitialForm: Event<Partial<AnyFormValues>>
-        resetForm: Event<void>
-        resetTouched: Event<void>
-        resetValues: Event<void>
+        setForm: EventCallable<Partial<AnyFormValues>>
+        setInitialForm: EventCallable<Partial<AnyFormValues>>
+        resetForm: EventCallable<void>
+        resetTouched: EventCallable<void>
+        resetValues: EventCallable<void>
     }
 }
 

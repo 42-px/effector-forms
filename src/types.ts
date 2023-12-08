@@ -1,4 +1,4 @@
-import { Event, Store, Domain } from "effector"
+import { EventCallable, StoreWritable, Domain, Store } from "effector"
 
 type InitFieldValue<Value> = () => Value
 
@@ -73,45 +73,45 @@ export type FieldData<Value> = {
 }
 
 export type FieldUnitShape<Value> = {
-  value: Store<Value>
-  initValue: Store<Value>
+  value: StoreWritable<Value>
+  initValue: StoreWritable<Value>
   isValid: Store<boolean>
   isDirty: Store<boolean>
-  touched: Store<boolean>
-  errors: Store<ValidationError<Value>[]>
+  touched: StoreWritable<boolean>
+  errors: StoreWritable<ValidationError<Value>[]>
   firstError: Store<ValidationError<Value> | null>
   errorText: Store<string>
-  onChange: Event<Value>
-  onBlur: Event<void>
-  addError: Event<{ rule: string; errorText?: string }>
-  validate: Event<void>
-  reset: Event<void>
-  resetErrors: Event<void>
-  resetValue: Event<void>
+  onChange: EventCallable<Value>
+  onBlur: EventCallable<void>
+  addError: EventCallable<{ rule: string; errorText?: string }>
+  validate: EventCallable<void>
+  reset: EventCallable<void>
+  resetErrors: EventCallable<void>
+  resetValue: EventCallable<void>
 }
 
 export type Field<Value> = {
   name: string
-  $initValue: Store<Value>
-  $value: Store<Value>
-  $errors: Store<ValidationError<Value>[]>
+  $initValue: StoreWritable<Value>
+  $value: StoreWritable<Value>
+  $errors: StoreWritable<ValidationError<Value>[]>
   $firstError: Store<ValidationError<Value> | null>
   $errorText: Store<string>
   $isValid: Store<boolean>
   $isDirty: Store<boolean>
-  $isTouched: Store<boolean>
-  $touched: Store<boolean>
+  $isTouched: StoreWritable<boolean>
+  $touched: StoreWritable<boolean>
   $field: Store<FieldData<Value>>
-  onChange: Event<Value>
-  changed: Event<Value>
-  onBlur: Event<void>
-  addError: Event<{ rule: string; errorText?: string }>
-  validate: Event<void>
-  reset: Event<void>
-  set: Event<Value>
-  resetErrors: Event<void>
-  resetValue: Event<void>
-  filter?: Store<boolean> | FilterFunc<Value>
+  onChange: EventCallable<Value>
+  changed: EventCallable<Value>
+  onBlur: EventCallable<void>
+  addError: EventCallable<{ rule: string; errorText?: string }>
+  validate: EventCallable<void>
+  reset: EventCallable<void>
+  set: EventCallable<Value>
+  resetErrors: EventCallable<void>
+  resetValue: EventCallable<void>
+  filter?: StoreWritable<boolean> | FilterFunc<Value>
   "@@unitShape": () => FieldUnitShape<Value>
 }
 
@@ -130,18 +130,18 @@ export type RuleResolver<
  * instead of creating a new unit
  */
 export type ExternalFieldUnits<Value> = {
-  $value?: Store<Value>
-  $errors?: Store<ValidationError<Value>[]>
-  $isTouched?: Store<boolean>
-  $initValue?: Store<Value>
-  onChange?: Event<Value>
-  changed?: Event<Value>
-  onBlur?: Event<void>
-  addError?: Event<{ rule: string; errorText?: string }>
-  validate?: Event<void>
-  resetValue?: Event<void>
-  reset?: Event<void>
-  resetErrors?: Event<void>
+  $value?: StoreWritable<Value>
+  $errors?: StoreWritable<ValidationError<Value>[]>
+  $isTouched?: StoreWritable<boolean>
+  $initValue?: StoreWritable<Value>
+  onChange?: EventCallable<Value>
+  changed?: EventCallable<Value>
+  onBlur?: EventCallable<void>
+  addError?: EventCallable<{ rule: string; errorText?: string }>
+  validate?: EventCallable<void>
+  resetValue?: EventCallable<void>
+  reset?: EventCallable<void>
+  resetErrors?: EventCallable<void>
 }
 
 /**
@@ -170,7 +170,7 @@ export type FieldConfig<Value> = {
    * The value of the field changes only
    * if the function returns true
    */
-  filter?: Store<boolean> | FilterFunc<Value>
+  filter?: StoreWritable<boolean> | FilterFunc<Value>
   /**
    * Array of field-specific validation triggers
    */
@@ -223,16 +223,16 @@ export type AddErrorPayload = {
  * instead of creating a new unit
  */
 export type ExternalFormUnits<Values extends AnyFormValues> = {
-  submit?: Event<void>
-  validate?: Event<void>
-  addErrors?: Event<AddErrorPayload[]>
-  reset?: Event<void>
-  resetValues?: Event<void>
-  resetTouched?: Event<void>
-  resetErrors?: Event<void>
-  formValidated?: Event<Values>
-  setInitialForm?: Event<Partial<AnyFormValues>>
-  setForm?: Event<Partial<AnyFormValues>>
+  submit?: EventCallable<void>
+  validate?: EventCallable<void>
+  addErrors?: EventCallable<AddErrorPayload[]>
+  reset?: EventCallable<void>
+  resetValues?: EventCallable<void>
+  resetTouched?: EventCallable<void>
+  resetErrors?: EventCallable<void>
+  formValidated?: EventCallable<Values>
+  setInitialForm?: EventCallable<Partial<AnyFormValues>>
+  setForm?: EventCallable<Partial<AnyFormValues>>
 }
 
 
@@ -310,7 +310,7 @@ export type FormConfig<Values extends AnyFormValues> = {
    * If store is passed the `formValidated` event will be called
    * then the value of store will be true
    */
-  filter?: Store<boolean>
+  filter?: StoreWritable<boolean>
   /**
    * Trigger that will be used to validate the form.
    */
@@ -325,41 +325,41 @@ export type FormUnitShape<Values extends AnyFormValues> = {
   isValid: Store<boolean>
   isDirty: Store<boolean>
   touched: Store<boolean>
-  submit: Event<void>
-  validate: Event<void>
-  reset: Event<void>
-  addErrors: Event<AddErrorPayload[]>
-  setForm: Event<Partial<Values>>
-  setInitialForm: Event<Partial<Values>>
-  resetTouched: Event<void>
-  resetValues: Event<void>
-  resetErrors: Event<void>
-  formValidated: Event<Values>
+  submit: EventCallable<void>
+  validate: EventCallable<void>
+  reset: EventCallable<void>
+  addErrors: EventCallable<AddErrorPayload[]>
+  setForm: EventCallable<Partial<Values>>
+  setInitialForm: EventCallable<Partial<Values>>
+  resetTouched: EventCallable<void>
+  resetValues: EventCallable<void>
+  resetErrors: EventCallable<void>
+  formValidated: EventCallable<Values>
 }
 
 export type Form<Values extends AnyFormValues> = {
   fields: FormFields<Values>
-  $values: Store<Values>
-  $eachValid: Store<boolean>
-  $isValid: Store<boolean>
-  $isDirty: Store<boolean>
-  $touched: Store<boolean>
-  $meta: Store<{
+  $values: StoreWritable<Values>
+  $eachValid: StoreWritable<boolean>
+  $isValid: StoreWritable<boolean>
+  $isDirty: StoreWritable<boolean>
+  $touched: StoreWritable<boolean>
+  $meta: StoreWritable<{
     isValid: boolean
     isDirty: boolean
     touched: boolean
   }>
-  submit: Event<void>
-  validate: Event<void>
-  reset: Event<void>
-  addErrors: Event<AddErrorPayload[]>
-  set: Event<Partial<Values>>
-  setForm: Event<Partial<Values>>
-  setInitialForm: Event<Partial<Values>>
-  resetTouched: Event<void>
-  resetValues: Event<void>
-  resetErrors: Event<void>
-  formValidated: Event<Values>
+  submit: EventCallable<void>
+  validate: EventCallable<void>
+  reset: EventCallable<void>
+  addErrors: EventCallable<AddErrorPayload[]>
+  set: EventCallable<Partial<Values>>
+  setForm: EventCallable<Partial<Values>>
+  setInitialForm: EventCallable<Partial<Values>>
+  resetTouched: EventCallable<void>
+  resetValues: EventCallable<void>
+  resetErrors: EventCallable<void>
+  formValidated: EventCallable<Values>
   "@@unitShape": () => FormUnitShape<Values>
 }
 

@@ -1,10 +1,9 @@
 import {
-    Event,
+    EventCallable,
     Store,
     combine,
     sample,
     guard,
-    createStore,
 } from "effector"
 import {
     AnyFields,
@@ -130,12 +129,12 @@ export function createForm<Values extends AnyFormValues>(
 
     const setInitialForm = createFormUnit.event<Partial<AnyFormValues>>({
         domain,
-        existing: units?.setInitialForm as Event<Partial<AnyFormValues>>,
+        existing: units?.setInitialForm as EventCallable<Partial<AnyFormValues>>
     })
 
     const setForm = createFormUnit.event<Partial<AnyFormValues>>({
         domain,
-        existing: units?.setForm as Event<Partial<AnyFormValues>>,
+        existing: units?.setForm as EventCallable<Partial<AnyFormValues>>,
     })
 
     const addErrors = createFormUnit.event<AddErrorPayload[]>({
@@ -206,14 +205,14 @@ export function createForm<Values extends AnyFormValues>(
     }
 
     guard({
-        source: submitWithFormData as unknown as Event<Values>,
+        source: submitWithFormData as unknown as EventCallable<Values>,
         filter: $isFormValid,
         // TODO: fix
         target: formValidated,
     })
 
     guard({
-        source: validateWithFormData as unknown as Event<Values>,
+        source: validateWithFormData as unknown as EventCallable<Values>,
         filter: $isFormValid,
         target: formValidated,
     })
