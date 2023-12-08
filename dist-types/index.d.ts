@@ -107,7 +107,7 @@ export type Field<Value> = {
 	set: EventCallable<Value>;
 	resetErrors: EventCallable<void>;
 	resetValue: EventCallable<void>;
-	filter?: StoreWritable<boolean> | FilterFunc<Value>;
+	filter?: StoreWritable<boolean> | Store<boolean> | FilterFunc<Value>;
 	"@@unitShape": () => FieldUnitShape<Value>;
 };
 export type FilterFunc<Value> = (value: Value) => boolean;
@@ -161,7 +161,7 @@ export type FieldConfig<Value> = {
 	 * The value of the field changes only
 	 * if the function returns true
 	 */
-	filter?: StoreWritable<boolean> | FilterFunc<Value>;
+	filter?: StoreWritable<boolean> | Store<boolean> | FilterFunc<Value>;
 	/**
 	 * Array of field-specific validation triggers
 	 */
@@ -286,7 +286,7 @@ export type FormConfig<Values extends AnyFormValues> = {
 	 * If store is passed the `formValidated` event will be called
 	 * then the value of store will be true
 	 */
-	filter?: StoreWritable<boolean>;
+	filter?: StoreWritable<boolean> | Store<boolean>;
 	/**
 	 * Trigger that will be used to validate the form.
 	 */

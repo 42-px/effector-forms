@@ -1,4 +1,4 @@
-import { restore, forward, createEffect, createEvent } from "effector"
+import { restore, createEffect, createEvent, sample } from "effector"
 import * as yup from "yup"
 import { createForm } from "./factory"
 import { Rule } from "./types"
@@ -230,9 +230,9 @@ test("filter", (done) => {
 
     $serverError.reset(form.$values.updates)
 
-    forward({
-        from: form.formValidated,
-        to: loginFx,
+    sample({
+        clock: form.formValidated,
+        target: loginFx,
     })
 
 

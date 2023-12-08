@@ -83,7 +83,7 @@ If you are using **SSR**, add effector-forms to the babel plugin config
 
 Model:
 ```ts
-import { restore, forward, createEffect } from "effector"
+import { restore, sample, createEffect } from "effector"
 import { createForm } from 'effector-forms'
 
 export const loginForm = createForm({
@@ -112,9 +112,9 @@ export const loginForm = createForm({
 
 export const loginFx = createEffect()
 
-forward({
-    from: loginForm.formValidated,
-    to: loginFx,
+sample({
+    clock: loginForm.formValidated,
+    target: loginFx,
 })
 ```
 
@@ -124,12 +124,12 @@ After we have created the form, we can connect it to the view using the **useFor
 
 ```tsx
 import { useForm } from 'effector-forms'
-import { useStore } from 'effector-react'
+import { useUnit } from 'effector-react'
 import { loginForm, loginFx } from '../model'
 
 export const LoginForm = () => {
   const { fields, submit, eachValid } = useForm(loginForm)
-  const pending = useStore(loginFx.pending)
+  const pending = useUnit(loginFx.pending)
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -309,9 +309,9 @@ form.$eachValid.watch((eachValid) => {
 
 form.fields.email.onChange("value")
 
-forward({
-  from: form.fields.email.onChange,
-  to: someEvent,
+sample({
+  clock: form.fields.email.onChange,
+  target: someEvent,
 })
 ```
 
@@ -333,9 +333,9 @@ export const loginForm = createForm({
 
 $serverError.reset(form.$values.updates)
 
-forward({
-    from: form.formValidated,
-    to: loginFx,
+sample({
+    clock: form.formValidated,
+    target: loginFx,
 })
 ```
 
@@ -371,9 +371,9 @@ const form = createForm({
   },
 })
 
-forward({
-  from: getUserProfileFx.doneData,
-  to: form.setForm,
+sample({
+  clock: getUserProfileFx.doneData,
+  target: form.setForm,
 })
 ```
 
@@ -820,12 +820,12 @@ const form = createForm({
 
 const somethingHappened = createEvent()
 
-forward({
-  from: somethingHappened.map(() => ({
+sample({
+  clock: somethingHappened.map(() => ({
     rule: "my-custom",
     errorText: "somethingHappened",
   })),
-  to: form.fields.addError,
+  target: form.fields.addError,
 })
 ```
 
@@ -845,7 +845,7 @@ const loginForm = createForm({
   },
 })
 
-guard({
+sample({
   source: loginFx.failData.map(
     (error) => error.name === "already-exists" ? { rule: "already-exists" } : null
   ),
@@ -859,7 +859,7 @@ guard({
 You can add multiple errors for many fields at once with the form.addErrors event:
 
 ```ts
-guard({
+sample({
   clock: loginFx.failData.map(
     (errors) => errors.map((err) => ({
       field: err.field,
@@ -912,18 +912,18 @@ const form = createForm({
 
 const somethingHappened = createEvent()
 
-forward({
-  from: somethingHappened,
-  to: form.fields.username.validate,
+sample({
+  clock: somethingHappened,
+  target: form.fields.username.validate,
 })
 ```
 
 Validate all fields:
 
 ```ts
-forward({
-  from: somethingHappened,
-  to: form.validate,
+sample({
+  clock: somethingHappened,
+  target: form.validate,
 })
 ```
 
@@ -1054,20 +1054,20 @@ export const registerForm = createForm({
 
 $registerError.reset(registerForm.$values.updates)
 
-forward({
-    from: registerForm.formValidated,
-    to: registerFx,
+sample({
+    clock: registerForm.formValidated,
+    target: registerFx,
 })
 ```
 
 View:
 ```tsx
-import { useStore } from 'effector'
+import { useUnit } from 'effector'
 import { useForm } from 'effector-forms'
 import { registerForm, registerFx } from '../model'
 
 const RegisterForm = () => {
-  const pending = useStore(registerFx.pending)
+  const pending = useUnit(registerFx.pending)
   const { submit, fields, eachValid } = useForm(form)
 
   const onSubmit = (e) => {

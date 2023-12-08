@@ -46,8 +46,8 @@
   },
   "homepage": "https://github.com/aanation/effector-forms#readme",
   "peerDependencies": {
-    "effector": "^23.0.0",
-    "effector-react": "^23.0.1"
+    "effector": ">=23.0.0 <24.0.0",
+    "effector-react": ">=23.0.0 <24.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.23.5",

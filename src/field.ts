@@ -5,7 +5,6 @@ import {
     Store,
     combine,
     sample,
-    guard,
     merge,
     Event,
 } from "effector"
@@ -375,11 +374,23 @@ export function bindChangeEvent({
         .on(changed, () => true)
         .reset(reset, resetForm, resetTouched)
 
-    guard({
-        source: onChange,
-        filter: filter || (() => true),
-        target: changed,
-    })
+
+    if (filter) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        sample({
+            source: onChange,
+            filter: filter,
+            target: changed,
+        })
+    } else {
+        sample({
+            source: onChange,
+            filter: (() => true),
+            target: changed,
+        })
+    }
+
 
     $initValue
         .on(setInitialForm, (curr, updateSet) => updateSet.hasOwnProperty(name)

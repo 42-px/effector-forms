@@ -2,7 +2,7 @@
 // eslint-disable-next-line no-unused-vars
 import * as React from "react"
 import { createForm, Rule, useForm } from "effector-forms"
-import { createDomain, createEvent, forward, sample } from "effector"
+import { createDomain, createEvent } from "effector"
 import { useUnit } from "effector-react"
 
 const rules = {
