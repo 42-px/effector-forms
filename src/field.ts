@@ -7,6 +7,7 @@ import {
     sample,
     merge,
     Event,
+    createEvent,
 } from "effector"
 import {
     ValidationError,
@@ -19,7 +20,6 @@ import {
     FieldUnitShape,
 } from "./types"
 import { createCombineValidator } from "./validation"
-import { createFormUnit } from "./create-form-unit"
 
 /**
  * @group Factories
@@ -33,82 +33,59 @@ export function createField(
         ? fieldConfig.init()
         : fieldConfig.init
 
-    const $value = createFormUnit.store({
-        domain,
-        existing: fieldConfig.units?.$value,
-        init: initValue,
-    }, {
-        sid: `${fieldName}-$value`
-    })
+    const $value = fieldConfig.units?.$value
+      ? fieldConfig.units.$value
+      : createStore(initValue, { sid: `${fieldName}-$value`, domain })
 
-    const $errors = createFormUnit.store<ValidationError[]>({
-        domain,
-        existing: fieldConfig.units?.$errors,
-        init: [],
-    }, {
-        sid: `${fieldName}-$errors`
-    })
+    const $errors = fieldConfig.units?.$errors
+      ? fieldConfig.units.$errors
+      : createStore<ValidationError[]>([], { sid: `${fieldName}-$errors`, domain })
 
+    const $firstError = $errors.map((errors) => errors[0] ? errors[0] : null)
 
-    const $firstError = $errors.map(
-        (errors) => errors[0] ? errors[0] : null
-    )
+    const $initValue = fieldConfig.units?.$initValue
+      ? fieldConfig.units.$initValue
+      : createStore(initValue, { sid: `${fieldName}-$initValue`, domain })
 
-    const $initValue = createFormUnit.store({
-        domain,
-        existing: fieldConfig.units?.$initValue,
-        init: initValue,
-    }, {
-        sid: `${fieldName}-$initValue`
-    })
-
-    const $touched = createFormUnit.store({
-        domain,
-        existing: fieldConfig.units?.$isTouched,
-        init: false,
-    }, {
-        sid: `${fieldName}-$touched`
-    })
+    const $touched = fieldConfig.units?.$isTouched
+      ? fieldConfig.units.$isTouched
+      : createStore(false, { sid: `${fieldName}-$touched`, domain })
 
     const $isDirty = combine($value, $initValue,
         (value, initValue) => value !== initValue,
     )
 
-    const onChange = createFormUnit.event({
-        domain,
-        existing: fieldConfig.units?.onChange,
-    })
-    const onBlur = createFormUnit.event({
-        domain,
-        existing: fieldConfig.units?.onBlur,
-    })
-    const changed = createFormUnit.event({
-        domain,
-        existing: fieldConfig.units?.changed,
-    })
-    const addError = createFormUnit.event<{
-        rule: string
-        errorText?: string
-    }>({
-        domain,
-        existing: fieldConfig.units?.addError,
-    })
-    const validate = createFormUnit.event({
-        domain,
-        existing: fieldConfig.units?.validate,
-    })
-    const resetErrors = createFormUnit.event({
-        domain,
-        existing: fieldConfig.units?.resetErrors,
-    })
-    const resetValue = createFormUnit.event({
-        domain,
-        existing: fieldConfig.units?.resetValue,
-    })
-    const reset = createFormUnit.event({
-        domain,
-        existing: fieldConfig.units?.reset,
-    })
+    const onChange = fieldConfig.units?.onChange
+      ? fieldConfig.units.onChange
+      : createEvent({ domain })
+
+    const onBlur = fieldConfig.units?.onBlur
+      ? fieldConfig.units.onBlur
+      : createEvent({ domain })
+
+    const changed = fieldConfig.units?.changed
+      ? fieldConfig.units.changed
+      : createEvent({ domain })
+
+    const addError = fieldConfig.units?.addError
+      ? fieldConfig.units.addError
+      : createEvent<{ rule: string; errorText?: string }>({ domain })
+
+    const validate = fieldConfig.units?.validate
+      ? fieldConfig.units.validate
+      : createEvent({ domain })
+
+    const resetErrors = fieldConfig.units?.resetErrors
+      ? fieldConfig.units.resetErrors
+      : createEvent({ domain })
+
+    const resetValue = fieldConfig.units?.resetValue
+      ? fieldConfig.units.resetValue
+      : createEvent({ domain })
+
+    const reset = fieldConfig.units?.reset
+      ? fieldConfig.units.reset
+      : createEvent({ domain });
 
     const $isValid = $firstError.map((firstError) => firstError === null)
     const $errorText = $firstError.map(
