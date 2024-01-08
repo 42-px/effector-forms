@@ -402,9 +402,14 @@ export function bindChangeEvent({
         .on(changed, (_, value) => value)
         .on(
             [setForm, setInitialForm],
-            (curr, updateSet) => updateSet.hasOwnProperty(name)
-                ? updateSet[name]
-                : curr
+            (curr, updateSet) => {
+                return (
+                    updateSet.hasOwnProperty(name) && 
+                    typeof updateSet[name] !== "undefined"
+                )
+                    ? updateSet[name]
+                    : curr
+            }
         )
         .on(resetValueWithInit, (_, initValue) => initValue)
 }

@@ -3,17 +3,17 @@
   "version": "2.0.0-next.0",
   "description": "Effector form state factory",
   "main": "./dist/effector-forms.cjs.js",
-  "jsnext:main": "./dist/index.js",
-  "module": "./dist/index.js",
+  "jsnext:main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
   "umd:main": "./dist/effector-forms.umd.js",
-  "browser": "./dist/index.js",
+  "browser": "./dist/index.mjs",
   "exports": {
     ".": {
       "types": "./dist-types/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/effector-forms.cjs.js",
       "node": "./dist/effector-forms.cjs.js",
-      "default": "./dist/index.js"
+      "default": "./dist/index.mjs"
     }
   },
   "scripts": {
