@@ -1,6 +1,6 @@
 {
   "name": "effector-forms",
-  "version": "2.0.0-next.0",
+  "version": "2.0.0-next.1",
   "description": "Effector form state factory",
   "main": "./dist/effector-forms.cjs.js",
   "jsnext:main": "./dist/index.mjs",
