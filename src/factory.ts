@@ -2,6 +2,7 @@ import {
     EventCallable,
     Store,
     combine,
+    createEvent,
     sample,
 } from "effector"
 import {
@@ -18,7 +19,6 @@ import {
     bindValidation,
     bindChangeEvent,
 } from "./field"
-import { createFormUnit } from "./create-form-unit"
 
 function createFormValuesStore(
     fields: AnyFields
@@ -111,55 +111,45 @@ export function createForm<Values extends AnyFormValues>(
         touched: $touched,
     })
 
-    const validate = createFormUnit.event<void>({
-        domain,
-        existing: units?.validate,
-    })
+    const validate = units?.validate
+      ? units.validate
+      : createEvent({ domain })
 
-    const submitForm = createFormUnit.event<void>({
-        domain,
-        existing: units?.submit,
-    })
+    const submitForm = units?.submit
+      ? units.submit
+      : createEvent({ domain })
 
-    const formValidated = createFormUnit.event({
-        domain,
-        existing: units?.formValidated,
-    })
+    const formValidated = units?.formValidated
+      ? units.formValidated
+      : createEvent<Values>({ domain })
 
-    const setInitialForm = createFormUnit.event<Partial<AnyFormValues>>({
-        domain,
-        existing: units?.setInitialForm as EventCallable<Partial<AnyFormValues>>
-    })
+    const setInitialForm = units?.setInitialForm
+      ? units.setInitialForm
+      : createEvent<Partial<AnyFormValues>>({ domain })
 
-    const setForm = createFormUnit.event<Partial<AnyFormValues>>({
-        domain,
-        existing: units?.setForm as EventCallable<Partial<AnyFormValues>>,
-    })
+    const setForm = units?.setForm
+      ? units.setForm
+      : createEvent<Partial<AnyFormValues>>({ domain })
 
-    const addErrors = createFormUnit.event<AddErrorPayload[]>({
-        domain,
-        existing: units?.addErrors,
-    })
+    const addErrors = units?.addErrors
+      ? units.addErrors
+      : createEvent<AddErrorPayload[]>({ domain })
 
-    const resetForm = createFormUnit.event({
-        domain,
-        existing: units?.reset,
-    })
+    const resetForm = units?.reset
+      ? units.reset
+      : createEvent({ domain })
 
-    const resetValues = createFormUnit.event({
-        domain,
-        existing: units?.resetValues,
-    })
+    const resetValues = units?.resetValues
+      ? units.resetValues
+      : createEvent({ domain })
 
-    const resetErrors = createFormUnit.event({
-        domain,
-        existing: units?.resetErrors,
-    })
+    const resetErrors = units?.resetErrors
+      ? units.resetErrors
+      : createEvent({ domain })
 
-    const resetTouched = createFormUnit.event({
-        domain,
-        existing: units?.resetTouched,
-    })
+    const resetTouched = units?.resetTouched
+      ? units.resetTouched
+      : createEvent({ domain })
 
     const submitWithFormData = sample({
         source: $form,
